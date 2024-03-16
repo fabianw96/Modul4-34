@@ -77,7 +77,7 @@ namespace StarterAssets
 
         // player
         private float _speed;
-        // private float _animationBlend;
+        private float _animationBlend;
         private float _targetRotation = 0.0f;
         private float _rotationVelocity;
         private float _verticalVelocity;
@@ -87,22 +87,23 @@ namespace StarterAssets
         private float _jumpTimeoutDelta;
         private float _fallTimeoutDelta;
 
-        // // animation IDs
-        // private int _animIDSpeed;
-        // private int _animIDGrounded;
-        // private int _animIDJump;
-        // private int _animIDFreeFall;
-        // private int _animIDMotionSpeed;
+        // animation IDs
+        private int _animIDSpeed;
+        private int _animIDGrounded;
+        private int _animIDJump;
+        private int _animIDFreeFall;
+        private int _animIDMotionSpeed;
 
         private PlayerInput _playerInput;
-        // private Animator _animator;
+        private Animator _animator;
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
 
         private const float _threshold = 0.01f;
 
-        // private bool _hasAnimator;
+        private bool _hasAnimator;
+        private Camera _camera;
 
         private bool IsCurrentDeviceMouse
         {
@@ -124,14 +125,15 @@ namespace StarterAssets
 
         private void Start()
         {
+            _camera = Camera.main;
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
-            // _hasAnimator = TryGetComponent(out _animator);
+            _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
             _playerInput = GetComponent<PlayerInput>();
 
-            // AssignAnimationIDs();
+            AssignAnimationIDs();
 
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
@@ -140,11 +142,12 @@ namespace StarterAssets
 
         private void Update()
         {
-            // _hasAnimator = TryGetComponent(out _animator);
+            _hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
             GroundedCheck();
             Move();
+            Shoot();
         }
 
         private void LateUpdate()
@@ -152,14 +155,14 @@ namespace StarterAssets
             CameraRotation();
         }
 
-        // private void AssignAnimationIDs()
-        // {
-        //     _animIDSpeed = Animator.StringToHash("Speed");
-        //     _animIDGrounded = Animator.StringToHash("Grounded");
-        //     _animIDJump = Animator.StringToHash("Jump");
-        //     _animIDFreeFall = Animator.StringToHash("FreeFall");
-        //     _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
-        // }
+        private void AssignAnimationIDs()
+        {
+            _animIDSpeed = Animator.StringToHash("Speed");
+            _animIDGrounded = Animator.StringToHash("Grounded");
+            _animIDJump = Animator.StringToHash("Jump");
+            _animIDFreeFall = Animator.StringToHash("FreeFall");
+            _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+        }
 
         private void GroundedCheck()
         {
@@ -169,11 +172,11 @@ namespace StarterAssets
             Grounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
                 QueryTriggerInteraction.Ignore);
 
-            // // update animator if using character
-            // if (_hasAnimator)
-            // {
-            //     _animator.SetBool(_animIDGrounded, Grounded);
-            // }
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDGrounded, Grounded);
+            }
         }
 
         private void CameraRotation()
@@ -231,8 +234,8 @@ namespace StarterAssets
                 _speed = targetSpeed;
             }
 
-            // _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
-            // if (_animationBlend < 0.01f) _animationBlend = 0f;
+            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * SpeedChangeRate);
+            if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
             Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
@@ -257,12 +260,12 @@ namespace StarterAssets
             _controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) +
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
-            // // update animator if using character
-            // if (_hasAnimator)
-            // {
-            //     _animator.SetFloat(_animIDSpeed, _animationBlend);
-            //     _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
-            // }
+            // update animator if using character
+            if (_hasAnimator)
+            {
+                _animator.SetFloat(_animIDSpeed, _animationBlend);
+                _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
+            }
         }
 
         private void JumpAndGravity()
@@ -272,12 +275,12 @@ namespace StarterAssets
                 // reset the fall timeout timer
                 _fallTimeoutDelta = FallTimeout;
 
-                // // update animator if using character
-                // if (_hasAnimator)
-                // {
-                //     _animator.SetBool(_animIDJump, false);
-                //     _animator.SetBool(_animIDFreeFall, false);
-                // }
+                // update animator if using character
+                if (_hasAnimator)
+                {
+                    _animator.SetBool(_animIDJump, false);
+                    _animator.SetBool(_animIDFreeFall, false);
+                }
 
                 // stop our velocity dropping infinitely when grounded
                 if (_verticalVelocity < 0.0f)
@@ -291,11 +294,11 @@ namespace StarterAssets
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
-                    // // update animator if using character
-                    // if (_hasAnimator)
-                    // {
-                    //     _animator.SetBool(_animIDJump, true);
-                    // }
+                    // update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDJump, true);
+                    }
                 }
 
                 // jump timeout
@@ -316,11 +319,11 @@ namespace StarterAssets
                 }
                 else
                 {
-                    // // update animator if using character
-                    // if (_hasAnimator)
-                    // {
-                    //     _animator.SetBool(_animIDFreeFall, true);
-                    // }
+                    // update animator if using character
+                    if (_hasAnimator)
+                    {
+                        _animator.SetBool(_animIDFreeFall, true);
+                    }
                 }
 
                 // if we are not grounded, do not jump
@@ -332,6 +335,25 @@ namespace StarterAssets
             {
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
+        }
+        
+        private void Shoot()
+        {
+            if (!_input.shoot)
+            {
+                _input.shoot = false;
+                return;
+            }
+
+            RaycastHit hitInfo = new RaycastHit();
+            bool hit = _camera != null && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hitInfo);
+            
+            Debug.Log("Shot!");
+            _input.shoot = false;
+
+            if (!hit) return;
+            
+            _input.shoot = false;
         }
 
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
