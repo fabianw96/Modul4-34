@@ -65,6 +65,7 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+		private Camera _camera;
 
 		private const float _threshold = 0.01f;
 
@@ -230,6 +231,25 @@ namespace StarterAssets
 			{
 				_verticalVelocity += Gravity * Time.deltaTime;
 			}
+		}
+		
+		private void Shoot()
+		{
+			if (!_input.shoot)
+			{
+				_input.shoot = false;
+				return;
+			}
+
+			RaycastHit hitInfo = new RaycastHit();
+			bool hit = _camera != null && Physics.Raycast(_camera.ScreenPointToRay(Input.mousePosition), out hitInfo);
+            
+			Debug.Log("Shot!");
+			_input.shoot = false;
+
+			if (!hit) return;
+            
+			_input.shoot = false;
 		}
 
 		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
