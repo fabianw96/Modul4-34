@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using General.Manager;
 using UnityEngine;
-using UnityTutorial.Manager;
 
-namespace UnityTutorial.PlayerControl
+namespace General.Player
 {
     public class PlayerController : MonoBehaviour
     {
