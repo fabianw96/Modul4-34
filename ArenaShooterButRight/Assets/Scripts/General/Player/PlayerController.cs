@@ -74,13 +74,13 @@ namespace UnityTutorial.PlayerControl
             if(_grounded)
             {
                 
-            _currentVelocity.x = Mathf.Lerp(_currentVelocity.x, _inputManager.Move.x * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
-            _currentVelocity.y =  Mathf.Lerp(_currentVelocity.y, _inputManager.Move.y * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
+                _currentVelocity.x = Mathf.Lerp(_currentVelocity.x, _inputManager.Move.x * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
+                _currentVelocity.y =  Mathf.Lerp(_currentVelocity.y, _inputManager.Move.y * targetSpeed, AnimBlendSpeed * Time.fixedDeltaTime);
 
-            var xVelDifference = _currentVelocity.x - _playerRigidbody.velocity.x;
-            var zVelDifference = _currentVelocity.y - _playerRigidbody.velocity.z;
+                var xVelDifference = _currentVelocity.x - _playerRigidbody.velocity.x;
+                var zVelDifference = _currentVelocity.y - _playerRigidbody.velocity.z;
 
-            _playerRigidbody.AddForce(transform.TransformVector(new Vector3(xVelDifference, 0 , zVelDifference)), ForceMode.VelocityChange);
+                _playerRigidbody.AddForce(transform.TransformVector(new Vector3(xVelDifference, 0 , zVelDifference)), ForceMode.VelocityChange);
             }
             else
             {
@@ -119,9 +119,9 @@ namespace UnityTutorial.PlayerControl
             _animator.SetTrigger(_jumpHash);
 
             //Enable this if you want B-Hop
-            //_playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
-            //_playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
-            //_animator.ResetTrigger(_jumpHash);
+            // _playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
+            // _playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
+            // _animator.ResetTrigger(_jumpHash);
         }
 
         public void JumpAddForce()
