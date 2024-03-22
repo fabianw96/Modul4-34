@@ -1,8 +1,7 @@
 using General.Interfaces;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Fabian.Generation
+namespace Fabian.Generation.Cellular_Automata
 {
     public class EnableCAButton : MonoBehaviour, IInteractable
     {
