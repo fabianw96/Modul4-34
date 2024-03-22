@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7073958518420761349}
   - component: {fileID: 6203292150468966714}
   - component: {fileID: 1567760932866987709}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: LevelTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,8 +136,8 @@ MonoBehaviour:
   tileRenderer: {fileID: 1213731017731153799}
   meshFilter: {fileID: 8516318000556064477}
   meshCollider: {fileID: 7073958518420761349}
-  mapScale: 3
-  heightMultiplier: 3
+  mapScale: 10
+  heightMultiplier: 50
   terrainTypes:
   - {fileID: 11400000, guid: 0781d35b2a1a65e40aac95415d88affa, type: 2}
   - {fileID: 11400000, guid: f188af351dc84cc449db2c6322bc6fc7, type: 2}
@@ -149,26 +149,26 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0.04283435
-      outSlope: 0.04283435
+      inSlope: 0
+      outSlope: 0
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.40223163
-      value: 0.01722933
-      inSlope: 0.18720265
-      outSlope: 0.18720265
+      time: 0.3
+      value: 0
+      inSlope: -0
+      outSlope: -0
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.01852718
-      outWeight: 0.07749162
+      outWeight: 0.044204168
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 1.6440661
-      outSlope: 1.6440661
+      inSlope: 1.4285715
+      outSlope: 1.4285715
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -176,3 +176,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  waves:
+  - {fileID: 11400000, guid: 32e87bd45bb71964896d27117314a823, type: 2}
+  - {fileID: 11400000, guid: 509241bb5a2ee9948b254e6e0f4ca48b, type: 2}
+  - {fileID: 11400000, guid: 93bb05e7507b6534489e96cdd19ec3ad, type: 2}

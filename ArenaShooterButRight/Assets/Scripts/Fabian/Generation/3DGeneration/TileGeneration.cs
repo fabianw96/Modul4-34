@@ -1,5 +1,6 @@
 using System;
 using Fabian.Generation.ScriptableObjects;
+using UnityEditor;
 using UnityEngine;
 
 namespace Fabian.Generation._3DGeneration
@@ -14,6 +15,8 @@ namespace Fabian.Generation._3DGeneration
         [SerializeField] private float heightMultiplier;
         [SerializeField] private TerrainType[] terrainTypes;
         [SerializeField] private AnimationCurve heightCurve;
+        [SerializeField] private NoiseWave[] waves;
+        private static readonly int Smoothness = Shader.PropertyToID("_Smoothness");
 
         private void Start()
         {
@@ -31,11 +34,12 @@ namespace Fabian.Generation._3DGeneration
             float offsetZ = -gameObject.transform.position.z;
 
 
-            float[,] heightMap = noiseMapGeneration.GenerateNoiseMap(tileDepth, tileWidth, mapScale, offsetX, offsetZ);
+            float[,] heightMap = noiseMapGeneration.GenerateNoiseMap(tileDepth, tileWidth, mapScale, offsetX, offsetZ, waves);
 
             Texture2D tileTexture = BuildTexture(heightMap);
             tileRenderer.material.mainTexture = tileTexture;
             
+            tileRenderer.material.SetFloat(Smoothness, 0);
             UpdateMeshVertices(heightMap);
         }
 
