@@ -1,8 +1,7 @@
 using Fabian.Generation.ScriptableObjects;
-using UnityEditor;
 using UnityEngine;
 
-namespace Fabian.Generation._3DGeneration
+namespace Fabian.Generation._3DGeneration.PerlinNoise
 {
     public class NoiseMapGeneration : MonoBehaviour
     {

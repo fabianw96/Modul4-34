@@ -1,9 +1,7 @@
-using System;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
 
-namespace Fabian.Generation._3DGeneration
+namespace Fabian.Generation._3DGeneration.PerlinNoise
 {
     public class LevelGeneration : MonoBehaviour
     {

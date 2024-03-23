@@ -1,9 +1,7 @@
-using System;
 using Fabian.Generation.ScriptableObjects;
-using UnityEditor;
 using UnityEngine;
 
-namespace Fabian.Generation._3DGeneration
+namespace Fabian.Generation._3DGeneration.PerlinNoise
 {
     public class TileGeneration : MonoBehaviour
     {
@@ -16,12 +14,17 @@ namespace Fabian.Generation._3DGeneration
         [SerializeField] private TerrainType[] terrainTypes;
         [SerializeField] private AnimationCurve heightCurve;
         [SerializeField] private NoiseWave[] waves;
+        
+        [SerializeField] private bool useDomainWarping;
+        [SerializeField] private int octaves = 4;
+        [SerializeField] private float lacunarity = 2f;
+        [SerializeField] private float gain = 0.5f;
+        
         private static readonly int Smoothness = Shader.PropertyToID("_Smoothness");
 
         private void Start()
         {
             GenerateTile();
-            
         }
 
         private void GenerateTile()
@@ -30,11 +33,29 @@ namespace Fabian.Generation._3DGeneration
             int tileDepth = (int)Mathf.Sqrt(meshvertices.Length);
             int tileWidth = tileDepth;
 
-            float offsetX = -gameObject.transform.position.x;
-            float offsetZ = -gameObject.transform.position.z;
+            float offsetX = -this.gameObject.transform.position.x;
+            float offsetZ = -this.gameObject.transform.position.z;
 
+            float[,] heightMap = new float[tileDepth, tileWidth];
+            // float[,] heightMap;
 
-            float[,] heightMap = noiseMapGeneration.GenerateNoiseMap(tileDepth, tileWidth, mapScale, offsetX, offsetZ, waves);
+            if (!useDomainWarping)
+            {
+                heightMap = noiseMapGeneration.GenerateNoiseMap(tileDepth, tileWidth, mapScale, offsetX, offsetZ, waves);
+            }
+            else
+            {
+                for (int zIndex = 0; zIndex < tileDepth; zIndex++)
+                {
+                    for (int xIndex = 0; xIndex < tileWidth; xIndex++)
+                    {
+                        float xPos = (float)xIndex / tileWidth * mapScale;
+                        float zPos = (float)zIndex / tileDepth * mapScale;
+                        heightMap[zIndex, xIndex] = NoiseFunctions.Pattern(xPos, zPos, mapScale, octaves, lacunarity, gain);
+                    }
+                }
+            }
+            
 
             Texture2D tileTexture = BuildTexture(heightMap);
             tileRenderer.material.mainTexture = tileTexture;
@@ -59,6 +80,8 @@ namespace Fabian.Generation._3DGeneration
                     TerrainType terrainType = ChooseTerrainType(height);
 
                     colorMap[colorIndex] = terrainType.Color;
+
+                    // colorMap[colorIndex] = Color.Lerp(Color.black, Color.white, height);
                 }
             }
 
