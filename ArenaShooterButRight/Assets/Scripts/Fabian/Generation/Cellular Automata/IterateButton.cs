@@ -1,7 +1,7 @@
 using General.Interfaces;
 using UnityEngine;
 
-namespace Fabian.Generation
+namespace Fabian.Generation.Cellular_Automata
 {
     public class IterateButton : MonoBehaviour, IInteractable
     {

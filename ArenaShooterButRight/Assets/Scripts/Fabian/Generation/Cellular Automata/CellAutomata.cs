@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
-namespace Fabian.Generation
+namespace Fabian.Generation.Cellular_Automata
 {
     public class CellAutomata : MonoBehaviour
     {
