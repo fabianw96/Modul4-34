@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9593f4cf1544e4f489efd3b69162af7f, type: 3}
   m_Name: Wave2
   m_EditorClassIdentifier: 
-  seed: 190396
+  seed: 123573
   frequency: 1
   amplitude: 1
