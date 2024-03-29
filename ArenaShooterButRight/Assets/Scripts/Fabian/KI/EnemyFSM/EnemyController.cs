@@ -7,37 +7,58 @@ namespace Fabian.KI.EnemyFSM
 {
     public class EnemyController : BaseController
     {
-        [SerializeField] public float idleTimer;
+        [SerializeField] public float idleBeforeShootTime;
+        [SerializeField] private float distanceToPlayer;
         [SerializeField] public GameObject player;
-        [SerializeField] public Transform idleSpot;
-        private EnemyIdleState _enemyIdleState;
+        [HideInInspector] public float shootTimer;
+        private EnemyShootState _enemyShootState;
         private EnemyChaseState _enemyChaseState;
+
+        protected override void Start()
+        {
+            shootTimer = idleBeforeShootTime;
+            base.Start();
+        }
+
+        protected override void Update()
+        {
+            agent.SetDestination(player.transform.position);
+            agent.transform.LookAt(player.transform);
+            IsInRange();
+            base.Update();
+        }
+
         protected override void InitFsm()
         {
-            _enemyIdleState = new EnemyIdleState(this);
+            _enemyShootState = new EnemyShootState(this);
             _enemyChaseState = new EnemyChaseState(this);
 
-            _currentState = _enemyIdleState;
+            CurrentState = _enemyChaseState;
             
-            _stateDictionary = new Dictionary<BaseState, List<Transition>>
+            StateDictionary = new Dictionary<BaseState, List<Transition>>
             {
                 {
-                    _enemyIdleState,
+                    _enemyShootState,
                     new List<Transition>
                     {
-                        new(() => idleTimer <= 0f, _enemyChaseState),
+                        new Transition(() => !IsInRange(), _enemyChaseState)
                     }
                 },
                 {
                     _enemyChaseState,
                     new List<Transition>
                     {
-                        new(() => agent.remainingDistance <= 1f, _enemyIdleState)
+                        new Transition(() => IsInRange(), _enemyShootState)
                     }
                 }
             };
             
             base.InitFsm();
+        }
+
+        private bool IsInRange()
+        {
+            return agent.remainingDistance <= distanceToPlayer;
         }
     }
 }

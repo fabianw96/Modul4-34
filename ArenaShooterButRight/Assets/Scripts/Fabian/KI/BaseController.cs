@@ -8,43 +8,40 @@ namespace Fabian.KI
     [RequireComponent(typeof(NavMeshAgent))]
     public abstract class BaseController : MonoBehaviour
     {
-        public string myCurrentState;
-        protected BaseState _currentState;
-        protected Transition _transition;
-        protected Dictionary<BaseState, List<Transition>> _stateDictionary;
+        protected BaseState CurrentState;
+        protected Transition Transition;
+        protected Dictionary<BaseState, List<Transition>> StateDictionary;
         
         [SerializeField] public NavMeshAgent agent;
-
-        
         
         // Start is called before the first frame update
-        protected void Start()
+        protected virtual void Start()
         {
             InitFsm();
         }
 
         protected virtual void InitFsm()
         {
-            _currentState.OnEnterState();
+            CurrentState.OnEnterState();
         }
 
         // Update is called once per frame
-        protected void Update()
+        protected virtual void Update()
         {
             UpdateFsm();
         }
 
         protected void UpdateFsm()
         {
-            _currentState.OnUpdateState();
+            CurrentState.OnUpdateState();
             
-            foreach (var tran in _stateDictionary[_currentState])
+            foreach (var tran in StateDictionary[CurrentState])
             {
                 if (tran.Condition())
                 {
-                    _currentState.OnExitState();
-                    _currentState = tran.NextState;
-                    _currentState.OnEnterState();
+                    CurrentState.OnExitState();
+                    CurrentState = tran.NextState;
+                    CurrentState.OnEnterState();
 
                     break;
                 }

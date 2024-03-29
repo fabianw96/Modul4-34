@@ -13,7 +13,7 @@ namespace Fabian.KI.EnemyFSM
         public override void OnEnterState()
         {
             Debug.Log(this + " enter");
-            _controller.agent.destination = _controller.player.transform.position;
+            _controller.agent.isStopped = false;
             base.OnEnterState();
         }
 
@@ -26,7 +26,6 @@ namespace Fabian.KI.EnemyFSM
         public override void OnExitState()
         {
             Debug.Log(this + " exit");
-            _controller.idleTimer = 4f;
             base.OnExitState();
         }
     }
