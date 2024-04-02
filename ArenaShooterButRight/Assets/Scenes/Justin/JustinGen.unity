@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2289.5164, g: 2467.2375, b: 3681.2, a: 1}
+  m_IndirectSpecularColor: {r: 2295.654, g: 2496.9841, b: 3788.2046, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -702,16 +702,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63841a411b2af6949a7e7a3072445ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawMode: 1
   mapWidth: 100
   mapHeight: 100
-  noiseScale: 12.4
-  octaves: 4
+  noiseScale: 25
+  octaves: 5
   persistance: 0.5
   lacunarity: 2
-  seed: 20
-  offset: {x: 37.21, y: 23.9}
+  seed: 0
+  offset: {x: 17.74, y: 0}
   autoUpdate: 1
-  terrainType: []
+  terrainType:
+  - {fileID: 11400000, guid: e02974e25da0f3645ba3dc4cff5b94f9, type: 2}
+  - {fileID: 11400000, guid: 9c4ef06af5940e1488f99be11728c09d, type: 2}
+  - {fileID: 11400000, guid: db427f569b451b24bae06b3262f4b87b, type: 2}
+  - {fileID: 11400000, guid: 08ebadba7e4a67347af4650b92e88a9d, type: 2}
+  - {fileID: 11400000, guid: e7b62f9e6c5eed84d94e63c4ee3092e1, type: 2}
+  - {fileID: 11400000, guid: 06106f8888f613149a75d6d4118ac18e, type: 2}
+  - {fileID: 11400000, guid: f8c1b884b2ac05c4cb1df7a18202c336, type: 2}
+  - {fileID: 11400000, guid: eb5a1f0dcd79cd34793aa1275c845ada, type: 2}
 --- !u!4 &1772617849
 Transform:
   m_ObjectHideFlags: 0
