@@ -15,6 +15,7 @@ namespace General.Player
         [SerializeField] private float Dis2Ground = 0.8f;
         [SerializeField] private LayerMask GroundCheck;
         [SerializeField] private float AirResistance = 0.8f;
+        [SerializeField] private GameObject Target;
         private Rigidbody _playerRigidbody;
         private InputManager _inputManager;
         private Animator _animator;
