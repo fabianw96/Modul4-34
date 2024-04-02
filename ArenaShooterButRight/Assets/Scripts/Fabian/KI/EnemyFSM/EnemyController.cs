@@ -8,9 +8,11 @@ namespace Fabian.KI.EnemyFSM
     public class EnemyController : BaseController
     {
         [SerializeField] public float idleBeforeShootTime;
+        [SerializeField] public float enemyShootCooldown;
         [SerializeField] public float distanceToPlayer;
         [SerializeField] public HealthSystem player;
         [HideInInspector] public float shootTimer;
+        [HideInInspector] public float remainingShootCooldown;
         private EnemyShootState _enemyShootState;
         private EnemyChaseState _enemyChaseState;
 
@@ -20,6 +22,7 @@ namespace Fabian.KI.EnemyFSM
         protected override void Start()
         {
             shootTimer = idleBeforeShootTime;
+            remainingShootCooldown = enemyShootCooldown;
             base.Start();
         }
 
