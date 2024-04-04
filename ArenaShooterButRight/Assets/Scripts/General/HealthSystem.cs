@@ -1,3 +1,5 @@
+using System;
+using System.ComponentModel;
 using General.Player;
 using UnityEngine;
 
@@ -14,7 +16,7 @@ namespace Fabian.KI.EnemyFSM
             maxHealth = SetDefaultHealth(maxHealth);
             currentHealth = maxHealth;
         }
-
+        
         private float SetDefaultHealth(float currentMaxValue)
         {
             return currentMaxValue > 0 ? currentMaxValue : DefaultHealth;

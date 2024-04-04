@@ -1,3 +1,4 @@
+using System;
 using General.Manager;
 using UnityEngine;
 
@@ -51,13 +52,21 @@ namespace General.Player
             _crouchHash = Animator.StringToHash("Crouch");
         }
 
-        private void FixedUpdate() {
+
+        private void Update()
+        {
+            Target.transform.position = Camera.position + Camera.forward * 5f;
+        }
+
+        private void FixedUpdate() 
+        {
             SampleGround();
             Move();
             HandleJump();
             HandleCrouch();
         }
-        private void LateUpdate() {
+        private void LateUpdate() 
+        {
             CamMovements();
         }
 

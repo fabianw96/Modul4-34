@@ -7,6 +7,7 @@ namespace Fabian.KI.EnemyFSM
     public class EnemyShootState : BaseState
     {
         private EnemyController _controller;
+        private bool _hasShot;
         public EnemyShootState(EnemyController controller) : base(controller)
         {
             _controller = controller;
@@ -32,9 +33,11 @@ namespace Fabian.KI.EnemyFSM
                 _controller.remainingShootCooldown -= Time.deltaTime;
                 return;
             }
-            Debug.Log("Pew pew!");
+
+            if (_hasShot) return;
+
+            _controller.StartCoroutine(ShootPlayer());
             _controller.remainingShootCooldown = _controller.enemyShootCooldown;
-            
             
             base.OnUpdateState();
         }
@@ -43,6 +46,14 @@ namespace Fabian.KI.EnemyFSM
         {
             _controller.shootTimer = _controller.idleBeforeShootTime;
             base.OnExitState();
+        }
+
+        private IEnumerator ShootPlayer()
+        {
+            _hasShot = true;
+            yield return new WaitForSeconds(3);
+            _controller.player.TakeDamage(5);
+            _hasShot = false;
         }
     }
 }
