@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-namespace Justin.KI
+﻿namespace Justin.KI
 {
-    public class EnemyIdleState : EnemyBaseState
+    public class EnemyRetreatState : EnemyBaseState
     {
         public override void EnterState(EnemyStateManager enemy)
         {
