@@ -6,14 +6,14 @@ using UnityEngine.UIElements;
 public static class Noise
 {
 
-    public static float[,] GenerateNoiseMap(int mapWidth,  int mapHeight, int  seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
+    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistence, float lacunarity, Vector2 offset)
     {
         float[,] noiseMap = new float[mapWidth, mapHeight];
-        
+
         System.Random prng = new System.Random(seed);
         // sample octaves from different samplepoints
         Vector2[] octaveOffsets = new Vector2[octaves];
-        for (int i = 0; i< octaves; i++)
+        for (int i = 0; i < octaves; i++)
         {
             float offsetX = prng.Next(-100000, 100000) + offset.x;
             float offsetY = prng.Next(-100000, 100000) + offset.y;
@@ -40,10 +40,10 @@ public static class Noise
                 float frequence = 1;
                 float amplitude = 1;
                 float noiseHeight = 0;
-                
-                for(int i = 0; i < octaves; i++)
+
+                for (int i = 0; i < octaves; i++)
                 {
-                    
+
                     float sampleX = (x - halfWidth) / scale * frequence + octaveOffsets[i].x;
                     float sampleY = (y - halfHeight) / scale * frequence + octaveOffsets[i].y;
 
@@ -67,7 +67,7 @@ public static class Noise
                 {
                     minNoiseHeight = noiseHeight;
                 }
-                noiseMap[x,y] = noiseHeight;
+                noiseMap[x, y] = noiseHeight;
             }
         }
 
@@ -75,9 +75,9 @@ public static class Noise
         {
             for (int x = 0; x < mapWidth; x++)
             {
-                noiseMap[x,y] = Mathf.InverseLerp(minNoiseHeight,maxNoiseHeight, noiseMap[x,y]);
+                noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
             }
         }
-                return noiseMap;
+        return noiseMap;
     }
 }
