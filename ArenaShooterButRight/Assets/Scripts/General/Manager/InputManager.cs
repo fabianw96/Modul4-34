@@ -1,4 +1,5 @@
 using General.Player;
+using General.Weapons;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,6 +23,8 @@ namespace General.Manager
         private InputAction _jumpAction;
         private InputAction _crouchAction;
         private InputAction _interactAction;
+        private InputAction _reloadAction;
+        private InputAction _shootAction;
 
         private void Awake() {
             HideCursor();
@@ -32,6 +35,8 @@ namespace General.Manager
             _jumpAction = _currentMap.FindAction("Jump");
             _crouchAction = _currentMap.FindAction("Crouch");
             _interactAction = _currentMap.FindAction("Interact");
+            _reloadAction = _currentMap.FindAction("Reload");
+            _shootAction = _currentMap.FindAction("Shoot");
             
 
             _moveAction.performed += onMove;
@@ -40,6 +45,8 @@ namespace General.Manager
             _jumpAction.performed += onJump;
             _crouchAction.started += onCrouch;
             _interactAction.started += onInteraction;
+            _reloadAction.performed += onReload;
+            _shootAction.performed += onShoot;
 
             _moveAction.canceled += onMove;
             _lookAction.canceled += onLook;
@@ -78,6 +85,16 @@ namespace General.Manager
         private void onInteraction(InputAction.CallbackContext context)
         {
             PlayerInteraction.Interact();
+        }
+
+        private void onReload(InputAction.CallbackContext context)
+        {
+            //implement reload
+        }
+
+        private void onShoot(InputAction.CallbackContext context)
+        {
+            //implement shoot
         }
 
         private void OnEnable() {

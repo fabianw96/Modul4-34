@@ -1,9 +1,8 @@
-using System;
-using System.ComponentModel;
+using Fabian.KI.EnemyFSM;
 using General.Player;
 using UnityEngine;
 
-namespace Fabian.KI.EnemyFSM
+namespace General
 {
     public class HealthSystem : MonoBehaviour, IDamageable<float>
     {

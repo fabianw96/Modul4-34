@@ -1,6 +1,7 @@
 using System;
 using General.Manager;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace General.Player
 {
