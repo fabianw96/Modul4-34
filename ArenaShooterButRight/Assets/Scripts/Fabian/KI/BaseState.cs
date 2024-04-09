@@ -1,3 +1,4 @@
+using Fabian.KI.EnemyFSM;
 using UnityEngine;
 
 namespace Fabian.KI
@@ -6,7 +7,7 @@ namespace Fabian.KI
     {
         protected BaseController Controller;
 
-        protected BaseState(BaseController controller)
+        protected BaseState(EnemyController controller)
         {
             Controller = controller;
         }

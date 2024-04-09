@@ -1,5 +1,6 @@
 using System;
 using General.Manager;
+using General.Weapons;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
@@ -31,6 +32,7 @@ namespace General.Player
         private int _zVelHash;
         private int _crouchHash;
         private float _xRotation;
+        private Weapon _currentWeapon;
 
         private const float _walkSpeed = 2f;
         private const float _runSpeed = 6f;
@@ -42,6 +44,7 @@ namespace General.Player
             _hasAnimator = TryGetComponent<Animator>(out _animator);
             _playerRigidbody = GetComponent<Rigidbody>();
             _inputManager = GetComponent<InputManager>();
+            _currentWeapon = GetComponentInChildren<Weapon>();
 
 
             _xVelHash = Animator.StringToHash("X_Velocity");
@@ -65,6 +68,8 @@ namespace General.Player
             Move();
             HandleJump();
             HandleCrouch();
+            HandleShooting();
+            HandleReload();
         }
         private void LateUpdate() 
         {
@@ -117,6 +122,27 @@ namespace General.Player
         }
 
         private void HandleCrouch() => _animator.SetBool(_crouchHash , _inputManager.Crouch);
+
+        private void HandleShooting()
+        {
+            if (!_inputManager.Shoot) return;
+            
+            if (_currentWeapon is RayCastWeapon)
+            {
+                _currentWeapon.UseGun();
+            }
+
+        }
+
+        private void HandleReload()
+        {
+            if (!_inputManager.Reload) return;
+
+            if (_currentWeapon != null)
+            {
+                _currentWeapon.Reload();
+            }
+        }
 
 
         private void HandleJump()

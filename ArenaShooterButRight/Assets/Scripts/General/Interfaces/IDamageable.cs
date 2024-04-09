@@ -1,4 +1,4 @@
-namespace Fabian.KI.EnemyFSM
+namespace General.Interfaces
 {
     public interface IDamageable<in T>
     {

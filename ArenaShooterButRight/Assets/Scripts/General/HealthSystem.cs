@@ -1,4 +1,5 @@
 using Fabian.KI.EnemyFSM;
+using General.Interfaces;
 using General.Player;
 using UnityEngine;
 
