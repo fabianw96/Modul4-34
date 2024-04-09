@@ -1,5 +1,8 @@
+using System;
 using General.Manager;
+using General.Weapons;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 namespace General.Player
 {
@@ -15,6 +18,7 @@ namespace General.Player
         [SerializeField] private float Dis2Ground = 0.8f;
         [SerializeField] private LayerMask GroundCheck;
         [SerializeField] private float AirResistance = 0.8f;
+        [SerializeField] private GameObject Target;
         private Rigidbody _playerRigidbody;
         private InputManager _inputManager;
         private Animator _animator;
@@ -28,6 +32,7 @@ namespace General.Player
         private int _zVelHash;
         private int _crouchHash;
         private float _xRotation;
+        private Weapon _currentWeapon;
 
         private const float _walkSpeed = 2f;
         private const float _runSpeed = 6f;
@@ -39,6 +44,7 @@ namespace General.Player
             _hasAnimator = TryGetComponent<Animator>(out _animator);
             _playerRigidbody = GetComponent<Rigidbody>();
             _inputManager = GetComponent<InputManager>();
+            _currentWeapon = GetComponentInChildren<Weapon>();
 
 
             _xVelHash = Animator.StringToHash("X_Velocity");
@@ -50,13 +56,23 @@ namespace General.Player
             _crouchHash = Animator.StringToHash("Crouch");
         }
 
-        private void FixedUpdate() {
+
+        private void Update()
+        {
+            Target.transform.position = Camera.position + Camera.forward * 5f;
+        }
+
+        private void FixedUpdate() 
+        {
             SampleGround();
             Move();
             HandleJump();
             HandleCrouch();
+            HandleShooting();
+            HandleReload();
         }
-        private void LateUpdate() {
+        private void LateUpdate() 
+        {
             CamMovements();
         }
 
@@ -106,6 +122,27 @@ namespace General.Player
         }
 
         private void HandleCrouch() => _animator.SetBool(_crouchHash , _inputManager.Crouch);
+
+        private void HandleShooting()
+        {
+            if (!_inputManager.Shoot) return;
+            
+            if (_currentWeapon is RayCastWeapon)
+            {
+                _currentWeapon.UseGun();
+            }
+
+        }
+
+        private void HandleReload()
+        {
+            if (!_inputManager.Reload) return;
+
+            if (_currentWeapon != null)
+            {
+                _currentWeapon.Reload();
+            }
+        }
 
 
         private void HandleJump()
