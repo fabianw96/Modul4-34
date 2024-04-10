@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2260.5627, g: 2403.465, b: 3504.7036, a: 1}
+  m_IndirectSpecularColor: {r: 2260.5374, g: 2402.2776, b: 3500.1294, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -743,7 +743,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3932b33f58bd72a4ba30f1231d61208f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapWidthInTiles: 10
+  mapWidthInTiles: 20
   mapDepthInTiles: 10
   tilePrefab: {fileID: 6232365680556412215, guid: e0933ab48f8a29a41872fcafe9e90bd3,
     type: 3}
@@ -1586,6 +1586,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 238622606975151209, guid: 551f981707c056a42afb81a62ff9658c,
+        type: 3}
+      propertyPath: m_Data.m_SourceObjects.m_Item0.transform
+      value: 
+      objectReference: {fileID: 1352406277}
+    - target: {fileID: 5968382410784580506, guid: 551f981707c056a42afb81a62ff9658c,
+        type: 3}
+      propertyPath: Target
+      value: 
+      objectReference: {fileID: 1352406276}
     - target: {fileID: 9051465224092827826, guid: 551f981707c056a42afb81a62ff9658c,
         type: 3}
       propertyPath: m_Name
@@ -1718,6 +1728,37 @@ MonoBehaviour:
   caGameObject: {fileID: 4110254373248094039}
   generateButton: {fileID: 280284348}
   iterateButton: {fileID: 643130144}
+--- !u!1 &1352406276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1352406277}
+  m_Layer: 0
+  m_Name: Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1352406277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1352406276}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1438057626
 GameObject:
   m_ObjectHideFlags: 0
@@ -2470,3 +2511,4 @@ SceneRoots:
   - {fileID: 320644516}
   - {fileID: 452029832}
   - {fileID: 1015850949}
+  - {fileID: 1352406277}

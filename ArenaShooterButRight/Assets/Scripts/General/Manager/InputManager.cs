@@ -1,4 +1,5 @@
 using General.Player;
+using General.Weapons;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -13,6 +14,8 @@ namespace General.Manager
         public bool Run {get; private set;}
         public bool Jump {get; private set;}
         public bool Crouch {get; private set;}
+        public bool Shoot { get; private set; }
+        public bool Reload { get; private set; }
         public bool Interact { get; private set; }
 
         private InputActionMap _currentMap;
@@ -22,6 +25,8 @@ namespace General.Manager
         private InputAction _jumpAction;
         private InputAction _crouchAction;
         private InputAction _interactAction;
+        private InputAction _reloadAction;
+        private InputAction _shootAction;
 
         private void Awake() {
             HideCursor();
@@ -32,6 +37,8 @@ namespace General.Manager
             _jumpAction = _currentMap.FindAction("Jump");
             _crouchAction = _currentMap.FindAction("Crouch");
             _interactAction = _currentMap.FindAction("Interact");
+            _reloadAction = _currentMap.FindAction("Reload");
+            _shootAction = _currentMap.FindAction("Shoot");
             
 
             _moveAction.performed += onMove;
@@ -40,12 +47,16 @@ namespace General.Manager
             _jumpAction.performed += onJump;
             _crouchAction.started += onCrouch;
             _interactAction.started += onInteraction;
+            _reloadAction.performed += onReload;
+            _shootAction.performed += onShoot;
 
             _moveAction.canceled += onMove;
             _lookAction.canceled += onLook;
             _runAction.canceled += onRun;
             _jumpAction.canceled += onJump;
             _crouchAction.canceled += onCrouch;
+            _reloadAction.canceled += onReload;
+            _shootAction.canceled += onShoot;
         }
 
         private void HideCursor()
@@ -78,6 +89,16 @@ namespace General.Manager
         private void onInteraction(InputAction.CallbackContext context)
         {
             PlayerInteraction.Interact();
+        }
+
+        private void onReload(InputAction.CallbackContext context)
+        {
+            Reload = context.ReadValueAsButton();
+        }
+
+        private void onShoot(InputAction.CallbackContext context)
+        {
+            Shoot = context.ReadValueAsButton();
         }
 
         private void OnEnable() {
