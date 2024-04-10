@@ -137,7 +137,7 @@ MonoBehaviour:
   meshFilter: {fileID: 8516318000556064477}
   meshCollider: {fileID: 7073958518420761349}
   mapScale: 10
-  heightMultiplier: 10
+  heightMultiplier: 25
   terrainTypes:
   - {fileID: 11400000, guid: 0781d35b2a1a65e40aac95415d88affa, type: 2}
   - {fileID: 11400000, guid: f188af351dc84cc449db2c6322bc6fc7, type: 2}
