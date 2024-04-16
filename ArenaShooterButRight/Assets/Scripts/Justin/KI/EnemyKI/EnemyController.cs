@@ -11,7 +11,7 @@ namespace Justin.KI
         EnemyPatrolState PatrolState;
         EnemyChaseState ChaseState;
         EnemyAttackState AttackState;
-        EnemyRetreatState RetreatState;
+        EnemySearchCover RetreatState;
         private Transform PlayerPosition;
         private float VisionRange, AttackRange;
 
@@ -27,7 +27,7 @@ namespace Justin.KI
             PatrolState = new EnemyPatrolState(); ;
             ChaseState = new EnemyChaseState(); ;
             AttackState = new EnemyAttackState(); ;
-            RetreatState = new EnemyRetreatState(); ;
+            RetreatState = new EnemySearchCover(); ;
             CurrentState = IdleState;
             CurrentState.EnterState(this);
             StateDictionary = new Dictionary<BaseState, List<Transition>>
