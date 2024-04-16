@@ -106,12 +106,10 @@ namespace Fabian.Generation.Cellular_Automata
                         if (neighborWallCount > 4)
                         {
                             NoiseGrid[k, j] = Grid.WALL;
-                            // PlaceTile();
                         }
                         else
                         {
                             NoiseGrid[k, j] = Grid.FLOOR;
-                            // PlaceTile();
                         }
                     }
                 }

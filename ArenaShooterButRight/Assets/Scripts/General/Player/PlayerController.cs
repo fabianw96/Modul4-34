@@ -129,7 +129,7 @@ namespace General.Player
             
             if (_currentWeapon is RayCastWeapon)
             {
-                _currentWeapon.UseGun();
+                _currentWeapon.TryShoot();
             }
 
         }
