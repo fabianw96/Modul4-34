@@ -12,9 +12,6 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise.Editor
             MapGeneration mapGeneration = (MapGeneration)target;
             MeshGeneration meshGen = FindObjectOfType<MeshGeneration>();
 
-            meshGen.xSize = mapGeneration.mapWidth;
-            meshGen.ySize = mapGeneration.mapHeight;
-
             if (DrawDefaultInspector())
             {
                 if (mapGeneration.autoUpdate)
