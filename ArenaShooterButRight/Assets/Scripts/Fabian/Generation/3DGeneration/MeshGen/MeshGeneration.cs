@@ -9,7 +9,7 @@ namespace Fabian.Generation._3DGeneration.MeshGen
     //mesh generation per catlikecoding https://catlikecoding.com/unity/tutorials/procedural-grid/
     public class MeshGeneration
     {
-        public static Mesh Generate(int width, int height, float[,] heightMap, float heightMultiplier)
+        public static Mesh Generate(int width, int height, float[,] heightMap, float heightMultiplier, AnimationCurve curve)
         {
             Mesh mesh = new Mesh();
             Vector3[] vertices = new Vector3[(width + 1) * (height + 1)];
@@ -24,7 +24,7 @@ namespace Fabian.Generation._3DGeneration.MeshGen
             {
                 for (int x = 0; x < width; x++, i++)
                 {
-                    vertices[i] = new Vector3(topLeftX + x, heightMap[x,y] * heightMultiplier, topLeftZ - y);
+                    vertices[i] = new Vector3(topLeftX + x, curve.Evaluate(heightMap[x,y]) * heightMultiplier, topLeftZ - y);
                     uv[i] = new Vector2((float)x / width, (float)y / height);
 
                     if (x < width - 1 && y < height - 1)
