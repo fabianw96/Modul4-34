@@ -17,6 +17,7 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
         public DrawStyle drawStyle;
         [SerializeField] public int mapWidth;
         [SerializeField] public int mapHeight;
+        [SerializeField] public float heightMultiplier;
         [SerializeField] private float noiseScale;
         [SerializeField] private int octaves;
         [SerializeField] [Range(0, 1)] private float persistance;
@@ -24,6 +25,7 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
         [SerializeField] private int seed;
         [SerializeField] private Vector2 offset;
         [SerializeField] private TerrainType[] terrainTypes;
+        [SerializeField] private MeshFilter meshFilter;
 
         [SerializeField] public bool autoUpdate;
 
@@ -34,9 +36,10 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
 
         public void GenerateMap()
         {
-            float[,] noiseMap;noiseMap = Noise.GenNoiseMap(mapWidth, mapHeight, seed ,noiseScale, octaves, persistance, lacunarity, offset);
+            float[,] noiseMap = Noise.GenNoiseMap(mapWidth, mapHeight, seed ,noiseScale, octaves, persistance, lacunarity, offset);
 
             ColorGeneratedMap(noiseMap);
+            meshFilter.mesh = MeshGeneration.Generate(mapWidth, mapHeight, noiseMap, heightMultiplier);
 
             MapDisplay display = FindObjectOfType<MapDisplay>();
             if (drawStyle == DrawStyle.Noise)
