@@ -20,12 +20,10 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
             Simplex
         }
 
-        private const int MAPCHUNKSIZE = 241;
-        
+        private const int MapChunkSize = 241;
+        [SerializeField] [Range(0, 6)] private int levelOfDetail;
         [SerializeField] private DrawStyle drawStyle;
         [SerializeField] private NoiseStyle noiseStyle;
-        [SerializeField] public int mapWidth;
-        [SerializeField] public int mapHeight;
         [SerializeField] public float heightMultiplier;
         [SerializeField] private float noiseScale;
         [SerializeField] private int octaves;
@@ -48,11 +46,11 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
         {
             FastNoiseLite noiseLite = new FastNoiseLite();
             
-            float[,] noiseMap = new float[mapWidth,mapHeight];
+            float[,] noiseMap = new float[MapChunkSize,MapChunkSize];
             
             if (noiseStyle == NoiseStyle.Perlin)
             {
-                noiseMap = Noise.GenNoiseMap(mapWidth, mapHeight, seed ,noiseScale, octaves, persistance, lacunarity, offset);
+                noiseMap = Noise.GenNoiseMap(MapChunkSize, MapChunkSize, seed ,noiseScale, octaves, persistance, lacunarity, offset);
             }
             else if (noiseStyle == NoiseStyle.Simplex)
             {
@@ -64,9 +62,9 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
                 noiseLite.SetFractalType(FastNoiseLite.FractalType.DomainWarpIndependent);
                 noiseLite.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
                 
-                for (int x = 0; x < mapWidth; x++)
+                for (int x = 0; x < MapChunkSize; x++)
                 {
-                    for (int y = 0; y < mapHeight; y++)
+                    for (int y = 0; y < MapChunkSize; y++)
                     {
                         noiseMap[x, y] = noiseLite.GetNoise(x, y);
                     }
@@ -74,7 +72,7 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
             }
 
             ColorGeneratedMap(noiseMap);
-            meshFilter.mesh = MeshGeneration.Generate(mapWidth, mapHeight, noiseMap, heightMultiplier, curve);
+            meshFilter.mesh = MeshGeneration.Generate(MapChunkSize, MapChunkSize, noiseMap, heightMultiplier, curve, levelOfDetail);
 
 
 
@@ -85,17 +83,17 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
             }
             else if (drawStyle == DrawStyle.Color)
             {
-                display.DrawTexture(TextureGeneration.TextureFromColorMap(ColorGeneratedMap(noiseMap), mapWidth, mapHeight));
+                display.DrawTexture(TextureGeneration.TextureFromColorMap(ColorGeneratedMap(noiseMap), MapChunkSize, MapChunkSize));
             }
         }
 
         private Color[] ColorGeneratedMap(float[,] noiseMap)
         {
-            Color[] colorMap = new Color[mapWidth * mapHeight];
+            Color[] colorMap = new Color[MapChunkSize * MapChunkSize];
             
-            for (int y = 0; y < mapHeight; y++)
+            for (int y = 0; y < MapChunkSize; y++)
             {
-                for (int x = 0; x < mapWidth; x++)
+                for (int x = 0; x < MapChunkSize; x++)
                 {
                     float currentHeight = noiseMap[x, y];
 
@@ -103,7 +101,7 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
                     {
                         if (currentHeight <= terrainTypes[i].terraingHeight)
                         {
-                            colorMap[y * mapWidth + x] = terrainTypes[i].Color;
+                            colorMap[y * MapChunkSize + x] = terrainTypes[i].Color;
                             break;
                         }
                     }
@@ -115,14 +113,6 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
 
         private void OnValidate()
         {
-            if (mapWidth < 1)
-            {
-                mapWidth = 1;
-            }
-            if (mapHeight < 1)
-            {
-                mapHeight = 1;
-            }
             if (lacunarity < 1)
             {
                 lacunarity = 1;
@@ -131,7 +121,6 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
             {
                 octaves = 0;
             }
-
             if (heightMultiplier < 0)
             {
                 heightMultiplier = 0;
