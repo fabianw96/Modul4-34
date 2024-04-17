@@ -13,8 +13,17 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
             Noise,
             Color
         };
+        
+        public enum NoiseStyle
+        {
+            Perlin,
+            Simplex
+        }
 
-        public DrawStyle drawStyle;
+        private const int MAPCHUNKSIZE = 241;
+        
+        [SerializeField] private DrawStyle drawStyle;
+        [SerializeField] private NoiseStyle noiseStyle;
         [SerializeField] public int mapWidth;
         [SerializeField] public int mapHeight;
         [SerializeField] public float heightMultiplier;
@@ -37,10 +46,37 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
 
         public void GenerateMap()
         {
-            float[,] noiseMap = Noise.GenNoiseMap(mapWidth, mapHeight, seed ,noiseScale, octaves, persistance, lacunarity, offset);
+            FastNoiseLite noiseLite = new FastNoiseLite();
+            
+            float[,] noiseMap = new float[mapWidth,mapHeight];
+            
+            if (noiseStyle == NoiseStyle.Perlin)
+            {
+                noiseMap = Noise.GenNoiseMap(mapWidth, mapHeight, seed ,noiseScale, octaves, persistance, lacunarity, offset);
+            }
+            else if (noiseStyle == NoiseStyle.Simplex)
+            {
+                noiseLite.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+                
+                noiseLite.SetSeed(seed);
+                noiseLite.SetFractalOctaves(octaves);
+                noiseLite.SetFractalLacunarity(lacunarity);
+                noiseLite.SetFractalType(FastNoiseLite.FractalType.DomainWarpIndependent);
+                noiseLite.SetDomainWarpType(FastNoiseLite.DomainWarpType.OpenSimplex2);
+                
+                for (int x = 0; x < mapWidth; x++)
+                {
+                    for (int y = 0; y < mapHeight; y++)
+                    {
+                        noiseMap[x, y] = noiseLite.GetNoise(x, y);
+                    }
+                }
+            }
 
             ColorGeneratedMap(noiseMap);
             meshFilter.mesh = MeshGeneration.Generate(mapWidth, mapHeight, noiseMap, heightMultiplier, curve);
+
+
 
             MapDisplay display = FindObjectOfType<MapDisplay>();
             if (drawStyle == DrawStyle.Noise)
