@@ -1,58 +1,52 @@
 using System;
 using System.Collections;
+using Fabian.Generation._3DGeneration.PerlinNoise;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace Fabian.Generation._3DGeneration.MeshGen
 {
-    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))] [ExecuteInEditMode]
-
-    public class MeshGeneration : MonoBehaviour
+    //mesh generation per catlikecoding https://catlikecoding.com/unity/tutorials/procedural-grid/
+    public class MeshGeneration
     {
-        [SerializeField] public int xSize;
-        [SerializeField] public int ySize;
-        private Vector3[] _vertices;
-        private Mesh _mesh;
-
-        public void Start()
+        public static Mesh Generate(int width, int height, float[,] heightMap, float heightMultiplier, AnimationCurve curve)
         {
-            GetComponent<MeshFilter>().mesh = _mesh = new Mesh();
-            _mesh.name = "Procedural Grid";
-            Generate();
-        }
+            Mesh mesh = new Mesh();
+            Vector3[] vertices = new Vector3[(width + 1) * (height + 1)];
+            Vector2[] uv = new Vector2[vertices.Length];
+            int[] triangles = new int[(width - 1) * (height - 1) * 6];
+            float topLeftX = (width - 1) / -2f;
+            float topLeftZ = (height - 2) / 2f;
+            int vertexIndex = 0;
+            int triangleIndex = 0;
 
-        private void Generate()
-        {
-        
-            _vertices = new Vector3[(xSize + 1) * (ySize + 1)];
-            Vector2[] uv = new Vector2[_vertices.Length];
-            
-            for (int i = 0, y=0; y <= ySize; y++)
+            for (int i = 0, y = 0; y < height; y++)
             {
-                for (int x = 0; x <= xSize; x++, i++)
+                for (int x = 0; x < width; x++, i++)
                 {
-                    _vertices[i] = new Vector3(x,0, y);
-                    uv[i] = new Vector2((float)x / xSize, (float)y / ySize);
+                    vertices[i] = new Vector3(topLeftX + x, curve.Evaluate(heightMap[x,y]) * heightMultiplier, topLeftZ - y);
+                    uv[i] = new Vector2((float)x / width, (float)y / height);
+
+                    if (x < width - 1 && y < height - 1)
+                    {
+                        triangles[triangleIndex] = triangles[triangleIndex + 4] = vertexIndex;
+                        triangles[triangleIndex + 1] = triangles[triangleIndex + 3] = vertexIndex + width + 1;
+                        triangles[triangleIndex + 2] = vertexIndex + width;
+                        triangles[triangleIndex + 5] = vertexIndex + 1;
+                        triangleIndex += 6;
+                    }
+
+                    vertexIndex++;
                 }
             }
-            
-            _mesh.vertices = _vertices;
-            _mesh.uv = uv;
 
-            int[] triangles = new int[xSize * ySize * 6];
+            mesh.name = "Proc Gen";
+            mesh.vertices = vertices;
+            mesh.uv = uv;
+            mesh.triangles = triangles;
+            mesh.RecalculateNormals();
 
-            for (int ti = 0, vi = 0, y = 0; y < ySize; y++, vi++)
-            {
-                for (int x = 0; x < xSize; x++, ti += 6, vi++)
-                {
-                    triangles[ti] = vi;
-                    triangles[ti + 1] = triangles[ti + 4] = vi + xSize + 1;
-                    triangles[ti + 2] = triangles[ti + 3] = vi + 1;
-                    triangles[ti + 5] = vi + xSize + 2;
-                }
-            }
-            _mesh.triangles = triangles;
-            _mesh.RecalculateNormals();
+            return mesh;
         }
     }
 }

@@ -10,24 +10,18 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise.Editor
         public override void OnInspectorGUI()
         {
             MapGeneration mapGeneration = (MapGeneration)target;
-            MeshGeneration meshGen = FindObjectOfType<MeshGeneration>();
-
-            meshGen.xSize = mapGeneration.mapWidth;
-            meshGen.ySize = mapGeneration.mapHeight;
 
             if (DrawDefaultInspector())
             {
                 if (mapGeneration.autoUpdate)
                 {
                     mapGeneration.GenerateMap();
-                    meshGen.Start();
                 }
             }
 
             if (GUILayout.Button("Generate"))
             {
                 mapGeneration.GenerateMap();
-                meshGen.Start();
             }
         }
     }
