@@ -23,11 +23,12 @@ namespace General.Weapons
         {
             // leftHandIKConstraint.data.target = leftHandIKTarget;
             // rightHandIKConstraint.data.target = rightHandIKTarget;
+            
             currentAmmo = maxAmmo;
         }
 
         //preemptive name
-        public virtual void UseGun()
+        public virtual void TryShoot()
         {
             if (currentAmmo > 0 && !isReloading && Time.time - _lastShotTime >= 1/ (fireRate / 60f))
             {
