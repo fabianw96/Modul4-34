@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Fabian.Generation._3DGeneration.PerlinNoise
+namespace Fabian.Generation._3DGeneration.NoiseGen
 {
     public static class TextureGeneration
     {

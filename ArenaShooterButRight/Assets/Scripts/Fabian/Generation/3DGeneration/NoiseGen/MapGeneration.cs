@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Fabian.Generation._3DGeneration.MeshGen;
 using Fabian.Generation.ScriptableObjects;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Fabian.Generation._3DGeneration.PerlinNoise
+namespace Fabian.Generation._3DGeneration.NoiseGen
 {
     public class MapGeneration : MonoBehaviour
     {
@@ -20,7 +21,7 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
             Simplex
         }
 
-        private const int MapChunkSize = 241;
+        public const int MapChunkSize = 241;
         [SerializeField] [Range(0, 6)] private int levelOfDetail;
         [SerializeField] private DrawStyle drawStyle;
         [SerializeField] private NoiseStyle noiseStyle;
@@ -37,12 +38,62 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
 
         [SerializeField] public bool autoUpdate;
 
+        private Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
+
         private void Start()
         {
-            GenerateMap();
+            DrawMapInEditor();
         }
 
-        public void GenerateMap()
+        public void DrawMapInEditor()
+        {
+            MapData mapData = GenerateMapData();
+            MapDisplay display = FindObjectOfType<MapDisplay>();
+            
+            meshFilter.mesh = MeshGeneration.Generate(MapChunkSize, MapChunkSize, mapData.HeightMap, heightMultiplier, curve, levelOfDetail);
+            
+            if (drawStyle == DrawStyle.Noise)
+            {
+                display.DrawTexture(TextureGeneration.TextureFromHeightMap(mapData.HeightMap));
+            }
+            else if (drawStyle == DrawStyle.Color)
+            {
+                display.DrawTexture(TextureGeneration.TextureFromColorMap(mapData.ColorMap, MapChunkSize, MapChunkSize));
+            }
+        }
+
+        public void RequestMapData(Action<MapData> callback)
+        {
+            ThreadStart threadStart = delegate
+            {
+                MapDataThread(callback);
+            };
+
+            new Thread(threadStart).Start();
+        }
+
+        void MapDataThread(Action<MapData> callback)
+        {
+            MapData mapData = GenerateMapData();
+            lock (mapDataThreadInfoQueue)
+            {
+                mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+            }
+        }
+
+        private void Update()
+        {
+            if (mapDataThreadInfoQueue.Count > 0)
+            {
+                for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
+            }
+        }
+
+        MapData GenerateMapData()
         {
             FastNoiseLite noiseLite = new FastNoiseLite();
             
@@ -70,21 +121,8 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
                     }
                 }
             }
-
-            ColorGeneratedMap(noiseMap);
-            meshFilter.mesh = MeshGeneration.Generate(MapChunkSize, MapChunkSize, noiseMap, heightMultiplier, curve, levelOfDetail);
-
-
-
-            MapDisplay display = FindObjectOfType<MapDisplay>();
-            if (drawStyle == DrawStyle.Noise)
-            {
-                display.DrawTexture(TextureGeneration.TextureFromHeightMap(noiseMap));
-            }
-            else if (drawStyle == DrawStyle.Color)
-            {
-                display.DrawTexture(TextureGeneration.TextureFromColorMap(ColorGeneratedMap(noiseMap), MapChunkSize, MapChunkSize));
-            }
+            
+            return new MapData(noiseMap, ColorGeneratedMap(noiseMap));
         }
 
         private Color[] ColorGeneratedMap(float[,] noiseMap)
@@ -126,7 +164,29 @@ namespace Fabian.Generation._3DGeneration.PerlinNoise
                 heightMultiplier = 0;
             }
         }
-        
-        
+
+        struct MapThreadInfo<T>
+        {
+            public readonly Action<T> Callback;
+            public readonly T Parameter;
+
+            public MapThreadInfo(Action<T> callback, T parameter)
+            {
+                Callback = callback;
+                Parameter = parameter;
+            }
+        }
+    }
+
+    public struct MapData
+    {
+        public readonly float[,] HeightMap;
+        public readonly Color[] ColorMap;
+
+        public MapData(float[,] heightMap, Color[] colorMap)
+        {
+            this.HeightMap = heightMap;
+            this.ColorMap = colorMap;
+        }
     }
 }
