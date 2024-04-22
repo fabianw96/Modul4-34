@@ -4,6 +4,7 @@ using System.Threading;
 using Fabian.Generation._3DGeneration.MeshGen;
 using Fabian.Generation.ScriptableObjects;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fabian.Generation._3DGeneration.NoiseGen
 {
@@ -22,7 +23,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         }
 
         public const int MapChunkSize = 241;
-        [SerializeField] [Range(0, 6)] private int levelOfDetail;
+        [SerializeField] [Range(0, 6)] private int levelOfDetailInEditor;
         [SerializeField] private DrawStyle drawStyle;
         [SerializeField] private NoiseStyle noiseStyle;
         [SerializeField] public float heightMultiplier;
@@ -35,10 +36,10 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         [SerializeField] private TerrainType[] terrainTypes;
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private AnimationCurve curve;
-
         [SerializeField] public bool autoUpdate;
 
         private Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new();
+        private Queue<MapThreadInfo<MeshData>> _meshDataThreadInfoQueue = new();
 
         private void Start()
         {
@@ -47,37 +48,55 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
         public void DrawMapInEditor()
         {
-            MapData mapData = GenerateMapData();
+            MapData mapData = GenerateMapData(Vector2.zero);
             MapDisplay display = FindObjectOfType<MapDisplay>();
             
-            meshFilter.mesh = MeshGeneration.Generate(MapChunkSize, MapChunkSize, mapData.HeightMap, heightMultiplier, curve, levelOfDetail);
             
             if (drawStyle == DrawStyle.Noise)
             {
-                display.DrawTexture(TextureGeneration.TextureFromHeightMap(mapData.HeightMap));
+                display.DrawMesh(MeshGeneration.Generate(mapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromHeightMap(mapData.HeightMap));
             }
             else if (drawStyle == DrawStyle.Color)
             {
-                display.DrawTexture(TextureGeneration.TextureFromColorMap(mapData.ColorMap, MapChunkSize, MapChunkSize));
+                display.DrawMesh(MeshGeneration.Generate(mapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromColorMap(mapData.ColorMap, MapChunkSize, MapChunkSize));
             }
         }
 
-        public void RequestMapData(Action<MapData> callback)
+        public void RequestMapData(Vector2 centre, Action<MapData> callback)
         {
             ThreadStart threadStart = delegate
             {
-                MapDataThread(callback);
+                MapDataThread(centre, callback);
             };
 
             new Thread(threadStart).Start();
         }
 
-        void MapDataThread(Action<MapData> callback)
+        void MapDataThread(Vector2 centre ,Action<MapData> callback)
         {
-            MapData mapData = GenerateMapData();
+            MapData mapData = GenerateMapData(centre);
             lock (_mapDataThreadInfoQueue)
             {
                 _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+            }
+        }
+
+        public void RequestMeshData(MapData mapData, int levelOfDetail, Action<MeshData> callback)
+        {
+            ThreadStart threadStart = delegate
+            {
+                MeshDataThread(mapData, levelOfDetail, callback);
+            };
+            
+            new Thread(threadStart).Start();
+        }
+
+        void MeshDataThread(MapData mapData, int levelOfDetail, Action<MeshData> callback)
+        {
+            MeshData meshData = MeshGeneration.Generate(mapData.HeightMap, heightMultiplier, curve, levelOfDetail);
+            lock (_meshDataThreadInfoQueue)
+            {
+                _meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
             }
         }
 
@@ -91,9 +110,18 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                     threadInfo.Callback(threadInfo.Parameter);
                 }
             }
+
+            if (_meshDataThreadInfoQueue.Count > 0)
+            {
+                for (int i = 0; i < _meshDataThreadInfoQueue.Count; i++)
+                {
+                    MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
+                    threadInfo.Callback(threadInfo.Parameter);
+                }
+            }
         }
 
-        MapData GenerateMapData()
+        MapData GenerateMapData(Vector2 centre)
         {
             FastNoiseLite noiseLite = new FastNoiseLite();
             
@@ -101,7 +129,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             
             if (noiseStyle == NoiseStyle.Perlin)
             {
-                noiseMap = Noise.GenNoiseMap(MapChunkSize, MapChunkSize, seed ,noiseScale, octaves, persistance, lacunarity, offset);
+                noiseMap = Noise.GenNoiseMap(MapChunkSize, MapChunkSize, seed ,noiseScale, octaves, persistance, lacunarity, centre + offset);
             }
             else if (noiseStyle == NoiseStyle.Simplex)
             {
