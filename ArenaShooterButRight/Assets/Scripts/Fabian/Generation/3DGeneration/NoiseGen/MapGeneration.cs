@@ -38,7 +38,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
         [SerializeField] public bool autoUpdate;
 
-        private Queue<MapThreadInfo<MapData>> mapDataThreadInfoQueue = new Queue<MapThreadInfo<MapData>>();
+        private Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new();
 
         private void Start()
         {
@@ -75,19 +75,19 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         void MapDataThread(Action<MapData> callback)
         {
             MapData mapData = GenerateMapData();
-            lock (mapDataThreadInfoQueue)
+            lock (_mapDataThreadInfoQueue)
             {
-                mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+                _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
             }
         }
 
         private void Update()
         {
-            if (mapDataThreadInfoQueue.Count > 0)
+            if (_mapDataThreadInfoQueue.Count > 0)
             {
-                for (int i = 0; i < mapDataThreadInfoQueue.Count; i++)
+                for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
                 {
-                    MapThreadInfo<MapData> threadInfo = mapDataThreadInfoQueue.Dequeue();
+                    MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
                     threadInfo.Callback(threadInfo.Parameter);
                 }
             }
@@ -185,8 +185,8 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
         public MapData(float[,] heightMap, Color[] colorMap)
         {
-            this.HeightMap = heightMap;
-            this.ColorMap = colorMap;
+            HeightMap = heightMap;
+            ColorMap = colorMap;
         }
     }
 }

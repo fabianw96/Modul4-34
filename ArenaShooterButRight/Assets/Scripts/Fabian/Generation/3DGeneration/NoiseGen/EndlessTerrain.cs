@@ -15,6 +15,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
         private Dictionary<Vector2, TerrainChunk> _terrainChunksDic = new Dictionary<Vector2, TerrainChunk>();
         private List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
+        
         private void Start()
         {
             _mapGeneration = FindObjectOfType<MapGeneration>();
@@ -80,6 +81,13 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                 _meshObject.layer = 3;
                 _meshObject.transform.parent = parent;
                 SetVisible(false);
+                
+                _mapGeneration.RequestMapData(OnMapDataReceived);
+            }
+
+            void OnMapDataReceived(MapData mapData)
+            {
+                Debug.Log("Data received");
             }
 
             public void UpdateTerrainChunk()
