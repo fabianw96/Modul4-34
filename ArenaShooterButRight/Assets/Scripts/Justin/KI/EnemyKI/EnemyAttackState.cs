@@ -6,6 +6,13 @@ namespace Justin.KI
 {
     public class EnemyAttackState : BaseState
     {
+        private EnemyController enemyController;
+
+        public EnemyAttackState(EnemyController _enemyController)
+        {
+            enemyController = _enemyController;
+        }
+
         public override void EnterState(EnemyController enemy)
         {
         

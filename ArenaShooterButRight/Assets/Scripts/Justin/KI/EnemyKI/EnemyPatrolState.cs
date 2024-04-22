@@ -6,9 +6,26 @@ namespace Justin.KI
 {
     public class EnemyPatrolState : BaseState
     {
+        private float searchWalkRadius = 5f;
+        private float waitTimeAtPosition = 2f;
+        private bool timerStarted;
+        private bool goToStart;
+        private Vector3 startPos;
+
+        private EnemyController controller;
+        public EnemyPatrolState(EnemyController _controller)
+        {
+            controller = _controller;
+        }
+
         public override void EnterState(EnemyController enemy)
         {
-
+            startPos = controller.transform.position;
+            Vector3 newPos = Random.insideUnitSphere * 20 * searchWalkRadius;
+            if (enemy.agent.SetDestination(newPos))
+            {
+                enemy.agent.SetDestination(newPos);
+            }
         }
 
         public override void ExitState(EnemyController enemy)
@@ -18,21 +35,32 @@ namespace Justin.KI
 
         public override void UpdateState(EnemyController enemy)
         {
-            // Patrol behavior
-            // Example: Move back and forth between two points
-            //transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+            if (controller.agent.remainingDistance <= 0.2f)
+            {
+                if (!timerStarted)
+                {
+                    controller.StartCoroutine(C_WaitForNewPosition());
+                }
+            }
+        }
 
-            // Example: If reaching a boundary, turn around
-            //if (transform.position.x > 5f || transform.position.x < -5f)
-            //{
-            //    transform.Rotate(Vector3.up, 180f);
-            //}
+        private IEnumerator C_WaitForNewPosition()
+        {
+            timerStarted = true;
+            yield return new WaitForSeconds(waitTimeAtPosition);
+            goToStart = !goToStart;
 
-            // Check for player within detection range to switch to chase state
-            //if (Vector3.Distance(transform.position, player.transform.position) < detectionRange)
-            //{
-            //    currentState = EnemyState.Chase;
-            //}
+            if (!goToStart)
+            {
+                controller.agent.SetDestination(startPos);
+            }
+            else
+            {
+                Vector3 newPos = startPos + Random.insideUnitSphere * searchWalkRadius;
+                controller.agent.SetDestination(newPos);
+            }
+
+            timerStarted = false;
         }
     }
 }

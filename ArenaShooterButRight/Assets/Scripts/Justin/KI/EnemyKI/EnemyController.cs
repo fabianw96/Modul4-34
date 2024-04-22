@@ -1,3 +1,4 @@
+using General;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,13 +8,13 @@ namespace Justin.KI
 {
     public class EnemyController : BaseController
     {
-        EnemyIdleState IdleState;
         EnemyPatrolState PatrolState;
         EnemyChaseState ChaseState;
         EnemyAttackState AttackState;
-        EnemySearchCover RetreatState;
-        private Transform PlayerPosition;
+        public EnemyHealthSystem enemyHealthSystem;
+        public HealthSystem Player;
         private float VisionRange, AttackRange;
+        private bool gotHit;
 
         protected override void Start()
         {
@@ -22,29 +23,19 @@ namespace Justin.KI
 
         protected override void InitFSM()
         {
-            initVariables();
-            IdleState = new EnemyIdleState(); ;
-            PatrolState = new EnemyPatrolState(); ;
-            ChaseState = new EnemyChaseState(); ;
-            AttackState = new EnemyAttackState(); ;
-            RetreatState = new EnemySearchCover(); ;
-            CurrentState = IdleState;
+            InitVariables();
+            PatrolState = new EnemyPatrolState(this);
+            ChaseState = new EnemyChaseState(this);
+            AttackState = new EnemyAttackState(this);
+            CurrentState = PatrolState;
             CurrentState.EnterState(this);
             StateDictionary = new Dictionary<BaseState, List<Transition>>
             {
                 {
-                    IdleState,
-                    new List<Transition>
-                    {
-                        new Transition(() => agent.remainingDistance > VisionRange, PatrolState ),
-                        new Transition(() => agent.remainingDistance < VisionRange && agent.remainingDistance > AttackRange, ChaseState ),
-                        new Transition(() => agent.remainingDistance > AttackRange, AttackState ),
-                    }
-                },
-                {
                     PatrolState,
                     new List<Transition>
                     {
+                        new Transition(() => enemyHealthSystem.hasTakenDamage == true, ChaseState),
                         new Transition(() => agent.remainingDistance < VisionRange && agent.remainingDistance > AttackRange, ChaseState ),
                         new Transition(() => agent.remainingDistance > AttackRange, AttackState ),
                     }
@@ -61,27 +52,19 @@ namespace Justin.KI
                     AttackState,
                     new List<Transition>
                     {
-                        // Keine Munition mehr oder wenig Leben -> Retreat State
-                        // Spieler nicht mehr in Angriffsreichweite -> ChaseState
-                        // Spieler Verloren -> Patrol State
+
+                         new Transition(() => agent.remainingDistance > VisionRange, PatrolState),
+                         new Transition(() => agent.remainingDistance > AttackRange, ChaseState),
                     }
                 },
-                {
-                    RetreatState,
-                    new List<Transition> 
-                    {
-                        // Munition besorgt -> Patrol State
-                        // Objekt zwischen Spieler und Gegner -> Patrol State 
-                    }
-
-                }
             };
         }
 
-        private void initVariables()
+        private void InitVariables()
         {
             AttackRange = 5.0f;
-            VisionRange = 7.0f;
+            VisionRange = 10.0f;
+            gotHit = false;
         }
 
         protected override void Update()

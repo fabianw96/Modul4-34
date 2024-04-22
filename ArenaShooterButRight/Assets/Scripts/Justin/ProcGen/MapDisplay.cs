@@ -4,25 +4,29 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Takes the Noisemap and turns it into a texture. 
-/// Then applies the texture to a plane.
-/// </summary>
-public class MapDisplay : MonoBehaviour
+namespace Justin.ProcGen
 {
-    public Renderer textureRenderer;
-    public MeshFilter meshFilter;
-    public MeshRenderer meshRenderer;
 
-    public void DrawTexture(Texture2D texture)
+    /// <summary>
+    /// Takes the Noisemap and turns it into a texture. 
+    /// Then applies the texture to a plane.
+    /// </summary>
+    public class MapDisplay : MonoBehaviour
     {
-        textureRenderer.sharedMaterial.mainTexture = texture;
-        textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height);
-    }
+        public Renderer textureRenderer;
+        public MeshFilter meshFilter;
+        public MeshRenderer meshRenderer;
 
-    internal void DrawMesh(MeshData meshData, Texture2D texture)
-    {
-        meshFilter.sharedMesh = meshData.CreateMesh();
-        meshRenderer.sharedMaterial.mainTexture = texture;
+        public void DrawTexture(Texture2D texture)
+        {
+            textureRenderer.sharedMaterial.mainTexture = texture;
+            textureRenderer.transform.localScale = new Vector3(texture.width, 1, texture.height);
+        }
+
+        internal void DrawMesh(MeshData meshData, Texture2D texture)
+        {
+            meshFilter.sharedMesh = meshData.CreateMesh();
+            meshRenderer.sharedMaterial.mainTexture = texture;
+        }
     }
 }

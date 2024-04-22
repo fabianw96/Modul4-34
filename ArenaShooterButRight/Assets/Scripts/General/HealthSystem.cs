@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace General
 {
-    public class HealthSystem : MonoBehaviour, IDamageable<float>
+    public abstract class HealthSystem : MonoBehaviour, IDamageable<float>
     {
         [SerializeField] private float maxHealth;
         [SerializeField] private float currentHealth;
@@ -23,7 +23,7 @@ namespace General
         }
         
 
-        public void TakeDamage(float damageTaken)
+        public virtual void TakeDamage(float damageTaken)
         {
             currentHealth -= damageTaken;
             if (currentHealth < 0f)
