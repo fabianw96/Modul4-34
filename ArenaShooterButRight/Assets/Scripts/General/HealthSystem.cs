@@ -5,11 +5,14 @@ using UnityEngine;
 
 namespace General
 {
-    public abstract class HealthSystem : MonoBehaviour, IDamageable<float>
+    public class HealthSystem : MonoBehaviour, IDamageable<float>
     {
         [SerializeField] private float maxHealth;
         [SerializeField] private float currentHealth;
         private const float DefaultHealth = 100f;
+        public bool hasTakenDamage;
+
+
 
         void Start()
         {
@@ -25,7 +28,9 @@ namespace General
 
         public virtual void TakeDamage(float damageTaken)
         {
+            
             currentHealth -= damageTaken;
+            hasTakenDamage = true;
             if (currentHealth < 0f)
             {
                 Kill();

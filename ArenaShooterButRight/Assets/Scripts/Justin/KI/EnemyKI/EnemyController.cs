@@ -11,10 +11,10 @@ namespace Justin.KI
         EnemyPatrolState PatrolState;
         EnemyChaseState ChaseState;
         EnemyAttackState AttackState;
-        public EnemyHealthSystem enemyHealthSystem;
+        public HealthSystem Enemy;
         public HealthSystem Player;
+        private float distanceToPlayer;
         private float VisionRange, AttackRange;
-        private bool gotHit;
 
         protected override void Start()
         {
@@ -35,17 +35,17 @@ namespace Justin.KI
                     PatrolState,
                     new List<Transition>
                     {
-                        new Transition(() => enemyHealthSystem.hasTakenDamage == true, ChaseState),
-                        new Transition(() => agent.remainingDistance < VisionRange && agent.remainingDistance > AttackRange, ChaseState ),
-                        new Transition(() => agent.remainingDistance > AttackRange, AttackState ),
+                        new Transition(() => Enemy.hasTakenDamage == true, ChaseState),
+                        new Transition(IsInChaseRange, ChaseState ),
+                        new Transition(IsInAttackRange, AttackState ),
                     }
                 },
                 {
                     ChaseState,
                     new List<Transition>
                     {
-                        new Transition(() => agent.remainingDistance > VisionRange, PatrolState ),
-                        new Transition(() => agent.remainingDistance > AttackRange, AttackState ),
+                        new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
+                        new Transition(IsInAttackRange, AttackState ),
                     }
                 },
                 {
@@ -53,8 +53,8 @@ namespace Justin.KI
                     new List<Transition>
                     {
 
-                         new Transition(() => agent.remainingDistance > VisionRange, PatrolState),
-                         new Transition(() => agent.remainingDistance > AttackRange, ChaseState),
+                         new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
+                         new Transition(IsInChaseRange, ChaseState),
                     }
                 },
             };
@@ -64,11 +64,11 @@ namespace Justin.KI
         {
             AttackRange = 5.0f;
             VisionRange = 10.0f;
-            gotHit = false;
         }
 
         protected override void Update()
         {
+            distanceToPlayer = Vector3.Distance(this.transform.position, Player.transform.position);
             UpdateFSM();
         }
 
@@ -85,6 +85,24 @@ namespace Justin.KI
                     CurrentState.EnterState(this);
                 }
             }
+        }
+
+        private void OnDrawGizmos()
+        { 
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(this.transform.position, VisionRange);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(this.transform.position, AttackRange);
+        }
+
+        private bool IsInChaseRange()
+        {
+            return (distanceToPlayer < VisionRange && distanceToPlayer > AttackRange);
+        }
+
+        private bool IsInAttackRange()
+        {
+            return (distanceToPlayer < AttackRange);
         }
     }
 }

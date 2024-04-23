@@ -6,7 +6,7 @@ namespace Justin.KI
 {
     public class EnemyPatrolState : BaseState
     {
-        private float searchWalkRadius = 5f;
+        private float searchWalkRadius = 10f;
         private float waitTimeAtPosition = 2f;
         private bool timerStarted;
         private bool goToStart;

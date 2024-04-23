@@ -971,6 +971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 2022489087}
+  Enemy: {fileID: 2022489089}
   Player: {fileID: 2087579216}
 --- !u!114 &2022489089
 MonoBehaviour:
@@ -984,8 +985,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41476d6e9f054b24e864bf6044466b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 0
+  currentHealth: 0
+  hasTakenDamage: 0
 --- !u!1 &2084391343
 GameObject:
   m_ObjectHideFlags: 0
