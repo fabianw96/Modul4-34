@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4491309433694113496
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423666032fed41d5935519fc922acb88, type: 3}
+  m_Name: PoseSamplerLayerSettings
+  m_EditorClassIdentifier: 
+  rigAsset: {fileID: 11400000, guid: bb964c4d36577834c9caded3e231341f, type: 2}
+  alpha: 1
+  curveBlending: []
+  linkDynamically: 0
+  poseToSample: {fileID: 11400000, guid: 6590b26c6566ec24ba4768e85620f575, type: 2}
+  defaultWeaponPose:
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  weaponBoneOffset:
+    position: {x: 0, y: 0, z: 0}
+    rotation: {x: 0, y: 0, z: 0, w: 1}
+    scale: {x: 1, y: 1, z: 1}
+  ikWeaponBone:
+    name: IK WeaponBone
+    index: 54
+    isVirtual: 0
+  ikHandRight:
+    name: IK RightHand
+    index: 55
+    isVirtual: 0
+  ikHandLeft:
+    name: IK LeftHand
+    index: 57
+    isVirtual: 0
+  ikHandRightHint:
+    name: IK RightElbow
+    index: 56
+    isVirtual: 0
+  ikHandLeftHint:
+    name: IK LeftElbow
+    index: 58
+    isVirtual: 0
+  weaponBoneRight:
+    name: IK WeaponBoneRight
+    index: 46
+    isVirtual: 0
+  weaponBoneLeft:
+    name: IK WeaponBoneLeft
+    index: 28
+    isVirtual: 0
+  weaponBone:
+    name: WeaponBone
+    index: 69
+    isVirtual: 0
+  pelvis:
+    name: Hips
+    index: 1
+    isVirtual: 0
+  spineRoot:
+    name: Spine_01
+    index: 10
+    isVirtual: 0
+  stabilizationWeight: StabilizationWeight
+  weaponBoneWeight: WeaponBoneWeight
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d53fe4b640f941ee8b893e5d6620b994, type: 3}
+  m_Name: AnimatorProfile_Rifle
+  m_EditorClassIdentifier: 
+  rigAsset: {fileID: 11400000, guid: bb964c4d36577834c9caded3e231341f, type: 2}
+  blendInTime: 0.15
+  blendOutTime: 0.15
+  easeMode:
+    easeFunc: 1
+    curve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+  settings:
+  - {fileID: -4491309433694113496}
+  - {fileID: 1262480101780163458}
+--- !u!114 &1262480101780163458
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c6c8dc558de4772963ae8c720fb2300, type: 3}
+  m_Name: IkLayerSettings
+  m_EditorClassIdentifier: 
+  rigAsset: {fileID: 11400000, guid: bb964c4d36577834c9caded3e231341f, type: 2}
+  alpha: 1
+  curveBlending: []
+  linkDynamically: 0
+  rightHand:
+    name: Hand_R
+    index: 34
+    isVirtual: 0
+  leftHand:
+    name: Hand_L
+    index: 16
+    isVirtual: 0
+  rightHandIk:
+    name: IK RightHand
+    index: 55
+    isVirtual: 0
+  leftHandIk:
+    name: IK LeftHand
+    index: 57
+    isVirtual: 0
+  rightHandHint:
+    name: IK RightElbow
+    index: 56
+    isVirtual: 0
+  leftHandHint:
+    name: IK LeftElbow
+    index: 58
+    isVirtual: 0
+  rightFoot:
+    name: Ball_R
+    index: 67
+    isVirtual: 0
+  leftFoot:
+    name: Ball_L
+    index: 62
+    isVirtual: 0
+  rightFootIk:
+    name: IK RightFoot
+    index: 71
+    isVirtual: 0
+  leftFootIk:
+    name: IK LeftFoot
+    index: 73
+    isVirtual: 0
+  rightFootHint:
+    name: IK RightKnee
+    index: 72
+    isVirtual: 0
+  leftFootHint:
+    name: IK LeftKnee
+    index: 74
+    isVirtual: 0
