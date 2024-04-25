@@ -10,6 +10,9 @@ namespace General
         [SerializeField] private float maxHealth;
         [SerializeField] private float currentHealth;
         private const float DefaultHealth = 100f;
+        public bool hasTakenDamage;
+
+
 
         void Start()
         {
@@ -23,9 +26,11 @@ namespace General
         }
         
 
-        public void TakeDamage(float damageTaken)
+        public virtual void TakeDamage(float damageTaken)
         {
+            
             currentHealth -= damageTaken;
+            hasTakenDamage = true;
             if (currentHealth < 0f)
             {
                 Kill();
