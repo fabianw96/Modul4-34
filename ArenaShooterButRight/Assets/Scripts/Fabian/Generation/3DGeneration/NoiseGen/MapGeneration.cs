@@ -38,8 +38,8 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         [SerializeField] private AnimationCurve curve;
         [SerializeField] public bool autoUpdate;
 
-        private Queue<MapThreadInfo<MapData>> _mapDataThreadInfoQueue = new();
-        private Queue<MapThreadInfo<MeshData>> _meshDataThreadInfoQueue = new();
+        private Queue<MapThreadInfo<FWMapData>> _mapDataThreadInfoQueue = new();
+        private Queue<MapThreadInfo<FWMeshData>> _meshDataThreadInfoQueue = new();
 
         private void Start()
         {
@@ -48,21 +48,21 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
         public void DrawMapInEditor()
         {
-            MapData mapData = GenerateMapData(Vector2.zero);
+            FWMapData fwMapData = GenerateMapData(Vector2.zero);
             MapDisplay display = FindObjectOfType<MapDisplay>();
             
             
             if (drawStyle == DrawStyle.Noise)
             {
-                display.DrawMesh(MeshGeneration.Generate(mapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromHeightMap(mapData.HeightMap));
+                display.DrawMesh(MeshGeneration.Generate(fwMapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromHeightMap(fwMapData.HeightMap));
             }
             else if (drawStyle == DrawStyle.Color)
             {
-                display.DrawMesh(MeshGeneration.Generate(mapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromColorMap(mapData.ColorMap, MapChunkSize, MapChunkSize));
+                display.DrawMesh(MeshGeneration.Generate(fwMapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromColorMap(fwMapData.ColorMap, MapChunkSize, MapChunkSize));
             }
         }
 
-        public void RequestMapData(Vector2 centre, Action<MapData> callback)
+        public void RequestMapData(Vector2 centre, Action<FWMapData> callback)
         {
             ThreadStart threadStart = delegate
             {
@@ -72,31 +72,31 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             new Thread(threadStart).Start();
         }
 
-        void MapDataThread(Vector2 centre ,Action<MapData> callback)
+        void MapDataThread(Vector2 centre ,Action<FWMapData> callback)
         {
-            MapData mapData = GenerateMapData(centre);
+            FWMapData fwMapData = GenerateMapData(centre);
             lock (_mapDataThreadInfoQueue)
             {
-                _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
+                _mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<FWMapData>(callback, fwMapData));
             }
         }
 
-        public void RequestMeshData(MapData mapData, int levelOfDetail, Action<MeshData> callback)
+        public void RequestMeshData(FWMapData fwMapData, int levelOfDetail, Action<FWMeshData> callback)
         {
             ThreadStart threadStart = delegate
             {
-                MeshDataThread(mapData, levelOfDetail, callback);
+                MeshDataThread(fwMapData, levelOfDetail, callback);
             };
             
             new Thread(threadStart).Start();
         }
 
-        void MeshDataThread(MapData mapData, int levelOfDetail, Action<MeshData> callback)
+        void MeshDataThread(FWMapData fwMapData, int levelOfDetail, Action<FWMeshData> callback)
         {
-            MeshData meshData = MeshGeneration.Generate(mapData.HeightMap, heightMultiplier, curve, levelOfDetail);
+            FWMeshData fwMeshData = MeshGeneration.Generate(fwMapData.HeightMap, heightMultiplier, curve, levelOfDetail);
             lock (_meshDataThreadInfoQueue)
             {
-                _meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<MeshData>(callback, meshData));
+                _meshDataThreadInfoQueue.Enqueue(new MapThreadInfo<FWMeshData>(callback, fwMeshData));
             }
         }
 
@@ -106,7 +106,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             {
                 for (int i = 0; i < _mapDataThreadInfoQueue.Count; i++)
                 {
-                    MapThreadInfo<MapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
+                    MapThreadInfo<FWMapData> threadInfo = _mapDataThreadInfoQueue.Dequeue();
                     threadInfo.Callback(threadInfo.Parameter);
                 }
             }
@@ -115,13 +115,13 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             {
                 for (int i = 0; i < _meshDataThreadInfoQueue.Count; i++)
                 {
-                    MapThreadInfo<MeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
+                    MapThreadInfo<FWMeshData> threadInfo = _meshDataThreadInfoQueue.Dequeue();
                     threadInfo.Callback(threadInfo.Parameter);
                 }
             }
         }
 
-        MapData GenerateMapData(Vector2 centre)
+        FWMapData GenerateMapData(Vector2 centre)
         {
             FastNoiseLite noiseLite = new FastNoiseLite();
             
@@ -150,7 +150,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                 }
             }
             
-            return new MapData(noiseMap, ColorGeneratedMap(noiseMap));
+            return new FWMapData(noiseMap, ColorGeneratedMap(noiseMap));
         }
 
         private Color[] ColorGeneratedMap(float[,] noiseMap)
@@ -206,12 +206,12 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         }
     }
 
-    public struct MapData
+    public struct FWMapData
     {
         public readonly float[,] HeightMap;
         public readonly Color[] ColorMap;
 
-        public MapData(float[,] heightMap, Color[] colorMap)
+        public FWMapData(float[,] heightMap, Color[] colorMap)
         {
             HeightMap = heightMap;
             ColorMap = colorMap;

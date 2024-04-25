@@ -87,7 +87,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             private MeshFilter _meshFilter;
             private LODInfo[] _detailLevels;
             private LODMesh[] _lodMeshes;
-            private MapData _mapData;
+            private FWMapData _fwMapData;
             private bool _mapDataReceived;
             private int _prevLodIndex = -1;
             public TerrainChunk(Vector2 coord, int size, Transform parent, Material material, LODInfo[] detailLevels)
@@ -117,12 +117,12 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                 _mapGeneration.RequestMapData(_position, OnMapDataReceived);
             }
 
-            void OnMapDataReceived(MapData mapData)
+            void OnMapDataReceived(FWMapData fwMapData)
             {
-                _mapData = mapData;
+                _fwMapData = fwMapData;
                 _mapDataReceived = true;
 
-                Texture2D texture = TextureGeneration.TextureFromColorMap(mapData.ColorMap, MapGeneration.MapChunkSize,
+                Texture2D texture = TextureGeneration.TextureFromColorMap(fwMapData.ColorMap, MapGeneration.MapChunkSize,
                     MapGeneration.MapChunkSize);
                 _meshRenderer.material.mainTexture = texture;
                 
@@ -161,7 +161,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                         }
                         else if(!lodMesh.HasRequestedMesh)
                         {
-                            lodMesh.RequestMesh(_mapData);
+                            lodMesh.RequestMesh(_fwMapData);
                         }
                     }
                 }
@@ -194,18 +194,18 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                 _updateCallback = updateCallback;
             }
 
-            private void OnMeshDataReceived(MeshData meshData)
+            private void OnMeshDataReceived(FWMeshData fwMeshData)
             {
-                Mesh = meshData.CreateMesh();
+                Mesh = fwMeshData.CreateMesh();
                 HasMesh = true;
 
                 _updateCallback();
             }
 
-            public void RequestMesh(MapData mapData)
+            public void RequestMesh(FWMapData fwMapData)
             {
                 HasRequestedMesh = true;
-                _mapGeneration.RequestMeshData(mapData, _lod, OnMeshDataReceived);
+                _mapGeneration.RequestMeshData(fwMapData, _lod, OnMeshDataReceived);
             }
         }
         

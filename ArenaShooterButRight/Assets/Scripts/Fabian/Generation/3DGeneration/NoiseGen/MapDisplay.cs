@@ -14,9 +14,9 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             textureRenderer.sharedMaterial.mainTexture = texture;
         }
 
-        public void DrawMesh(MeshData meshData, Texture2D texture)
+        public void DrawMesh(FWMeshData fwMeshData, Texture2D texture)
         {
-            meshFilter.sharedMesh = meshData.CreateMesh();
+            meshFilter.sharedMesh = fwMeshData.CreateMesh();
             meshRenderer.sharedMaterial.mainTexture = texture;
         }
     }

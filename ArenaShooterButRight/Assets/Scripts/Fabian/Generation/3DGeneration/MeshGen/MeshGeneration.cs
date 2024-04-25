@@ -8,7 +8,7 @@ namespace Fabian.Generation._3DGeneration.MeshGen
     //mesh generation per catlikecoding https://catlikecoding.com/unity/tutorials/procedural-grid/
     public static class MeshGeneration
     {
-        public static MeshData Generate(float[,] heightMap, float heightMultiplier, AnimationCurve curve, int levelOfDetail)
+        public static FWMeshData Generate(float[,] heightMap, float heightMultiplier, AnimationCurve curve, int levelOfDetail)
         {
             AnimationCurve heightCurve = new AnimationCurve(curve.keys);
             int width = heightMap.GetLength(0);
@@ -16,7 +16,7 @@ namespace Fabian.Generation._3DGeneration.MeshGen
             int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
             int verticesPerLine = (width - 1) / meshSimplificationIncrement + 1;
 
-            MeshData meshData = new MeshData(verticesPerLine, verticesPerLine);
+            FWMeshData fwMeshData = new FWMeshData(verticesPerLine, verticesPerLine);
             int[] triangles = new int[(verticesPerLine - 1) * (verticesPerLine - 1) * 6];
             
             float topLeftX = (width - 1) / -2f;
@@ -29,8 +29,8 @@ namespace Fabian.Generation._3DGeneration.MeshGen
             {
                 for (int x = 0; x < width; x += meshSimplificationIncrement, i++)
                 {
-                    meshData.Vertices[i] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x,y]) * heightMultiplier, topLeftZ - y);
-                    meshData.Uvs[i] = new Vector2((float)x / width, (float)y / height);
+                    fwMeshData.Vertices[i] = new Vector3(topLeftX + x, heightCurve.Evaluate(heightMap[x,y]) * heightMultiplier, topLeftZ - y);
+                    fwMeshData.Uvs[i] = new Vector2((float)x / width, (float)y / height);
 
                     if (x < width - 1 && y < height - 1)
                     {
@@ -45,18 +45,18 @@ namespace Fabian.Generation._3DGeneration.MeshGen
                 }
             }
             
-            meshData.Triangles = triangles;
+            fwMeshData.Triangles = triangles;
             
-            return meshData;
+            return fwMeshData;
         }
     }
     
-    public class MeshData {
+    public class FWMeshData {
         public Vector3[] Vertices;
         public int[] Triangles;
         public Vector2[] Uvs;
 
-        public MeshData(int meshWidth, int meshHeight) {
+        public FWMeshData(int meshWidth, int meshHeight) {
             Vertices = new Vector3[meshWidth * meshHeight];
             Uvs = new Vector2[meshWidth * meshHeight];
             Triangles = new int[(meshWidth-1)*(meshHeight-1)*6];
