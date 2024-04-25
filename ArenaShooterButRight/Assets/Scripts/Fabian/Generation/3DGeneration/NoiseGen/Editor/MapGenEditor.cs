@@ -1,27 +1,26 @@
-using Fabian.Generation._3DGeneration.MeshGen;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
-namespace Fabian.Generation._3DGeneration.PerlinNoise.Editor
+namespace Fabian.Generation._3DGeneration.NoiseGen.Editor
 {
     [CustomEditor(typeof(MapGeneration))]
     public class MapGenEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
-            MapGeneration mapGeneration = (MapGeneration)target;
+            MapGeneration mapGeneration = (MapGeneration)this.target;
 
             if (DrawDefaultInspector())
             {
                 if (mapGeneration.autoUpdate)
                 {
-                    mapGeneration.GenerateMap();
+                    mapGeneration.DrawMapInEditor();
                 }
             }
 
             if (GUILayout.Button("Generate"))
             {
-                mapGeneration.GenerateMap();
+                mapGeneration.DrawMapInEditor();
             }
         }
     }
