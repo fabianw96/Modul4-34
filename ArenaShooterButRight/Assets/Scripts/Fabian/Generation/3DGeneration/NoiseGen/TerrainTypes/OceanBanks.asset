@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: OceanBanks
   m_EditorClassIdentifier: 
   terrainName: OceanBanks
-  terraingHeight: 0.4
+  terraingHeight: 0.3
   Color: {r: 0.36320752, g: 0.772844, b: 1, a: 0}

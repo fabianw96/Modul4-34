@@ -10,8 +10,8 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         [SerializeField] private Transform viewer;
         [SerializeField] private Material mapMaterial;
         private static float _maxviewdistance = 450;
-        public LODInfo[] detailLevels;
-        private const float ViewerMoveThresholdForChunkUpdate = 25f;
+        private const float Scale = 1f;
+        public LODInfo[] detailLevels; private const float ViewerMoveThresholdForChunkUpdate = 25f;
         private const float SqrViewerMoveThresholdForChunkUpdate = ViewerMoveThresholdForChunkUpdate * ViewerMoveThresholdForChunkUpdate;
 
         
@@ -22,7 +22,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         private int _chunksVisibleInViewDst;
 
         private Dictionary<Vector2, TerrainChunk> _terrainChunksDic = new Dictionary<Vector2, TerrainChunk>();
-        private List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
+        static private List<TerrainChunk> _terrainChunksVisibleLastUpdate = new List<TerrainChunk>();
         
         private void Start()
         {
@@ -35,7 +35,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
         private void Update()
         {
-            _viewerPosition = new Vector2(viewer.position.x, viewer.position.z);
+            _viewerPosition = new Vector2(viewer.position.x, viewer.position.z) / Scale;
             if ((_viewerPositionOld - _viewerPosition).sqrMagnitude > SqrViewerMoveThresholdForChunkUpdate)
             {
                 _viewerPositionOld = _viewerPosition;
@@ -64,10 +64,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                     if (_terrainChunksDic.ContainsKey(viewedChunkCoord))
                     {
                         _terrainChunksDic[viewedChunkCoord].UpdateTerrainChunk();
-                        if (_terrainChunksDic[viewedChunkCoord].IsVisible())
-                        {
-                            _terrainChunksVisibleLastUpdate.Add(_terrainChunksDic[viewedChunkCoord]);
-                        }
+
                     }
                     else
                     {
@@ -102,7 +99,8 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                 _meshFilter = _meshObject.AddComponent<MeshFilter>();
 
                 _meshRenderer.material = material;
-                _meshObject.transform.position = positionV3;
+                _meshObject.transform.position = positionV3 * Scale;
+                _meshObject.transform.localScale = Vector3.one * Scale;
                 _meshObject.layer = 3;
                 _meshObject.transform.parent = parent;
                 SetVisible(false);
@@ -135,6 +133,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                 
                 float viewerDistanceFromNearestEdge = Mathf.Sqrt(_bounds.SqrDistance(_viewerPosition));
                 bool visible = viewerDistanceFromNearestEdge <= _maxviewdistance;
+                
                 if (visible)
                 {
                     int lodIndex = 0;
@@ -164,8 +163,8 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
                             lodMesh.RequestMesh(_fwMapData);
                         }
                     }
+                    _terrainChunksVisibleLastUpdate.Add(this);
                 }
-                
                 SetVisible(visible);
             }
 
