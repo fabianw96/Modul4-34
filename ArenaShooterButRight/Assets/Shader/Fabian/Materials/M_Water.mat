@@ -73,7 +73,7 @@ Material:
     - _AlphaDstBlend: 10
     - _AlphaSrcBlend: 1
     - _BaseSpeed: -0.01
-    - _BaseTiling: 30
+    - _BaseTiling: 35
     - _BlendMode: 0
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
@@ -89,7 +89,7 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
-    - _FoamDistance: 2.2
+    - _FoamDistance: 1.25
     - _FresnelPower: 4
     - _OpaqueCullMode: 2
     - _QueueControl: -1
@@ -128,10 +128,11 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - _DeepColor: {r: 0, g: 0.148122, b: 0.3773585, a: 1}
+    - _DeepColor: {r: 0.039248854, g: 0.053053893, b: 0.056603767, a: 1}
     - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShallowColor: {r: 0, g: 0.797081, b: 1, a: 1}
+    - _FoamColor: {r: 0.7738519, g: 0.8607292, b: 0.8867924, a: 0}
+    - _ShallowColor: {r: 0.33725488, g: 0.47450978, b: 0.5098039, a: 1}
     - _WaterColor: {r: 0, g: 0.43371317, b: 0.5031446, a: 0}
   m_BuildTextureStacks: []
