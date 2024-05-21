@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Sand
   m_EditorClassIdentifier: 
   terrainName: Sand
-  terraingHeight: 0.5
+  terraingHeight: 0.4
   Color: {r: 0.9490196, g: 0.8235294, b: 0.6627451, a: 0}

@@ -13,7 +13,8 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         public enum DrawStyle
         {
             Noise,
-            Color
+            Color,
+            Falloff
         };
         
         public enum NoiseStyle
@@ -26,6 +27,7 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         [SerializeField] [Range(0, 6)] private int levelOfDetailInEditor;
         [SerializeField] private DrawStyle drawStyle;
         [SerializeField] private NoiseStyle noiseStyle;
+        [SerializeField] private Noise.NormalizeMode normalizeMode;
         [SerializeField] public float heightMultiplier;
         [SerializeField] private float noiseScale;
         [SerializeField] private int octaves;
@@ -33,13 +35,24 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
         [SerializeField] private float lacunarity;
         [SerializeField] private int seed;
         [SerializeField] private Vector2 offset;
+        [SerializeField] private bool useFalloff;
+        [SerializeField] private int cellularAutomataIterations;
+        [SerializeField] [Range(0, 1)] private float cellularAutomataCutOff;
+        [SerializeField] private int maxCellularAutomataNeighbors;
         [SerializeField] private TerrainType[] terrainTypes;
         [SerializeField] private MeshFilter meshFilter;
         [SerializeField] private AnimationCurve curve;
         [SerializeField] public bool autoUpdate;
 
+        private float[,] _falloffMap;
+
         private Queue<MapThreadInfo<FWMapData>> _mapDataThreadInfoQueue = new();
         private Queue<MapThreadInfo<FWMeshData>> _meshDataThreadInfoQueue = new();
+
+        private void Awake()
+        {
+            _falloffMap = FalloffGenerator.GenerateFalloffMap(MapChunkSize);
+        }
 
         private void Start()
         {
@@ -59,6 +72,10 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             else if (drawStyle == DrawStyle.Color)
             {
                 display.DrawMesh(MeshGeneration.Generate(fwMapData.HeightMap, heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromColorMap(fwMapData.ColorMap, MapChunkSize, MapChunkSize));
+            }
+            else if (drawStyle == DrawStyle.Falloff)
+            {
+                display.DrawMesh(MeshGeneration.Generate(FalloffGenerator.GenerateCaFalloffMap(MapChunkSize, cellularAutomataCutOff, cellularAutomataIterations, maxCellularAutomataNeighbors), heightMultiplier, curve, levelOfDetailInEditor),TextureGeneration.TextureFromHeightMap(FalloffGenerator.GenerateCaFalloffMap(MapChunkSize, cellularAutomataCutOff, cellularAutomataIterations, maxCellularAutomataNeighbors)));
             }
         }
 
@@ -129,7 +146,18 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             
             if (noiseStyle == NoiseStyle.Perlin)
             {
-                noiseMap = Noise.GenNoiseMap(MapChunkSize, MapChunkSize, seed ,noiseScale, octaves, persistance, lacunarity, centre + offset);
+                noiseMap = Noise.GenNoiseMap(MapChunkSize, MapChunkSize, seed ,noiseScale, octaves, persistance, lacunarity, centre + offset, normalizeMode);
+
+                if (useFalloff)
+                {
+                    for (int y = 0; y < MapChunkSize; y++)
+                    {
+                        for (int x = 0; x < MapChunkSize; x++)
+                        {
+                            noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - _falloffMap[x, y]);
+                        }
+                    }
+                }
             }
             else if (noiseStyle == NoiseStyle.Simplex)
             {
@@ -165,9 +193,12 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
 
                     for (int i = 0; i < terrainTypes.Length; i++)
                     {
-                        if (currentHeight <= terrainTypes[i].terraingHeight)
+                        if (currentHeight >= terrainTypes[i].terraingHeight)
                         {
                             colorMap[y * MapChunkSize + x] = terrainTypes[i].Color;
+                        }
+                        else
+                        {
                             break;
                         }
                     }
@@ -191,6 +222,9 @@ namespace Fabian.Generation._3DGeneration.NoiseGen
             {
                 heightMultiplier = 0;
             }
+
+            _falloffMap = FalloffGenerator.GenerateCaFalloffMap(MapChunkSize, cellularAutomataCutOff,
+                cellularAutomataIterations, maxCellularAutomataNeighbors);
         }
 
         struct MapThreadInfo<T>

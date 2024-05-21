@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
@@ -12,37 +13,36 @@ namespace Fabian.Generation.Cellular_Automata
             WALL
         }
     
-        [SerializeField] private Grid[,] NoiseGrid;
-        [SerializeField] private Tilemap TileMap;
-        [SerializeField] private Tile Floor;
-        [SerializeField] private Tile Wall;
-        [SerializeField] private int MapWidth;
-        [SerializeField] private int MapHeight;
-        [SerializeField] private int Density;
-        [SerializeField] private int IterationCount;
+        private Grid[,] _noiseGrid;
+        [SerializeField] private Tilemap tileMap;
+        [SerializeField] private Tile floor;
+        [SerializeField] private Tile wall;
+        [SerializeField] private int mapWidth;
+        [SerializeField] private int mapHeight;
+        [SerializeField] private int density;
+        [SerializeField] private int iterationCount;
 
         private void OnEnable()
         {
-            NoiseGrid = new Grid[MapWidth, MapHeight];
-        
+            _noiseGrid = new Grid[mapWidth, mapHeight];
             GenerateNoise();
         }
 
         public void GenerateNoise()
         {
-            NoiseGrid = new Grid[MapWidth,MapHeight];
+            _noiseGrid = new Grid[mapWidth,mapHeight];
             
-            for (int x = 0; x < MapWidth; x++)
+            for (int x = 0; x < mapWidth; x++)
             {
-                for (int y = 0; y < MapHeight; y++)
+                for (int y = 0; y < mapHeight; y++)
                 {
-                    if (Random.Range(0, 100) > Density)
+                    if (Random.Range(0, 100) > density)
                     {
-                        NoiseGrid[x, y] = Grid.FLOOR;
+                        _noiseGrid[x, y] = Grid.FLOOR;
                     }
                     else
                     {
-                        NoiseGrid[x, y] = Grid.WALL;
+                        _noiseGrid[x, y] = Grid.WALL;
                     }
                 }
             }
@@ -51,33 +51,31 @@ namespace Fabian.Generation.Cellular_Automata
 
         private void PlaceTile()
         {
-            for (int x = 0; x < MapHeight; x++)
+            for (int x = 0; x < mapHeight; x++)
             {
-                for (int y = 0; y < MapWidth; y++)
+                for (int y = 0; y < mapWidth; y++)
                 {
-                    if (NoiseGrid[y,x] == Grid.FLOOR)
+                    if (_noiseGrid[y,x] == Grid.FLOOR)
                     {
-                        TileMap.SetTile(new Vector3Int(x, y), Floor);
+                        tileMap.SetTile(new Vector3Int(x, y), floor);
                     }
-                    else if (NoiseGrid[y,x] == Grid.WALL)
+                    else if (_noiseGrid[y,x] == Grid.WALL)
                     {
-                        TileMap.SetTile(new Vector3Int(x, y), Wall);
+                        tileMap.SetTile(new Vector3Int(x, y), wall);
                     }
                 }
             }
-
-       
         }
 
         public void ApplyCellularAutomata(int iterations)
         {
             for (int i = 0; i < iterations; i++)
             { 
-                Grid[,] tempGrid = NoiseGrid;
+                Grid[,] tempGrid = _noiseGrid;
             
-                for (int j = 0; j < MapHeight; j++)
+                for (int j = 0; j < mapHeight; j++)
                 {
-                    for (int k = 0; k < MapWidth; k++)
+                    for (int k = 0; k < mapWidth; k++)
                     {
                         int neighborWallCount = 0;
                     
@@ -101,15 +99,14 @@ namespace Fabian.Generation.Cellular_Automata
                                 }
                             }
                         }
-
-                    
+                        
                         if (neighborWallCount > 4)
                         {
-                            NoiseGrid[k, j] = Grid.WALL;
+                            _noiseGrid[k, j] = Grid.WALL;
                         }
                         else
                         {
-                            NoiseGrid[k, j] = Grid.FLOOR;
+                            _noiseGrid[k, j] = Grid.FLOOR;
                         }
                     }
                 }
@@ -119,7 +116,7 @@ namespace Fabian.Generation.Cellular_Automata
 
         private bool IsWithMapBounds(int x, int y)
         {
-            return x >= 0 && y >= 0 && x < MapWidth && y < MapHeight;
+            return x >= 0 && y >= 0 && x < mapWidth && y < mapHeight;
         }
     
     }

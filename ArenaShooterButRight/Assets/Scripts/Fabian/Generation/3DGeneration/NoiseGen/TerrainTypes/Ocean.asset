@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ocean
   m_EditorClassIdentifier: 
   terrainName: Ocean
-  terraingHeight: 0.3
+  terraingHeight: 0
   Color: {r: 0.112362035, g: 0.40996158, b: 0.9528302, a: 0}

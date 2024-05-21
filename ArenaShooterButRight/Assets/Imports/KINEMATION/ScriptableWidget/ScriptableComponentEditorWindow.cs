@@ -1,8 +1,8 @@
 ﻿// Designed by KINEMATION, 2024.
 
-using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace KINEMATION.ScriptableWidget
 {
