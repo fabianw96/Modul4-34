@@ -9,7 +9,6 @@ namespace General.Player
         private Ray _ray;
         private RaycastHit _hit;
 
-
         private void Start()
         {
             _mainCamera = Camera.main;

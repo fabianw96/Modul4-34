@@ -6,6 +6,8 @@ using UnityEngine.Animations.Rigging;
 
 namespace General.Player
 {
+    //https://github.com/JARVIS843/Unity-Tutorial - FPS Full body Character controller by JARVIS843
+    
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private float AnimBlendSpeed = 8.9f;
