@@ -24,9 +24,6 @@ MonoBehaviour:
     - model: {fileID: 8926484042661614961}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661614988}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615628}
       id: 0
       isStickyNote: 0
@@ -39,9 +36,6 @@ MonoBehaviour:
     - model: {fileID: 8926484042661615012}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615018}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615299}
       id: 0
       isStickyNote: 0
@@ -51,13 +45,7 @@ MonoBehaviour:
     - model: {fileID: 8926484042661615270}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615276}
-      id: 0
-      isStickyNote: 0
     - model: {fileID: 8926484042661615339}
-      id: 0
-      isStickyNote: 0
-    - model: {fileID: 8926484042661615354}
       id: 0
       isStickyNote: 0
     - model: {fileID: 8926484042661615337}
@@ -71,8 +59,8 @@ MonoBehaviour:
       serializedVersion: 2
       x: 5343
       y: 1394
-      width: 1769
-      height: 1215
+      width: 1771
+      height: 1330
     contents:
     - model: {fileID: 8926484042661615632}
       id: 0
@@ -107,17 +95,14 @@ MonoBehaviour:
     - model: {fileID: 8926484042661615789}
       id: 0
       isStickyNote: 0
-    - model: {fileID: 8926484042661615652}
-      id: 0
-      isStickyNote: 0
   stickyNoteInfos: []
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: 3482
+    x: 3481
     y: 645
-    width: 3630
-    height: 2040
+    width: 3632
+    height: 2079
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -128,7 +113,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d4c867f6b72b714dbb5fd1780afe208, type: 3}
-  m_Name: VFX_Lightning
+  m_Name: VFX_LightningStrike
   m_EditorClassIdentifier: 
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 0}
@@ -172,7 +157,7 @@ VisualEffectResource:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: VFX_Lightning
+  m_Name: VFX_LightningStrike
   m_Graph: {fileID: 114350483966674976}
   m_Infos:
     m_RendererSettings:
@@ -6572,7 +6557,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 6119, y: 2506}
+  m_UIPosition: {x: 6330, y: 2619}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -6891,7 +6876,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 6316, y: 2486}
+  m_UIPosition: {x: 6382, y: 2486}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
