@@ -20,39 +20,31 @@ namespace Fabian.KI.EnemyFSM
 
         public override void OnUpdateState()
         {
-            if (_controller.shootTimer > 0)
-            {
-                _controller.shootTimer -= Time.deltaTime;
-                return;
-            }
-
-            //shoot at player
-            while (_controller.remainingShootCooldown > 0)
-            {
-                _controller.remainingShootCooldown -= Time.deltaTime;
-                return;
-            }
-
             if (_hasShot) return;
 
             _controller.StartCoroutine(ShootPlayer());
-            _controller.remainingShootCooldown = _controller.enemyShootCooldown;
             
             base.OnUpdateState();
-        }
-        
-        public override void OnExitState()
-        {
-            _controller.shootTimer = _controller.idleBeforeShootTime;
-            base.OnExitState();
         }
 
         private IEnumerator ShootPlayer()
         {
+            GameObject bullet = Object.Instantiate(_controller.bulletPrefab);
+            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), _controller.gunArm.GetComponent<Collider>());
+            bullet.transform.position = _controller.gunArm.transform.position;
+            Vector3 rotation = bullet.transform.rotation.eulerAngles;
+            bullet.transform.rotation = Quaternion.Euler(rotation.x, _controller.transform.eulerAngles.y, rotation.z);
+            bullet.GetComponent<Rigidbody>().AddForce(_controller.gunArm.transform.forward * _controller.projectileSpeed, ForceMode.Impulse);
+            _controller.StartCoroutine(DestroyProjectile(bullet, _controller.projectileDecayDelay));
             _hasShot = true;
-            yield return new WaitForSeconds(3);
-            _controller.player.TakeDamage(5);
+            yield return new WaitForSeconds(_controller.enemyShootCooldown);
             _hasShot = false;
+        }
+
+        private IEnumerator DestroyProjectile(GameObject proj, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            Object.Destroy(proj);
         }
     }
 }
