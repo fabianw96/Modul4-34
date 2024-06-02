@@ -20,7 +20,7 @@ namespace Fabian.Generation._3DGeneration.MeshGen
             int[] triangles = new int[(verticesPerLine - 1) * (verticesPerLine - 1) * 6];
             
             float topLeftX = (width - 1) / -2f;
-            float topLeftZ = (height - 2) / 2f;
+            float topLeftZ = (height - 1) / 2f;
             
             int vertexIndex = 0;
             int triangleIndex = 0;

@@ -19,8 +19,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 734
     y: -190
-    width: 631
-    height: 2324
+    width: 632
+    height: 2345
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -197,7 +197,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614569}
   - {fileID: 8926484042661614580}
   - {fileID: 8926484042661614652}
-  m_UIPosition: {x: 941.3827, y: 114.57214}
+  m_UIPosition: {x: 941, y: 107}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -1074,7 +1074,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614593}
   - {fileID: 8926484042661614696}
   - {fileID: 8926484042661614699}
-  m_UIPosition: {x: 940, y: 1239}
+  m_UIPosition: {x: 941, y: 1247}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -2624,7 +2624,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 0.1
+      m_SerializableObject: 1
     m_Space: 2147483647
   m_Property:
     name: Intensity
