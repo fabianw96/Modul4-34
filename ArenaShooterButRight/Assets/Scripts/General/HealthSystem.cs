@@ -28,9 +28,8 @@ namespace General
 
         public virtual void TakeDamage(float damageTaken)
         {
-            
             currentHealth -= damageTaken;
-            hasTakenDamage = true;
+            // hasTakenDamage = true;
             if (currentHealth < 0f)
             {
                 Kill();
