@@ -1,11 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
-public abstract class Projectile : MonoBehaviour, IProjectile
+public class Projectile : MonoBehaviour
 {
     public float speed;
     protected Vector3 direction;
+    [SerializeField] private VisualEffect vfx;
 
     public void Launch(Vector3 _direction)
     {
@@ -21,8 +23,8 @@ public abstract class Projectile : MonoBehaviour, IProjectile
 
     private void OnCollisionEnter(Collision collision)
     {
-        OnHit();
+        //OnHit();
         // Implement collision logic
     }
-    public abstract void OnHit();
+    //public void OnHit();
 }
