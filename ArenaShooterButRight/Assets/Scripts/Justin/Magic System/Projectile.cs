@@ -1,30 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
+using General;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed;
-    protected Vector3 direction;
-    [SerializeField] private VisualEffect vfx;
+    private SpellData spellData;
+    private MagicEffect magicEffect;
+    private Vector3 direction;
 
-    public void Launch(Vector3 _direction)
+    public void Launch(Vector3 _launchDirection, SpellData _spellData)
     {
-        direction = _direction;
-        //Implement Launch Logic
+        spellData = _spellData;
+        direction = _launchDirection;
+        // Implement movement logic
     }
-
 
     private void Update()
     {
-        transform.Translate(direction * speed * Time.deltaTime);
+        transform.Translate(direction * spellData.speed * Time.deltaTime);
     }
 
-    private void OnCollisionEnter(Collision collision)
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    spellData.(collision.gameObject);
+    //    Destroy(gameObject);
+    //}
+
+    private void OnTriggerEnter(Collider other)
     {
-        //OnHit();
-        // Implement collision logic
+        if (other.gameObject.GetComponent<HealthSystem>() != null)
+        {
+            
+        }
     }
-    //public void OnHit();
 }
