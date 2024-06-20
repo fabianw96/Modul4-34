@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,21 +8,33 @@ public class Shooter : MonoBehaviour
     public Transform shootPoint;
     public GameObject projectilePrefab;
     public List<SpellData> spellDataList;
-    // Spelltype from UI
+    [SerializeField] private GameObject casterPoint;
 
-    private void ChooseSpell()
+    public void ChooseSpell(SpellType chosenSpell)
     {
-       switch (/*Welcher spell in UI gewählt*/)
+       switch (chosenSpell)
        {
-            //case SpellType.Fireball:
-            //    Shoot()
+            case SpellType.Fireball:
+                Shoot(spellDataList[0]);
+                break;
+            case SpellType.Iceball:
+                Shoot(spellDataList[1]);
+                break;
+            case SpellType.Electroball:
+                Shoot(spellDataList[2]);
+                break;
        }
     }
 
-    public void Shoot(Vector3 direction, SpellData spellData)
+    private void Shoot(SpellData spellData)
     {
-        GameObject projectileInstance = Instantiate(projectilePrefab, shootPoint.position, Quaternion.identity);
+        GameObject projectileInstance = Instantiate(projectilePrefab);
+        Physics.IgnoreCollision(projectileInstance.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
+        projectileInstance.transform.position = casterPoint.transform.position;
+        Vector3 rotation = projectileInstance.transform.root.eulerAngles;
+        projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
+        projectileInstance.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 100f, ForceMode.Impulse);
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
-        projectile.Launch(direction);
+        projectile.Launch(spellData);
     }
 }

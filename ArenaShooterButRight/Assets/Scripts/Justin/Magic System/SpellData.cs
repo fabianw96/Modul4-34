@@ -1,3 +1,4 @@
+using General.Player;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -23,6 +24,6 @@ public class SpellData : ScriptableObject
     public bool isDot;
     public EffectTypes effectType;
     public float effectDuration;
-    //public FPSMovementSettings movementSettings;
+    public PlayerController movementSettings;
     public VisualEffect effect;
 }
