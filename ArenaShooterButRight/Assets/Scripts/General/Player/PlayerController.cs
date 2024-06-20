@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using General.Manager;
 using General.Weapons;
 using UnityEngine;
@@ -21,6 +22,9 @@ namespace General.Player
         [SerializeField] private LayerMask GroundCheck;
         [SerializeField] private float AirResistance = 0.8f;
         [SerializeField] private GameObject Target;
+        [SerializeField] private Shooter spellCaster;
+        private List<SpellType> _spellTypes;
+        private SpellType _chosenSpell;
         private Rigidbody _playerRigidbody;
         private InputManager _inputManager;
         private Animator _animator;
@@ -34,7 +38,6 @@ namespace General.Player
         private int _zVelHash;
         private int _crouchHash;
         private float _xRotation;
-        private Weapon _currentWeapon;
 
         private const float _walkSpeed = 2f;
         private const float _runSpeed = 6f;
@@ -46,8 +49,8 @@ namespace General.Player
             _hasAnimator = TryGetComponent<Animator>(out _animator);
             _playerRigidbody = GetComponent<Rigidbody>();
             _inputManager = GetComponent<InputManager>();
-            _currentWeapon = GetComponentInChildren<Weapon>();
 
+            _chosenSpell = SpellType.Fireball;
 
             _xVelHash = Animator.StringToHash("X_Velocity");
             _yVelHash = Animator.StringToHash("Y_Velocity");
@@ -62,6 +65,26 @@ namespace General.Player
         private void Update()
         {
             Target.transform.position = Camera.position + Camera.forward * 5f;
+
+            //TODO: Umbauen auf UI und neues Input system
+            
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                _chosenSpell = SpellType.Fireball;
+                Debug.Log("Fireball chosen");
+            }
+
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                _chosenSpell = SpellType.Iceball;
+                Debug.Log("Iceball chosen");
+            }
+            
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                _chosenSpell = SpellType.Electroball;
+                Debug.Log("Electroball chosen");
+            }
         }
 
         private void FixedUpdate() 
@@ -70,8 +93,7 @@ namespace General.Player
             Move();
             HandleJump();
             HandleCrouch();
-            HandleShooting();
-            HandleReload();
+            HandleCast();
         }
         private void LateUpdate() 
         {
@@ -125,28 +147,14 @@ namespace General.Player
 
         private void HandleCrouch() => _animator.SetBool(_crouchHash , _inputManager.Crouch);
 
-        private void HandleShooting()
+        private void HandleCast()
         {
             if (!_inputManager.Shoot) return;
             
-            if (_currentWeapon is RayCastWeapon)
-            {
-                _currentWeapon.TryShoot();
-            }
+            spellCaster.ChooseSpell(_chosenSpell);
 
         }
-
-        private void HandleReload()
-        {
-            if (!_inputManager.Reload) return;
-
-            if (_currentWeapon != null)
-            {
-                _currentWeapon.Reload();
-            }
-        }
-
-
+        
         private void HandleJump()
         {
             if(!_hasAnimator) return;
