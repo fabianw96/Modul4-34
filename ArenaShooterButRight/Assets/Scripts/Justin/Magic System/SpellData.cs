@@ -25,5 +25,5 @@ public class SpellData : ScriptableObject
     public EffectTypes effectType;
     public float effectDuration;
     public PlayerController movementSettings;
-    public VisualEffect effect;
+    public VisualEffectAsset effect;
 }
