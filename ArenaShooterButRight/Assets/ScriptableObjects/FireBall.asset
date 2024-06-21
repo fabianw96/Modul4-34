@@ -18,4 +18,5 @@ MonoBehaviour:
   isDot: 1
   effectType: 0
   effectDuration: 5
-  effect: {fileID: 0}
+  movementSettings: {fileID: 0}
+  effect: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b, type: 3}

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
-    public Transform shootPoint;
-    public GameObject projectilePrefab;
-    public List<SpellData> spellDataList;
+    [SerializeField] private Transform shootPoint;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private List<SpellData> spellDataList;
     [SerializeField] private GameObject casterPoint;
 
     public void ChooseSpell(SpellType chosenSpell)
