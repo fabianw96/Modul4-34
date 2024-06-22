@@ -6,21 +6,40 @@ public class Shooter : MonoBehaviour
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private List<SpellData> spellDataList;
     [SerializeField] private Transform casterPoint;
+    [SerializeField] private Mana mana;
+
+    private void Start()
+    {
+        if (mana == null)
+        {
+            mana = GetComponent<Mana>();
+        }
+    }
 
     public void ChooseSpell(SpellType chosenSpell)
     {
-        Debug.Log("In ChooseSpeel Method");
+        SpellData spellData = null;
         switch (chosenSpell)
         {
             case SpellType.Fireball:
-                Shoot(spellDataList[0]);
+                spellData = spellDataList[0];
                 break;
             case SpellType.Iceball:
-                Shoot(spellDataList[1]);
+                spellData = spellDataList[1];
                 break;
             case SpellType.Electroball:
-                Shoot(spellDataList[2]);
+                spellData = spellDataList[2];
                 break;
+        }
+
+        if (spellData != null && mana.HasEnoughMana(spellData.manaCost))
+        {
+            Shoot(spellData);
+            mana.UseMana(spellData.manaCost);
+        }
+        else
+        {
+            Debug.Log("Not enough mana to cast the spell");
         }
     }
 

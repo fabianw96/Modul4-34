@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
   m_Name: FireBall
   m_EditorClassIdentifier: 
-  speed: 10
+  effectType: 0
   spellType: 0
+  speed: 10
   damage: 10
   isDot: 1
-  effectType: 0
   effectDuration: 5
   movementSettings: {fileID: 0}
-  effect: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b, type: 3}
+  visualEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
+    type: 3}
+  manaCost: 10

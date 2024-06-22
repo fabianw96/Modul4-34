@@ -1968,6 +1968,7 @@ GameObject:
   - component: {fileID: 847641908719313635}
   - component: {fileID: 4129402027324726263}
   - component: {fileID: 1731333826041071655}
+  - component: {fileID: 2762374795650824372}
   m_Layer: 8
   m_Name: CharacterPrefab
   m_TagString: Player
@@ -2268,6 +2269,22 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b74d47c62b794d74c820e8995ce8631d, type: 2}
   - {fileID: 11400000, guid: 1be652e477ac1bd45938cbbd29f40706, type: 2}
   casterPoint: {fileID: 7408177288510641674}
+  mana: {fileID: 0}
+--- !u!114 &2762374795650824372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4829024158550982007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e93cce456e127c409c42676c1730114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxMana: 100
+  currentMana: 0
+  manaRegenRate: 5
 --- !u!1 &4868023509163395099
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
   m_Name: IceBall
   m_EditorClassIdentifier: 
-  speed: 15
+  effectType: 1
   spellType: 0
+  speed: 15
   damage: 25
   isDot: 0
-  effectType: 1
   effectDuration: 5
   movementSettings: {fileID: 0}
-  effect: {fileID: 8926484042661614526, guid: 8975a3625162741448f1680d5c26f3ca, type: 3}
+  visualEffectAsset: {fileID: 8926484042661614526, guid: 8975a3625162741448f1680d5c26f3ca,
+    type: 3}
+  manaCost: 10

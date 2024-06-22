@@ -1,6 +1,7 @@
 using System;
 using General;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Projectile : MonoBehaviour
 {
@@ -13,6 +14,13 @@ public class Projectile : MonoBehaviour
         Debug.Log("In Launch Method");
         spellData = _spellData;
         direction = transform.forward;
+
+        if (spellData.visualEffectAsset == null)
+        {
+            VisualEffect visualEffect = gameObject.AddComponent<VisualEffect>();
+            visualEffect.visualEffectAsset = _spellData.visualEffectAsset;
+            visualEffect.Play();
+        }
     }
 
     private void Update()
