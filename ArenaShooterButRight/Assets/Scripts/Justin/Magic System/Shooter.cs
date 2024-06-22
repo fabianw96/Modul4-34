@@ -45,13 +45,19 @@ public class Shooter : MonoBehaviour
 
     private void Shoot(SpellData spellData)
     {
-        Debug.Log("In Shoot Method");
         GameObject projectileInstance = Instantiate(projectilePrefab);
         Physics.IgnoreCollision(projectileInstance.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         projectileInstance.transform.position = casterPoint.transform.position;
         Vector3 rotation = projectileInstance.transform.root.eulerAngles;
         projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
         projectileInstance.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 100f, ForceMode.Impulse);
+
+        MeshRenderer meshRenderer = projectileInstance.GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
+        {
+            meshRenderer.enabled = false;
+        }
+
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
         projectile.Launch(spellData);
     }

@@ -15,7 +15,6 @@ public class MagicEffect : MonoBehaviour
     
     public void InitEffect(SpellData _spellData, HealthSystem _healthSys)
     {
-        Debug.Log("In InitEffect Method");
         healthSystem = _healthSys;
         dmg = _spellData.damage;
         effectDuration = _spellData.effectDuration;
@@ -30,16 +29,9 @@ public class MagicEffect : MonoBehaviour
         {
             ApplyEffect();
         }
-
         //TODO: isdot abfragen. Wenn ja, applyeffect, wenn nein, dealdmg.
         // should be done
 
-        if (spellData.isDot)
-        {
-            ApplyEffect();
-            // StartCoroutine(DotDamage());
-        }
-        healthSystem.TakeDamage(spellData.damage);
         //TODO: delete self when damage has been taken.
         // Should be done with ApplyDotEffect and RemoveEffectAfterDuration Methods
     }
@@ -78,7 +70,6 @@ public class MagicEffect : MonoBehaviour
                 // e.g., reduce movement speed
             }
             // Implement other effect types here
-
             // Remove the effect after duration
             StartCoroutine(RemoveEffectAfterDuration());
         }

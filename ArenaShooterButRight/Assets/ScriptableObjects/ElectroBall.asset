@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectType: 0
   spellType: 2
-  speed: 20
+  speed: 2
   damage: 10
   isDot: 0
   effectDuration: 0
+  manaCost: 10
   movementSettings: {fileID: 0}
   visualEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
     type: 3}
-  manaCost: 10

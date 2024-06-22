@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 1742.4447, g: 1872.9438, b: 2758.4558, a: 1}
+  m_IndirectSpecularColor: {r: 1742.2056, g: 1872.4995, b: 2757.4263, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -598,7 +598,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 598015127}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 8975a3625162741448f1680d5c26f3ca, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -943,7 +943,7 @@ VisualEffect:
   m_PropertySheet:
     m_Float:
       m_Array:
-      - m_Value: 0.6
+      - m_Value: 0.2
         m_Name: Size
         m_Overridden: 1
     m_Vector2f:
@@ -1000,6 +1000,11 @@ PrefabInstance:
       propertyPath: m_Data.m_SourceObjects.m_Item0.transform
       value: 
       objectReference: {fileID: 564405492}
+    - target: {fileID: 1731333826041071655, guid: 551f981707c056a42afb81a62ff9658c,
+        type: 3}
+      propertyPath: mana
+      value: 
+      objectReference: {fileID: 1986531027}
     - target: {fileID: 1765919955937312341, guid: 551f981707c056a42afb81a62ff9658c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1060,6 +1065,11 @@ PrefabInstance:
       propertyPath: Target
       value: 
       objectReference: {fileID: 564405491}
+    - target: {fileID: 5968382410784580506, guid: 551f981707c056a42afb81a62ff9658c,
+        type: 3}
+      propertyPath: spellCaster
+      value: 
+      objectReference: {fileID: 1986531028}
     - target: {fileID: 8673402212120816697, guid: 551f981707c056a42afb81a62ff9658c,
         type: 3}
       propertyPath: currentHealth
@@ -1266,6 +1276,12 @@ VisualEffect:
       m_Array:
       - m_Value: 0.6
         m_Name: Size
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: Lightning Speed
+        m_Overridden: 1
+      - m_Value: 32
+        m_Name: Lightning Spawn Rate
         m_Overridden: 1
     m_Vector2f:
       m_Array: []
@@ -1829,6 +1845,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1986531027 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2762374795650824372, guid: 551f981707c056a42afb81a62ff9658c,
+    type: 3}
+  m_PrefabInstance: {fileID: 800528785}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e93cce456e127c409c42676c1730114, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1986531028 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1731333826041071655, guid: 551f981707c056a42afb81a62ff9658c,
+    type: 3}
+  m_PrefabInstance: {fileID: 800528785}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1295319a46ec1643bc69976fb80c037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2013410473
 GameObject:
   m_ObjectHideFlags: 1

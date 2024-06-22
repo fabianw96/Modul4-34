@@ -34,6 +34,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 2800000, guid: 11e00fbd51f5ff94394575c1055aecab, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _NormalTexture:
         m_Texture: {fileID: 2800000, guid: 368f59a7c1e511c4fb50ea78fda3d555, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -59,6 +63,7 @@ Material:
     - _BaseSpeed: -0.01
     - _BaseTiling: 35
     - _BlendMode: 0
+    - _Brightness: 2
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
     - _CullModeForward: 2
@@ -83,6 +88,7 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 4
     - _RequireSplitLighting: 0
+    - _RotationSpeed: 0.2
     - _Smoothness: 0.73
     - _SrcBlend: 1
     - _StencilRef: 0
@@ -104,6 +110,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
+    - _Twirl_Strength: 10
     - _UseShadowThreshold: 0
     - _WaterAlpha: 0.9
     - _ZTestDepthEqualForOpaque: 4
@@ -111,6 +118,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
+    - _Color: {r: 0.10575018, g: 0.6415094, b: 0.07564967, a: 0}
     - _DeepColor: {r: 0.07480001, g: 0.21543637, b: 0.34, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
