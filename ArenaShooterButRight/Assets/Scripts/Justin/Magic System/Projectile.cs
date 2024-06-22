@@ -23,10 +23,10 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        transform.Translate(direction * (spellData.speed * Time.deltaTime));
-    }
+    //private void Update()
+    //{
+    //    transform.Translate(direction * (spellData.speed * Time.deltaTime));
+    //}
 
     private void OnTriggerEnter(Collider other)
     {

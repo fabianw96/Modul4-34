@@ -50,7 +50,7 @@ public class Shooter : MonoBehaviour
         projectileInstance.transform.position = casterPoint.transform.position;
         Vector3 rotation = projectileInstance.transform.root.eulerAngles;
         projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
-        projectileInstance.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 100f, ForceMode.Impulse);
+        projectileInstance.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * spellData.speed, ForceMode.Impulse);
 
         MeshRenderer meshRenderer = projectileInstance.GetComponent<MeshRenderer>();
         if (meshRenderer != null)

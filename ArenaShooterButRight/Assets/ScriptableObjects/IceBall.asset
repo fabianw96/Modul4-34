@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectType: 1
   spellType: 0
-  speed: 2
+  speed: 3
   damage: 25
   isDot: 0
   effectDuration: 5
