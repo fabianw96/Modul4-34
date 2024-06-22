@@ -10,9 +10,9 @@ public class Projectile : MonoBehaviour
 
     public void Launch(SpellData _spellData)
     {
+        Debug.Log("In Launch Method");
         spellData = _spellData;
-        // direction = _launchDirection;
-        // Implement movement logic
+        direction = transform.forward;
     }
 
     private void Update()
@@ -20,20 +20,20 @@ public class Projectile : MonoBehaviour
         transform.Translate(direction * (spellData.speed * Time.deltaTime));
     }
 
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    spellData.(collision.gameObject);
-    //    Destroy(gameObject);
-    //}
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<HealthSystem>() != null && other.gameObject.GetComponent<MagicEffect>() == null)
+        if (other.gameObject.GetComponent<HealthSystem>() != null)
         {
-            magicEffect = other.gameObject.AddComponent<MagicEffect>();
+            MagicEffect magicEffect = other.gameObject.GetComponent<MagicEffect>();
+            if (magicEffect == null)
+            {
+                magicEffect = other.gameObject.AddComponent<MagicEffect>();
+            }
             magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>());
+            Destroy(gameObject); // Destroy Projectile upon impact
         }
         
         //TODO: check if other gameobject already has magiceffect. initeffect on that one then.
+        // Should be checked by the logic above
     }
 }

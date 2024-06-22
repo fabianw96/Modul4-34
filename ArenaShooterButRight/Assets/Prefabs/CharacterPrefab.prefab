@@ -480,6 +480,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6729750995796406968}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1074759751415216298
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3215948373464484630}
+  m_Layer: 0
+  m_Name: WeaponTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3215948373464484630
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074759751415216298}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1765919955937312341}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1843418701879062629
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,6 +542,37 @@ Transform:
   m_Children:
   - {fileID: 1881103920560056257}
   m_Father: {fileID: 5627488783978461400}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2048235551240751278
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7408177288510641674}
+  m_Layer: 8
+  m_Name: CasterPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7408177288510641674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048235551240751278}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.22, z: 0.58}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1765919955937312341}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2106576142772790603
 GameObject:
@@ -1905,6 +1967,7 @@ GameObject:
   - component: {fileID: 8673402212120816697}
   - component: {fileID: 847641908719313635}
   - component: {fileID: 4129402027324726263}
+  - component: {fileID: 1731333826041071655}
   m_Layer: 8
   m_Name: CharacterPrefab
   m_TagString: Player
@@ -1933,6 +1996,8 @@ Transform:
   - {fileID: 3786037962338051316}
   - {fileID: 425088841362976830}
   - {fileID: 3707128056810784093}
+  - {fileID: 3215948373464484630}
+  - {fileID: 7408177288510641674}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1842959474699803104
@@ -2062,6 +2127,7 @@ MonoBehaviour:
     m_Bits: 8
   AirResistance: 0.8
   Target: {fileID: 0}
+  spellCaster: {fileID: 0}
 --- !u!114 &4075929735088176477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2089,6 +2155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   currentHealth: 0
+  hasTakenDamage: 0
 --- !u!114 &847641908719313635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2182,6 +2249,25 @@ MonoBehaviour:
   - {fileID: 7991837468568984337}
   - {fileID: 3354194667344922132}
   - {fileID: 3286486957549648888}
+--- !u!114 &1731333826041071655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4829024158550982007}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1295319a46ec1643bc69976fb80c037, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 1064929345243570042, guid: 0263cd37ba3774e4ca730da908f1b520,
+    type: 3}
+  spellDataList:
+  - {fileID: 11400000, guid: 383022f9a9cbc014f879728bd512432b, type: 2}
+  - {fileID: 11400000, guid: b74d47c62b794d74c820e8995ce8631d, type: 2}
+  - {fileID: 11400000, guid: 1be652e477ac1bd45938cbbd29f40706, type: 2}
+  casterPoint: {fileID: 7408177288510641674}
 --- !u!1 &4868023509163395099
 GameObject:
   m_ObjectHideFlags: 0
@@ -4470,7 +4556,6 @@ MonoBehaviour:
   fireRate: 600
   isReloading: 0
   raycastOrigin: {fileID: 7578205145750659786}
-  raycastTarget: {fileID: 0}
   isFullAuto: 1
 --- !u!1 &8946430786846441889
 GameObject:

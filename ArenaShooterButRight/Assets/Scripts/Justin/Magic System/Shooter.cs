@@ -1,19 +1,17 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
-    [SerializeField] private Transform shootPoint;
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private List<SpellData> spellDataList;
-    [SerializeField] private GameObject casterPoint;
+    [SerializeField] private Transform casterPoint;
 
     public void ChooseSpell(SpellType chosenSpell)
     {
-       switch (chosenSpell)
-       {
+        Debug.Log("In ChooseSpeel Method");
+        switch (chosenSpell)
+        {
             case SpellType.Fireball:
                 Shoot(spellDataList[0]);
                 break;
@@ -23,11 +21,12 @@ public class Shooter : MonoBehaviour
             case SpellType.Electroball:
                 Shoot(spellDataList[2]);
                 break;
-       }
+        }
     }
 
     private void Shoot(SpellData spellData)
     {
+        Debug.Log("In Shoot Method");
         GameObject projectileInstance = Instantiate(projectilePrefab);
         Physics.IgnoreCollision(projectileInstance.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
         projectileInstance.transform.position = casterPoint.transform.position;
