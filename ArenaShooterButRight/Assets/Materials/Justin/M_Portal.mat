@@ -29,11 +29,11 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DISABLE_SSR_TRANSPARENT
-  - _DOUBLESIDED_ON
   - _ENABLE_FOG_ON_TRANSPARENT
   - _SURFACE_TYPE_TRANSPARENT
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _DISABLE_SSR_TRANSPARENT
+  - _DOUBLESIDED_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
@@ -84,7 +84,7 @@ Material:
     - _BaseSpeed: 0.1
     - _BaseTiling: 1
     - _BlendMode: 0
-    - _Brightness: 20
+    - _Brightness: 10
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 0
     - _CullModeForward: 0
@@ -110,21 +110,21 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 4
     - _RequireSplitLighting: 0
-    - _RotationSpeed: 0.5
-    - _Scale: 5
-    - _Scroll_Speed: 0.03
+    - _RotationSpeed: 0.2
+    - _Scale: 15
+    - _Scroll_Speed: 1
     - _Smoothness: 0.72
     - _SrcBlend: 1
     - _StencilRef: 0
-    - _StencilRefDepth: 0
+    - _StencilRefDepth: 1
     - _StencilRefDistortionVec: 4
     - _StencilRefGBuffer: 2
-    - _StencilRefMV: 32
+    - _StencilRefMV: 33
     - _StencilWriteMask: 6
     - _StencilWriteMaskDepth: 9
     - _StencilWriteMaskDistortionVec: 4
     - _StencilWriteMaskGBuffer: 15
-    - _StencilWriteMaskMV: 41
+    - _StencilWriteMaskMV: 43
     - _SupportDecals: 1
     - _SurfaceType: 1
     - _TransparentBackfaceEnable: 0
@@ -134,7 +134,7 @@ Material:
     - _TransparentSortPriority: 0
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
-    - _Twirl_Strength: 10
+    - _Twirl_Strength: 15
     - _UV: 200
     - _UseShadowThreshold: 0
     - _WaterAlpha: 0.9
@@ -143,7 +143,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1.40278, g: 0.42694122, b: 1.4980396, a: 1}
+    - _Color: {r: 1.4027797, g: 0.42694113, b: 1.4980392, a: 1}
     - _DeepColor: {r: 0.09972935, g: 0.20476827, b: 0.26037726, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
