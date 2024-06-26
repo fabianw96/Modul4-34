@@ -1,7 +1,5 @@
-using System;
 using General;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MagicEffect : MonoBehaviour
@@ -13,10 +11,10 @@ public class MagicEffect : MonoBehaviour
     private bool hasEffectApplied = false;
     private SpellData spellData;
     
-    public void InitEffect(SpellData _spellData, HealthSystem _healthSys)
+    public void InitEffect(SpellData _spellData, HealthSystem _healthSys, float _damage)
     {
         healthSystem = _healthSys;
-        dmg = _spellData.damage;
+        dmg = _damage;
         effectDuration = _spellData.effectDuration;
         isDot = _spellData.isDot;
         spellData = _spellData;

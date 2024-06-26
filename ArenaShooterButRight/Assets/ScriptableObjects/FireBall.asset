@@ -14,11 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectType: 0
   spellType: 0
-  speed: 5
-  damage: 10
-  isDot: 1
+  baseSpeed: 5
+  baseDamage: 10
+  baseManaCost: 4
   effectDuration: 5
-  manaCost: 10
+  isDot: 1
   movementSettings: {fileID: 0}
   visualEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
     type: 3}
+  damagePerLevel: 5
+  manaCostPerLevel: 2
+  speedPerLevel: 1

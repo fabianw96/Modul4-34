@@ -49,7 +49,6 @@ namespace General.Player
             _hasAnimator = TryGetComponent<Animator>(out _animator);
             _playerRigidbody = GetComponent<Rigidbody>();
             _inputManager = GetComponent<InputManager>();
-
             _chosenSpell = SpellType.Fireball;
 
             _xVelHash = Animator.StringToHash("X_Velocity");

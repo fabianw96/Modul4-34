@@ -1,6 +1,4 @@
-using System;
 using General;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -9,11 +7,18 @@ public class Projectile : MonoBehaviour
     private SpellData spellData;
     private MagicEffect magicEffect;
     private Vector3 direction;
+    private float speed;
+    private float damage;
 
-    public void Launch(SpellData _spellData)
+    public void Launch(SpellData _spellData, Vector3 _launchDirection, int _level)
     {
         spellData = _spellData;
-        direction = transform.forward;
+        direction = _launchDirection.normalized;
+        speed = _spellData.CalculateSpeed(_level);
+        damage = _spellData.CalculateDamage(_level);
+
+        // Disable gravity
+        GetComponent<Rigidbody>().useGravity = false;
 
         if (spellData.visualEffectAsset != null)
         {
@@ -23,10 +28,10 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    //private void Update()
-    //{
-    //    transform.Translate(direction * (spellData.speed * Time.deltaTime));
-    //}
+    private void Update()
+    {
+        transform.position += direction * (speed * Time.deltaTime);
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -37,7 +42,7 @@ public class Projectile : MonoBehaviour
             {
                 magicEffect = other.gameObject.AddComponent<MagicEffect>();
             }
-            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>());
+            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage);
             Destroy(gameObject); // Destroy Projectile upon impact
         }
         
