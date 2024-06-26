@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 380.8616, g: 337.18167, b: 290.52383, a: 1}
+  m_IndirectSpecularColor: {r: 1847.7375, g: 2050.1213, b: 3032.922, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &100146999
 Transform:
   m_ObjectHideFlags: 0
@@ -317,13 +317,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 157207112}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.005784823, y: -0, z: -0, w: 0.9999833}
+  m_LocalRotation: {x: 0.2644033, y: 0, z: 0, w: 0.9644123}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0.663, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 30.663, y: 0, z: 0}
 --- !u!114 &157207115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -863,7 +863,7 @@ Transform:
   m_GameObject: {fileID: 1450310401}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.38268346, z: -0, w: 0.9238795}
-  m_LocalPosition: {x: -4.2610016, y: -1.5540009, z: 8.435}
+  m_LocalPosition: {x: -4, y: 0.5, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -937,7 +937,7 @@ VisualEffect:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1665793997}
   m_Enabled: 1
-  m_Asset: {fileID: 8926484042661614526, guid: 58d54fe3aad9aae419ef47fb42dc739a, type: 3}
+  m_Asset: {fileID: 8926484042661614526, guid: 6289e8c367613bb4395aea9e7b503956, type: 3}
   m_InitialEventName: OnPlay
   m_InitialEventNameOverriden: 0
   m_StartSeed: 0
@@ -982,7 +982,16 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 8600000, guid: 9740469c6ab6abb4a8e4563c2b596a7c, type: 2}
+        m_Name: PortalTexture
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: 94daba1292d86304d901fcb926f7305c, type: 3}
+        m_Name: Mask
+        m_Overridden: 1
+      - m_Value: {fileID: 2800000, guid: 94daba1292d86304d901fcb926f7305c, type: 3}
+        m_Name: MaskTexture
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!4 &1665794000
