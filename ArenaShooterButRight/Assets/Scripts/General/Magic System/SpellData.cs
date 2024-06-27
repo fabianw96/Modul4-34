@@ -37,6 +37,7 @@ public class SpellData : ScriptableObject
     public bool isDot; 
     public PlayerController movementSettings; // to apply status effects
     public VisualEffectAsset visualEffectAsset; // visual Asset of the spell
+
     public float CalculateSpeed(int _level)
     {
         return baseSpeed + (speedPerLevel * (_level - 1));
