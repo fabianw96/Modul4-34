@@ -1,5 +1,5 @@
 {
-    "name": "PlayerControlls",
+    "name": "PlayerControls",
     "maps": [
         {
             "name": "Player",
@@ -9,15 +9,6 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "58bb4aee-5489-4df2-8c4d-1055a7965c6d",
-                    "expectedControlType": "Vector2",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
-                    "name": "Look",
-                    "type": "Value",
-                    "id": "3a25b153-2b66-466a-8b6b-32ef75f6529d",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -42,15 +33,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Crouch",
-                    "type": "Button",
-                    "id": "00a01b46-1bc8-4f85-a1db-a9203ffbd9cd",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Interact",
                     "type": "Button",
                     "id": "bcb5f35f-372f-474d-9966-59b45ba8a4b3",
@@ -69,13 +51,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Reload",
-                    "type": "Button",
-                    "id": "799623f5-428a-4ba9-a2dd-9556762c3127",
-                    "expectedControlType": "Button",
+                    "name": "Look",
+                    "type": "Value",
+                    "id": "c92debec-3cc0-4134-9332-6845e98d5f0b",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -136,17 +118,6 @@
                 },
                 {
                     "name": "",
-                    "id": "098f615d-78c9-43a8-aa57-5155f4dc9063",
-                    "path": "<Mouse>/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "df290331-3d14-44d7-a4af-908bb509e9fe",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -164,17 +135,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "54ec0aa2-e2d3-451c-b2bc-64e9eec4fa6c",
-                    "path": "<Keyboard>/leftCtrl",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -202,12 +162,12 @@
                 },
                 {
                     "name": "",
-                    "id": "52c99e0c-34c3-46c7-acbd-e96ec1e06fc7",
-                    "path": "<Keyboard>/r",
+                    "id": "0896c142-c2e7-412d-8256-286690bbf889",
+                    "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Reload",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
