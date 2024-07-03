@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using General.Interfaces;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class FPSController : MonoBehaviour {
+public class FPSController : MonoBehaviour
+{
 
+    [SerializeField] private float raycastDistance = 1.5f;
     [SerializeField] private float walkSpeed = 3;
     [SerializeField] private float runSpeed = 6;
     [SerializeField] private float smoothMoveTime = 0.1f;
@@ -145,7 +148,17 @@ public class FPSController : MonoBehaviour {
     {
         if (_isInteractPressed)
         {
-            Debug.Log("Tap tap");
+            RaycastHit hitInfo = new RaycastHit();
+            int layer = 1 << LayerMask.NameToLayer("Portal");
+            bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance, layer, QueryTriggerInteraction.Ignore);
+
+            if (!hit) return;
+            GameObject hitObject = hitInfo.transform.gameObject;
+            if (hitObject != null && hitObject.GetComponent<IInteractable>() != null)
+            {
+                Debug.Log("Interaction!");
+                hitObject.GetComponent<IInteractable>().Interaction();
+            }
         }
     }
 
