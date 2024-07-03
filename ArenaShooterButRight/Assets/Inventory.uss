@@ -1,0 +1,59 @@
+.container {
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.inventory {
+    flex-grow: 1;
+    width: 50%;
+    height: 75%;
+    max-width: 50%;
+    max-height: 75%;
+    margin-top: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    background-color: rgb(28, 32, 36);
+    border-top-color: rgb(255, 197, 0);
+    border-top-width: 5px;
+}
+
+.header {
+    color: rgb(255, 197, 0);
+    font-size: 24px;
+    margin-bottom: 10px;
+    border-bottom-color: rgb(64, 74, 82);
+    border-bottom-width: 1px;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+.slotContainer {
+    width: 128px;
+    height: 128px;
+    margin: 5px;
+    border-left-color: rgb(48, 48, 48);
+    border-right-color: rgb(48, 48, 48);
+    border-top-color: rgb(48, 48, 48);
+    border-bottom-color: rgb(48, 48, 48);
+    background-color: rgb(9, 19, 21);
+    background-image: url('/Assets/Sprites/ItemSlotBackground.png');
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.slotIcon {
+    padding: 15px;
+    flex-shrink: 0;
+    flex-grow: 1;
+}
+
+
+
