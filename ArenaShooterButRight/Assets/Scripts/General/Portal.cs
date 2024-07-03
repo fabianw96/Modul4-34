@@ -13,7 +13,6 @@ public class Portal : MonoBehaviour, IInteractable
     [Header("Important")] 
     [SerializeField] private Portal linkedPortal;
     [SerializeField] private VisualEffect portalEffect;
-    [SerializeField] private BoxCollider enableTrigger;
 
     private RenderTexture _portalTexture;
     private Camera _portalCam;
@@ -72,15 +71,30 @@ public class Portal : MonoBehaviour, IInteractable
 
     public void Render()
     {
-        var m = transform.localToWorldMatrix * linkedPortal.transform.worldToLocalMatrix *
-                _playerCam.transform.localToWorldMatrix;
-        _portalCam.transform.SetPositionAndRotation(m.GetColumn(3), m.rotation);
+        Vector3 pos = linkedPortal.transform.InverseTransformPoint(_playerCam.transform.position);
+        float angle = SignedAngle(-linkedPortal.transform.forward, _playerCam.transform.forward, Vector3.up);
+        
+        _portalCam.transform.SetLocalPositionAndRotation(new Vector3(-pos.x, _portalCam.transform.localPosition.y, -pos.z), Quaternion.Euler(0f,angle,0f));
+        
     }
 
     public void Interaction()
     {
         //set player to portal pos + local Z + 1
-        _playerCam.gameObject.transform.parent.SetPositionAndRotation(linkedPortal.transform.position, linkedPortal.transform.rotation);
+        _playerCam.gameObject.transform.parent.SetPositionAndRotation(linkedPortal.transform.position + Vector3.forward, linkedPortal.transform.rotation);
         
+    }
+    
+    float SignedAngle(Vector3 a, Vector3 b, Vector3 n) {
+        // angle in [0,180]
+        float angle = Vector3.Angle(a,b);
+        float sign = Mathf.Sign(Vector3.Dot(n,Vector3.Cross(a, b)));
+		
+        // angle in [-179,180]
+        float signed_angle = angle * sign;
+		
+        while(signed_angle < 0) signed_angle += 360;
+	
+        return signed_angle;
     }
 }

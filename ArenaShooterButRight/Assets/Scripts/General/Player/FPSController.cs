@@ -21,7 +21,9 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float rotationSmoothTime = 0.1f;
 
     private CharacterController _controller;
+    private Shooter _shooter;
     private Camera _cam;
+    private SpellType _chosenSpell;
     [SerializeField] private float yaw;
     [SerializeField] private float pitch;
     private float _smoothYaw;
@@ -49,6 +51,8 @@ public class FPSController : MonoBehaviour
 
     void Start () {
         _cam = Camera.main;
+        _shooter = GetComponent<Shooter>();
+        
         if (lockCursor) {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -79,6 +83,22 @@ public class FPSController : MonoBehaviour
 
         _mX = Input.GetAxisRaw("Mouse X");
         _mY = Input.GetAxisRaw("Mouse Y");
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _chosenSpell = SpellType.Fireball;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _chosenSpell = SpellType.Iceball;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _chosenSpell = SpellType.Electroball;
+        }
+        
         
         HandleLook();
         HandleShoot();
@@ -124,7 +144,7 @@ public class FPSController : MonoBehaviour
     {
         if (_isShootPressed)
         {
-            Debug.Log("pew pew");
+            // _shooter.ChooseSpell(_chosenSpell);
         }
     }
     private void HandleLook()

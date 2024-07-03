@@ -9,7 +9,7 @@ namespace General.Weapons
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.GetComponent<PlayerController>() != null)
+            if (other.gameObject.GetComponent<FPSController>() != null)
             {
                 other.gameObject.GetComponent<HealthSystem>().TakeDamage(damage);
                 Destroy(gameObject);
