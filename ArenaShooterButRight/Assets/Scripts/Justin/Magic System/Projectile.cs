@@ -1,6 +1,8 @@
 using System;
 using General;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Projectile : MonoBehaviour
 {
@@ -11,29 +13,35 @@ public class Projectile : MonoBehaviour
     public void Launch(SpellData _spellData)
     {
         spellData = _spellData;
-        // direction = _launchDirection;
-        // Implement movement logic
+        direction = transform.forward;
+
+        if (spellData.visualEffectAsset != null)
+        {
+            VisualEffect visualEffect = gameObject.AddComponent<VisualEffect>();
+            visualEffect.visualEffectAsset = _spellData.visualEffectAsset;
+            visualEffect.Play();
+        }
     }
 
-    private void Update()
-    {
-        transform.Translate(direction * (spellData.speed * Time.deltaTime));
-    }
-
-    //private void OnCollisionEnter(Collision collision)
+    //private void Update()
     //{
-    //    spellData.(collision.gameObject);
-    //    Destroy(gameObject);
+    //    transform.Translate(direction * (spellData.speed * Time.deltaTime));
     //}
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<HealthSystem>() != null && other.gameObject.GetComponent<MagicEffect>() == null)
+        if (other.gameObject.GetComponent<HealthSystem>() != null)
         {
-            magicEffect = other.gameObject.AddComponent<MagicEffect>();
+            MagicEffect magicEffect = other.gameObject.GetComponent<MagicEffect>();
+            if (magicEffect == null)
+            {
+                magicEffect = other.gameObject.AddComponent<MagicEffect>();
+            }
             magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>());
+            Destroy(gameObject); // Destroy Projectile upon impact
         }
         
         //TODO: check if other gameobject already has magiceffect. initeffect on that one then.
+        // Should be checked by the logic above
     }
 }

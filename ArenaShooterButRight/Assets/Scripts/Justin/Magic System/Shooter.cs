@@ -1,29 +1,46 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Shooter : MonoBehaviour
 {
-    public Transform shootPoint;
-    public GameObject projectilePrefab;
-    public List<SpellData> spellDataList;
-    [SerializeField] private GameObject casterPoint;
+    [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private List<SpellData> spellDataList;
+    [SerializeField] private Transform casterPoint;
+    [SerializeField] private Mana mana;
+
+    private void Start()
+    {
+        if (mana == null)
+        {
+            mana = GetComponent<Mana>();
+        }
+    }
 
     public void ChooseSpell(SpellType chosenSpell)
     {
-       switch (chosenSpell)
-       {
+        SpellData spellData = null;
+        switch (chosenSpell)
+        {
             case SpellType.Fireball:
-                Shoot(spellDataList[0]);
+                spellData = spellDataList[0];
                 break;
             case SpellType.Iceball:
-                Shoot(spellDataList[1]);
+                spellData = spellDataList[1];
                 break;
             case SpellType.Electroball:
-                Shoot(spellDataList[2]);
+                spellData = spellDataList[2];
                 break;
-       }
+        }
+
+        if (spellData != null && mana.HasEnoughMana(spellData.manaCost))
+        {
+            Shoot(spellData);
+            mana.UseMana(spellData.manaCost);
+        }
+        else
+        {
+            Debug.Log("Not enough mana to cast the spell");
+        }
     }
 
     private void Shoot(SpellData spellData)
@@ -33,7 +50,14 @@ public class Shooter : MonoBehaviour
         projectileInstance.transform.position = casterPoint.transform.position;
         Vector3 rotation = projectileInstance.transform.root.eulerAngles;
         projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
-        projectileInstance.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * 100f, ForceMode.Impulse);
+        projectileInstance.GetComponent<Rigidbody>().AddForce(gameObject.transform.forward * spellData.speed, ForceMode.Impulse);
+
+        MeshRenderer meshRenderer = projectileInstance.GetComponent<MeshRenderer>();
+        if (meshRenderer != null)
+        {
+            meshRenderer.enabled = false;
+        }
+
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
         projectile.Launch(spellData);
     }

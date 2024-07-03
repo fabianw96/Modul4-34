@@ -152,7 +152,6 @@ namespace General.Player
             if (!_inputManager.Shoot) return;
             
             spellCaster.ChooseSpell(_chosenSpell);
-
         }
         
         private void HandleJump()
