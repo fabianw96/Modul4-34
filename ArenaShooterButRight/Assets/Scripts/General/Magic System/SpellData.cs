@@ -19,8 +19,12 @@ public enum SpellType
 [CreateAssetMenu(menuName = "ScriptableObjects/SpellData")]
 public class SpellData : ScriptableObject
 {
+    [Header("General")]
     public EffectTypes effectType; // Status effects
-    public SpellType spellType; 
+    public SpellType spellType;
+    public Sprite spellIcon;
+    public float unlockPrice;
+
     [Header("Spellstats")]
     public float baseSpeed; // the spells projectile speed
     public float baseDamage; // spell damage

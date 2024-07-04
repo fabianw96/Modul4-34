@@ -14,14 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectType: 0
   spellType: 0
+  spellIcon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
+  unlockPrice: 0
   baseSpeed: 5
   baseDamage: 10
   baseManaCost: 4
+  baseCooldown: 0
   effectDuration: 5
+  damagePerLevel: 5
+  manaCostPerLevel: 2
+  speedPerLevel: 1
+  cooldownPerLevel: 0
   isDot: 1
   movementSettings: {fileID: 0}
   visualEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
     type: 3}
-  damagePerLevel: 5
-  manaCostPerLevel: 2
-  speedPerLevel: 1
