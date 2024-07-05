@@ -9,11 +9,11 @@ public class SpellLevelManager : MonoBehaviour
     [System.Serializable]
     public class SpellLevel
     {
-        public SpellType spellType;
+        public SpellTypes spellType;
         public int level = 1;
     }
 
-    public int GetSpellLevel(SpellType _spellType)
+    public int GetSpellLevel(SpellTypes _spellType)
     {
         foreach (var spellLevel in spellLevels)
         {
@@ -25,7 +25,7 @@ public class SpellLevelManager : MonoBehaviour
         return 1;
     }
 
-    public void LevelUpSpell(SpellType _spellType)
+    public void LevelUpSpell(SpellTypes _spellType)
     {
         foreach (var spellLevel in spellLevels)
         {

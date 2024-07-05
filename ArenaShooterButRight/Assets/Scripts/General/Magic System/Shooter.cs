@@ -24,18 +24,18 @@ public class Shooter : MonoBehaviour
         }
     }
 
-    public void ChooseSpell(SpellType _chosenSpell)
+    public void ChooseSpell(SpellTypes _chosenSpell)
     {
         SpellData spellData = null;
         switch (_chosenSpell)
         {
-            case SpellType.Fireball:
+            case SpellTypes.Fireball:
                 spellData = spellDataList[0];
                 break;
-            case SpellType.Iceball:
+            case SpellTypes.Iceball:
                 spellData = spellDataList[1];
                 break;
-            case SpellType.Electroball:
+            case SpellTypes.Electroball:
                 spellData = spellDataList[2];
                 break;
         }

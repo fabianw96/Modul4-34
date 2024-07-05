@@ -1,0 +1,30 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss?fileID=7433441132597879392&amp;guid=9a40d25cf318e7847b739e09a52d3db9&amp;type=3#SpellDatabaseEditor" />
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="SpellTab" style="flex-grow: 1; margin-left: 3px;">
+            <ui:VisualElement name="Headline" style="flex-grow: 0; flex-direction: row;">
+                <ui:Label tabindex="-1" text="Spells" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Spells" style="justify-content: flex-start; align-self: auto; font-size: 24px; -unity-font-style: bold; width: 80%; height: 35px; margin-left: 5px; margin-top: 5px;" />
+                <ui:Button text="+" parse-escape-sequences="true" display-tooltip-when-elided="true" name="AddSpellButton" style="width: 15%; height: 35px; margin-right: -5px; margin-top: 5px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="spellDetailTab" style="flex-grow: 4;">
+            <ui:ScrollView name="SpellDetails" style="width: 75%; color: rgb(253, 253, 253); background-color: rgba(106, 106, 106, 0);">
+                <ui:VisualElement name="Header" style="flex-direction: row; background-color: rgba(38, 38, 38, 0); -unity-text-align: upper-left; align-items: center; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; border-bottom-color: rgba(255, 183, 0, 0); border-bottom-width: 1px;">
+                    <ui:Label text="Details" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 24px; margin-left: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: 5px; background-color: rgba(0, 0, 0, 0);" />
+                    <ui:Button text="Delete" display-tooltip-when-elided="true" name="Btn_DeleteItem" style="height: 25px; margin-right: 10px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="Content" style="flex-grow: 1;">
+                    <ui:VisualElement name="Row" style="flex-direction: row; align-items: center;">
+                        <ui:VisualElement name="Icon" style="padding-right: 0; width: 122px; height: 122px; background-image: url(&apos;row&apos;); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; padding-left: 0; padding-top: 0; padding-bottom: 0; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+                        <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-background-image-tint-color: rgb(56, 56, 56); background-color: rgb(65, 65, 65);">
+                            <ui:Label text="General" display-tooltip-when-elided="true" name="Header" class="details-header" />
+                            <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="SpellName" name="ItemName" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:EnumField label="Type" name="ItemType" binding-path="SpellType" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:ObjectField label="Icon" name="IconPicker" binding-path="SpellIcon" type="UnityEngine.Sprite, UnityEngine.CoreModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -15,8 +15,8 @@ public class MagicEffect : MonoBehaviour
     {
         healthSystem = _healthSys;
         dmg = _damage;
-        effectDuration = _spellData.effectDuration;
-        isDot = _spellData.isDot;
+        effectDuration = _spellData.EffectDuration;
+        isDot = _spellData.IsDot;
         spellData = _spellData;
 
         if (isDot)
@@ -62,7 +62,7 @@ public class MagicEffect : MonoBehaviour
         if (!hasEffectApplied)
         {
             hasEffectApplied = true;
-            if (spellData.effectType == EffectTypes.Slow)
+            if (spellData.EffectType == EffectTypes.Slow)
             {
                 // Implement slow effect logic here
                 // e.g., reduce movement speed

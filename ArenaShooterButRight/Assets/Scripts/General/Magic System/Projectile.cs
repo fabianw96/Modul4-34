@@ -20,10 +20,10 @@ public class Projectile : MonoBehaviour
         // Disable gravity
         GetComponent<Rigidbody>().useGravity = false;
 
-        if (spellData.visualEffectAsset != null)
+        if (spellData.VisualEffectAsset != null)
         {
             VisualEffect visualEffect = gameObject.AddComponent<VisualEffect>();
-            visualEffect.visualEffectAsset = _spellData.visualEffectAsset;
+            visualEffect.visualEffectAsset = _spellData.VisualEffectAsset;
             visualEffect.Play();
         }
     }

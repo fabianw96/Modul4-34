@@ -23,8 +23,8 @@ namespace General.Player
         [SerializeField] private float AirResistance = 0.8f;
         [SerializeField] private GameObject Target;
         [SerializeField] private Shooter spellCaster;
-        private List<SpellType> _spellTypes;
-        private SpellType _chosenSpell;
+        private List<SpellTypes> _spellTypes;
+        private SpellTypes _chosenSpell;
         private Rigidbody _playerRigidbody;
         private InputManager _inputManager;
         private Animator _animator;
@@ -49,7 +49,7 @@ namespace General.Player
             _hasAnimator = TryGetComponent<Animator>(out _animator);
             _playerRigidbody = GetComponent<Rigidbody>();
             _inputManager = GetComponent<InputManager>();
-            _chosenSpell = SpellType.Fireball;
+            _chosenSpell = SpellTypes.Fireball;
 
             _xVelHash = Animator.StringToHash("X_Velocity");
             _yVelHash = Animator.StringToHash("Y_Velocity");
@@ -69,19 +69,19 @@ namespace General.Player
             
             if (Input.GetKeyDown(KeyCode.Alpha1))
             {
-                _chosenSpell = SpellType.Fireball;
+                _chosenSpell = SpellTypes.Fireball;
                 Debug.Log("Fireball chosen");
             }
 
             if (Input.GetKeyDown(KeyCode.Alpha2))
             {
-                _chosenSpell = SpellType.Iceball;
+                _chosenSpell = SpellTypes.Iceball;
                 Debug.Log("Iceball chosen");
             }
             
             if (Input.GetKeyDown(KeyCode.Alpha3))
             {
-                _chosenSpell = SpellType.Electroball;
+                _chosenSpell = SpellTypes.Electroball;
                 Debug.Log("Electroball chosen");
             }
         }

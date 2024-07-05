@@ -1,4 +1,5 @@
 using General.Player;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.VFX;
@@ -9,7 +10,7 @@ public enum EffectTypes
     Slow
 }
 
-public enum SpellType
+public enum SpellTypes
 {
     Fireball,
     Iceball,
@@ -20,44 +21,47 @@ public enum SpellType
 public class SpellData : ScriptableObject
 {
     [Header("General")]
-    public EffectTypes effectType; // Status effects
-    public SpellType spellType;
-    public Sprite spellIcon;
-    public float unlockPrice;
+    public string ID = Guid.NewGuid().ToString().ToUpper();
+    public EffectTypes EffectType; // Status effects
+    public SpellTypes SpellType;
+    public string SpellName;
+    public Sprite SpellIcon;
+    public float UnlockPrice;
 
     [Header("Spellstats")]
-    public float baseSpeed; // the spells projectile speed
-    public float baseDamage; // spell damage
-    public float baseManaCost; // Mana cost of the spell
-    public float baseCooldown;
-    public float effectDuration; // e.g, dot duration
+    public float BaseSpeed; // the spells projectile speed
+    public float BaseDamage; // spell damage
+    public float BaseManaCost; // Mana cost of the spell
+    public float BaseCooldown;
+    public bool IsDot;
+    public float EffectDuration; // e.g, dot duration
 
     [Header("Spellstats per Level")]
-    public float damagePerLevel;
-    public float manaCostPerLevel;
-    public float speedPerLevel;
-    public float cooldownPerLevel;
+    public float DamagePerLevel;
+    public float ManaCostPerLevel;
+    public float SpeedPerLevel;
+    public float CooldownPerLevel;
 
-    public bool isDot; 
-    public PlayerController movementSettings; // to apply status effects
-    public VisualEffectAsset visualEffectAsset; // visual Asset of the spell
+    
+    public PlayerController MovementSettings; // to apply status effects
+    public VisualEffectAsset VisualEffectAsset; // visual Asset of the spell
 
     public float CalculateSpeed(int _level)
     {
-        return baseSpeed + (speedPerLevel * (_level - 1));
+        return BaseSpeed + (SpeedPerLevel * (_level - 1));
     }
 
     public float CalculateDamage(int _level)
     {
-        return baseDamage + (damagePerLevel * (_level - 1));
+        return BaseDamage + (DamagePerLevel * (_level - 1));
     }
 
     public float CalculateManaCost(int _level)
     {
-        return baseManaCost + (manaCostPerLevel * (_level - 1));
+        return BaseManaCost + (ManaCostPerLevel * (_level - 1));
     }
     public float CalculateCooldown(int _level)
     {
-        return baseCooldown + (cooldownPerLevel * (_level - 1));
+        return BaseCooldown + (CooldownPerLevel * (_level - 1));
     }
 }
