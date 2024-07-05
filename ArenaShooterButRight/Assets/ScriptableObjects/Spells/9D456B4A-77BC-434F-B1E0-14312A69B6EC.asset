@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
-  m_Name: 7AC2BC9E-A681-4A71-BCDD-8F8CFD0AB565
+  m_Name: 9D456B4A-77BC-434F-B1E0-14312A69B6EC
   m_EditorClassIdentifier: 
-  ID: 7AC2BC9E-A681-4A71-BCDD-8F8CFD0AB565
+  ID: 9D456B4A-77BC-434F-B1E0-14312A69B6EC
   EffectType: 0
   SpellType: 0
   SpellName: New Spell

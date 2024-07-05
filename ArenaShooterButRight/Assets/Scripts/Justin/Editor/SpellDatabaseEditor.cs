@@ -30,7 +30,7 @@ public sealed class SpellDatabaseEditor : EditorWindow
         SpellDatabaseEditor wnd = GetWindow<SpellDatabaseEditor>();
         wnd.titleContent = new GUIContent("Spell Database");
 
-        Vector2 size = new Vector2(800, 475);
+        Vector2 size = new Vector2(1000, 500);
         wnd.minSize = size;
         wnd.maxSize = size;
     }
@@ -61,7 +61,19 @@ public sealed class SpellDatabaseEditor : EditorWindow
 
         // Add Spell Init
         rootVisualElement.Q<Button>("AddSpellButton").clicked += AddSpell_OnClick;
+        rootVisualElement.Q<Button>("DeleteSpellButton").clicked += DeleteSpell_OnClick;
 
+    }
+
+    private void DeleteSpell_OnClick()
+    {
+        // Get the path of the file and delete it through AssetDatabase
+        string path = AssetDatabase.GetAssetPath(activeSpell);
+        AssetDatabase.DeleteAsset(path);
+
+        // remove the reference from the list and refresh the ListView
+        spellDatabase.Remove(activeSpell);
+        spellListView.Rebuild();
     }
 
     private void AddSpell_OnClick()
