@@ -10,23 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
-  m_Name: ElectroBall
+  m_Name: IceShard
   m_EditorClassIdentifier: 
-  ID: 81FEBE16-645C-4D18-8926-1A0E4BD666BB
-  EffectType: 0
-  SpellType: 0
-  SpellName: Electroball
-  SpellIcon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
+  ID: E7503483-933B-4F30-8E09-B7BAEECE4F5A
+  EffectType: 1
+  Type: 0
+  Name: IceShard
+  Icon: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
   UnlockPrice: 0
   BaseSpeed: 0
   BaseDamage: 0
   BaseManaCost: 0
   BaseCooldown: 0
-  IsDot: 0
+  IsDot: 1
   EffectDuration: 0
   DamagePerLevel: 0
   ManaCostPerLevel: 0
   SpeedPerLevel: 0
   CooldownPerLevel: 0
   MovementSettings: {fileID: 0}
-  VisualEffectAsset: {fileID: 0}
+  VisualEffectAsset: {fileID: 8926484042661614526, guid: 3811295d187630d49bde7fae31052ff1,
+    type: 3}

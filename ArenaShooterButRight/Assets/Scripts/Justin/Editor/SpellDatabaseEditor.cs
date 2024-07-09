@@ -68,14 +68,14 @@ public sealed class SpellDatabaseEditor : EditorWindow
 
         spellDetails.Q<TextField>("SpellName").RegisterValueChangedCallback(evt =>
             {
-                activeSpell.SpellName = evt.newValue;
+                activeSpell.Name = evt.newValue;
                 spellListView.Rebuild();
             });
 
         spellDetails.Q<ObjectField>("IconPicker").RegisterValueChangedCallback(evt =>
             {
                 Sprite newSprite = evt.newValue as Sprite;
-                activeSpell.SpellIcon = newSprite == null ? defaultSpellIcon : newSprite;
+                activeSpell.Icon = newSprite == null ? defaultSpellIcon : newSprite;
                 largeDisplayIcon.style.backgroundImage = newSprite == null ? defaultSpellIcon.texture : newSprite.texture;
                 spellListView.Rebuild();
             });
@@ -90,14 +90,16 @@ public sealed class SpellDatabaseEditor : EditorWindow
         // remove the reference from the list and refresh the ListView
         spellDatabase.Remove(activeSpell);
         spellListView.Rebuild();
+
+        spellDetails.style.visibility = Visibility.Hidden;
     }
 
     private void AddSpell_OnClick()
     {
         // Create a new Scriptable Object and set default parameters
         SpellData newSpell = SpellData.CreateInstance<SpellData>();
-        newSpell.SpellName = $"New Spell";
-        newSpell.SpellIcon = defaultSpellIcon;
+        newSpell.Name = $"New Spell";
+        newSpell.Icon = defaultSpellIcon;
 
         // Create the asset, using the unique ID for the name
         AssetDatabase.CreateAsset(newSpell, $"Assets/ScriptableObjects/Spells/{newSpell.ID}.asset");
@@ -118,8 +120,8 @@ public sealed class SpellDatabaseEditor : EditorWindow
         {
             e.Q<VisualElement>("Icon").style.backgroundImage =
                 spellDatabase[i] == null ? defaultSpellIcon.texture :
-                spellDatabase[i].SpellIcon.texture;
-            e.Q<Label>("Name").text = spellDatabase[i].SpellName;
+                spellDatabase[i].Icon.texture;
+            e.Q<Label>("Name").text = spellDatabase[i].Name;
         };
 
         spellListView = new ListView(spellDatabase, 50, makeSpell, bindItem);
@@ -137,9 +139,9 @@ public sealed class SpellDatabaseEditor : EditorWindow
         SerializedObject so = new SerializedObject(activeSpell);
         spellDetails.Bind(so);
 
-        if (activeSpell.SpellIcon != null)
+        if (activeSpell.Icon != null)
         {
-            largeDisplayIcon.style.backgroundImage = activeSpell.SpellIcon.texture;
+            largeDisplayIcon.style.backgroundImage = activeSpell.Icon.texture;
         }
         spellDetails.style.visibility = Visibility.Visible;
     }
@@ -156,12 +158,5 @@ public sealed class SpellDatabaseEditor : EditorWindow
         }
     }
 }
-
-//m_DetailSection.Q<TextField>("ItemName")
-//    .RegisterValueChangedCallback(evt =>
-//    {
-//    m_activeItem.FriendlyName = evt.newValue;
-//    m_ItemListView.Refresh());
-//        }
 
 

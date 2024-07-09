@@ -23,9 +23,9 @@ public class SpellData : ScriptableObject
     [Header("General")]
     public string ID = Guid.NewGuid().ToString().ToUpper();
     public EffectTypes EffectType; // Status effects
-    public SpellTypes SpellType;
-    public string SpellName;
-    public Sprite SpellIcon;
+    public SpellTypes Type;
+    public string Name;
+    public Sprite Icon;
     public float UnlockPrice;
 
     [Header("Spellstats")]
