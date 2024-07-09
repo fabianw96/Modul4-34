@@ -75,14 +75,12 @@ public class Portal : MonoBehaviour, IInteractable
         float angle = SignedAngle(-linkedPortal.transform.forward, _playerCam.transform.forward, Vector3.up);
         
         _portalCam.transform.SetLocalPositionAndRotation(new Vector3(-pos.x, _portalCam.transform.localPosition.y, -pos.z), Quaternion.Euler(0f,angle,0f));
-        
     }
 
     public void Interaction()
     {
         //set player to portal pos + local Z + 1
         _playerCam.gameObject.transform.parent.SetPositionAndRotation(linkedPortal.transform.position + Vector3.forward, linkedPortal.transform.rotation);
-        
     }
     
     float SignedAngle(Vector3 a, Vector3 b, Vector3 n) {
