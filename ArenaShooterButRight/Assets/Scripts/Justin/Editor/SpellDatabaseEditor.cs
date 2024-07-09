@@ -37,6 +37,7 @@ public sealed class SpellDatabaseEditor : EditorWindow
 
     public void CreateGUI()
     {
+        // Get UI File Path
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uxml");
         VisualElement rootFromUXML = visualTree.Instantiate();
         rootVisualElement.Add(rootFromUXML);
@@ -63,6 +64,21 @@ public sealed class SpellDatabaseEditor : EditorWindow
         rootVisualElement.Q<Button>("AddSpellButton").clicked += AddSpell_OnClick;
         rootVisualElement.Q<Button>("DeleteSpellButton").clicked += DeleteSpell_OnClick;
 
+        // Change Name and Icon in Itemlist if changed in Spell
+
+        spellDetails.Q<TextField>("SpellName").RegisterValueChangedCallback(evt =>
+            {
+                activeSpell.SpellName = evt.newValue;
+                spellListView.Rebuild();
+            });
+
+        spellDetails.Q<ObjectField>("IconPicker").RegisterValueChangedCallback(evt =>
+            {
+                Sprite newSprite = evt.newValue as Sprite;
+                activeSpell.SpellIcon = newSprite == null ? defaultSpellIcon : newSprite;
+                largeDisplayIcon.style.backgroundImage = newSprite == null ? defaultSpellIcon.texture : newSprite.texture;
+                spellListView.Rebuild();
+            });
     }
 
     private void DeleteSpell_OnClick()
@@ -79,7 +95,7 @@ public sealed class SpellDatabaseEditor : EditorWindow
     private void AddSpell_OnClick()
     {
         // Create a new Scriptable Object and set default parameters
-        SpellData newSpell = new SpellData();
+        SpellData newSpell = SpellData.CreateInstance<SpellData>();
         newSpell.SpellName = $"New Spell";
         newSpell.SpellIcon = defaultSpellIcon;
 
@@ -103,7 +119,7 @@ public sealed class SpellDatabaseEditor : EditorWindow
             e.Q<VisualElement>("Icon").style.backgroundImage =
                 spellDatabase[i] == null ? defaultSpellIcon.texture :
                 spellDatabase[i].SpellIcon.texture;
-            e.Q<Label>("Name").text = spellDatabase[i].name;
+            e.Q<Label>("Name").text = spellDatabase[i].SpellName;
         };
 
         spellListView = new ListView(spellDatabase, 50, makeSpell, bindItem);
@@ -131,12 +147,21 @@ public sealed class SpellDatabaseEditor : EditorWindow
     private void LoadAllItems()
     {
         spellDatabase.Clear();
-        string[] allPaths = Directory.GetFiles("Assets/ScriptableObjects/Spells", "*.asset",SearchOption.AllDirectories);
+        string[] allPaths = Directory.GetFiles("Assets/ScriptableObjects/Spells", "*.asset", SearchOption.AllDirectories);
 
-        foreach (string path in allPaths) 
+        foreach (string path in allPaths)
         {
             string cleanedPath = path.Replace("\\", "/");
-            spellDatabase.Add((SpellData)AssetDatabase.LoadAssetAtPath(cleanedPath,typeof(SpellData)));
+            spellDatabase.Add((SpellData)AssetDatabase.LoadAssetAtPath(cleanedPath, typeof(SpellData)));
         }
     }
 }
+
+//m_DetailSection.Q<TextField>("ItemName")
+//    .RegisterValueChangedCallback(evt =>
+//    {
+//    m_activeItem.FriendlyName = evt.newValue;
+//    m_ItemListView.Refresh());
+//        }
+
+
