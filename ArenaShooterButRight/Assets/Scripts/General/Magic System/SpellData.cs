@@ -6,6 +6,7 @@ using UnityEngine.VFX;
 
 public enum EffectTypes
 {
+    None,
     Burn,
     Slow
 }
@@ -31,14 +32,14 @@ public class SpellData : ScriptableObject
     [Header("Spellstats")]
     public float BaseSpeed; // the spells projectile speed
     public float BaseDamage; // spell damage
-    public float BaseManaCost; // Mana cost of the spell
+    public float BaseCost; // Mana cost of the spell
     public float BaseCooldown;
     public bool IsDot;
     public float EffectDuration; // e.g, dot duration
 
     [Header("Spellstats per Level")]
     public float DamagePerLevel;
-    public float ManaCostPerLevel;
+    public float CostPerLevel;
     public float SpeedPerLevel;
     public float CooldownPerLevel;
 
@@ -58,7 +59,7 @@ public class SpellData : ScriptableObject
 
     public float CalculateManaCost(int _level)
     {
-        return BaseManaCost + (ManaCostPerLevel * (_level - 1));
+        return BaseCost + (CostPerLevel * (_level - 1));
     }
     public float CalculateCooldown(int _level)
     {

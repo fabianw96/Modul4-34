@@ -44,7 +44,6 @@ public sealed class SpellDatabaseEditor : EditorWindow
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss");
         rootVisualElement.styleSheets.Add(styleSheet);
-
         spellRowTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Justin/Editor/SpellRowTemplate.uxml");
         defaultSpellIcon = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sprites/UnknownIcon.png", typeof(Sprite));
 
@@ -79,6 +78,8 @@ public sealed class SpellDatabaseEditor : EditorWindow
                 largeDisplayIcon.style.backgroundImage = newSprite == null ? defaultSpellIcon.texture : newSprite.texture;
                 spellListView.Rebuild();
             });
+
+        // Spellstats Init
     }
 
     private void DeleteSpell_OnClick()
