@@ -1,14 +1,12 @@
-using General.Player;
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.VFX;
 
 public enum EffectTypes
 {
     None,
     Burn,
-    Slow
+    Slow,
 }
 
 public enum SpellTypes
@@ -28,15 +26,21 @@ public class SpellData : ScriptableObject
     public SpellTypes Type;
     public string Name;
     public Sprite Icon;
-    public int UnlockCost;
 
     [Header("Spellstats")]
     public float BaseSpeed; // the spells projectile speed
     public float BaseDamage; // spell damage
     public float BaseCost; // Mana cost of the spell
     public float BaseCooldown;
+    public int UnlockCost;
+
+    [Header("Spelleffect Stats")]
     public bool IsDot;
-    public float EffectDuration; // e.g, dot duration
+    public bool IsSlow;
+    public float EffectDuration; // e.g, dot duration, slow duration
+    public float DotDamagePerTick;
+    public float DotTickRate;
+    public float SlowStrength;
 
     [Header("Spellstats per Level")]
     public float DamagePerLevel;
@@ -44,9 +48,9 @@ public class SpellData : ScriptableObject
     public float SpeedPerLevel;
     public float CooldownPerLevel;
 
-    
-    public PlayerController MovementSettings; // to apply status effects
+    public FPSController FPSController;
     public VisualEffectAsset VisualEffectAsset; // visual Asset of the spell
+    public VisualEffectAsset VisualImpactEffectAsset; // visual Asset of the status effect caused by the spell
 
     public float CalculateSpeed(int _level)
     {

@@ -27,16 +27,10 @@ public class MagicEffect : MonoBehaviour
         {
             ApplyEffect();
         }
-        //TODO: isdot abfragen. Wenn ja, applyeffect, wenn nein, dealdmg.
-        // should be done
-
-        //TODO: delete self when damage has been taken.
-        // Should be done with ApplyDotEffect and RemoveEffectAfterDuration Methods
     }
 
     private IEnumerator ApplyDotEffect()
     {
-        Debug.Log("In ApplyDotEffect Method");
         float elapsedTime = 0f;
         while (elapsedTime < effectDuration)
         {
@@ -49,7 +43,6 @@ public class MagicEffect : MonoBehaviour
 
     private IEnumerator RemoveEffectAfterDuration()
     {
-        Debug.Log("In RemoveEffectAfterDuration Method");
         yield return new WaitForSeconds(effectDuration);
         // Reset any modified properties to their original state
         // e.g., reset movement speed
@@ -58,14 +51,12 @@ public class MagicEffect : MonoBehaviour
 
     private void ApplyEffect()
     {
-        Debug.Log("In ApplyEffect Method");
         if (!hasEffectApplied)
         {
             hasEffectApplied = true;
             if (spellData.EffectType == EffectTypes.Slow)
             {
-                // Implement slow effect logic here
-                // e.g., reduce movement speed
+                
             }
             // Implement other effect types here
             // Remove the effect after duration

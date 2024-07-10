@@ -14,21 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ID: E7503483-933B-4F30-8E09-B7BAEECE4F5A
   EffectType: 1
-  Type: 0
+  Type: 2
   Name: IceShard
   Icon: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
-  UnlockPrice: 0
-  BaseSpeed: 0
-  BaseDamage: 0
-  BaseCost: 0
-  BaseCooldown: 0
+  BaseSpeed: 5
+  BaseDamage: 8
+  BaseCost: 5
+  BaseCooldown: 0.2
+  UnlockCost: 0
   IsDot: 1
+  IsSlow: 0
   EffectDuration: 0
-  Test: 
-  DamagePerLevel: 0
-  CostPerLevel: 0
-  SpeedPerLevel: 0
+  DotDamagePerTick: 0
+  DotTickRate: 0
+  SlowStrength: 0
+  DamagePerLevel: 1
+  CostPerLevel: 1
+  SpeedPerLevel: 1
   CooldownPerLevel: 0
-  MovementSettings: {fileID: 0}
+  FPSController: {fileID: 0}
   VisualEffectAsset: {fileID: 8926484042661614526, guid: 3811295d187630d49bde7fae31052ff1,
     type: 3}
+  VisualImpactEffectAsset: {fileID: 0}

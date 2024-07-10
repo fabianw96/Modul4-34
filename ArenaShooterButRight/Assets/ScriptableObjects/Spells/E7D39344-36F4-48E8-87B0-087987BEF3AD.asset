@@ -17,16 +17,22 @@ MonoBehaviour:
   Type: 1
   Name: Fireball
   Icon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
+  BaseSpeed: 5
+  BaseDamage: 20
+  BaseCost: 10
+  BaseCooldown: 0.5
   UnlockCost: 0
-  BaseSpeed: 0
-  BaseDamage: 0
-  BaseCost: 0
-  BaseCooldown: 0
   IsDot: 0
+  IsSlow: 0
   EffectDuration: 0
-  DamagePerLevel: 0
-  CostPerLevel: 0
-  SpeedPerLevel: 0
-  CooldownPerLevel: 0
-  MovementSettings: {fileID: 0}
-  VisualEffectAsset: {fileID: 0}
+  DotDamagePerTick: 0
+  DotTickRate: 0
+  SlowStrength: 0
+  DamagePerLevel: 5
+  CostPerLevel: 2
+  SpeedPerLevel: 1
+  CooldownPerLevel: 0.1
+  FPSController: {fileID: 0}
+  VisualEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
+    type: 3}
+  VisualImpactEffectAsset: {fileID: 0}

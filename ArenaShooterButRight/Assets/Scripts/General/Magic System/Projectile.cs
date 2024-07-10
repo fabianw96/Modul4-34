@@ -45,8 +45,5 @@ public class Projectile : MonoBehaviour
             magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage);
             Destroy(gameObject); // Destroy Projectile upon impact
         }
-        
-        //TODO: check if other gameobject already has magiceffect. initeffect on that one then.
-        // Should be checked by the logic above
     }
 }

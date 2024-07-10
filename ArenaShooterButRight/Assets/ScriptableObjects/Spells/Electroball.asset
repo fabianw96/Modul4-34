@@ -17,16 +17,22 @@ MonoBehaviour:
   Type: 2
   Name: Electric Sphere
   Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
+  BaseSpeed: 8
+  BaseDamage: 15
+  BaseCost: 10
+  BaseCooldown: 1
   UnlockCost: 0
-  BaseSpeed: 1
-  BaseDamage: 1
-  BaseCost: 5
-  BaseCooldown: 0.5
   IsDot: 0
+  IsSlow: 0
   EffectDuration: 0
-  DamagePerLevel: 1
+  DotDamagePerTick: 0
+  DotTickRate: 0
+  SlowStrength: 0
+  DamagePerLevel: 2
   CostPerLevel: 1
-  SpeedPerLevel: 1
+  SpeedPerLevel: 2
   CooldownPerLevel: -0.1
-  MovementSettings: {fileID: 0}
-  VisualEffectAsset: {fileID: 0}
+  FPSController: {fileID: 0}
+  VisualEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
+    type: 3}
+  VisualImpactEffectAsset: {fileID: 0}
