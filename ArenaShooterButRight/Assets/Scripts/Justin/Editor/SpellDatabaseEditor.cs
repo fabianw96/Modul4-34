@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -53,7 +52,6 @@ public sealed class SpellDatabaseEditor : EditorWindow
         spellTab = rootVisualElement.Q<VisualElement>("SpellTab");
         GenerateListView();
 
-
         // SpellDetails Init
         spellDetails = rootVisualElement.Q<ScrollView>("SpellDetails");
         spellDetails.style.visibility = Visibility.Hidden;
@@ -78,8 +76,6 @@ public sealed class SpellDatabaseEditor : EditorWindow
                 largeDisplayIcon.style.backgroundImage = newSprite == null ? defaultSpellIcon.texture : newSprite.texture;
                 spellListView.Rebuild();
             });
-
-        // Spellstats Init
     }
 
     private void DeleteSpell_OnClick()
@@ -136,7 +132,6 @@ public sealed class SpellDatabaseEditor : EditorWindow
     private void ListView_onSelectionChanged(IEnumerable<object> selectedSpells)
     {
         activeSpell = (SpellData)selectedSpells.First();
-
         SerializedObject so = new SerializedObject(activeSpell);
         spellDetails.Bind(so);
 
@@ -159,5 +154,3 @@ public sealed class SpellDatabaseEditor : EditorWindow
         }
     }
 }
-
-

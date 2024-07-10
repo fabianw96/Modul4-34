@@ -13,6 +13,7 @@ public enum EffectTypes
 
 public enum SpellTypes
 {
+    None,
     Fireball,
     Iceball,
     Electroball
@@ -27,7 +28,7 @@ public class SpellData : ScriptableObject
     public SpellTypes Type;
     public string Name;
     public Sprite Icon;
-    public float UnlockPrice;
+    public int UnlockCost;
 
     [Header("Spellstats")]
     public float BaseSpeed; // the spells projectile speed

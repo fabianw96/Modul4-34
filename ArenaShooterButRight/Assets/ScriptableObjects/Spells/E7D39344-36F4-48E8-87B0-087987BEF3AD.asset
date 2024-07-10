@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
-  m_Name: Fireball
+  m_Name: E7D39344-36F4-48E8-87B0-087987BEF3AD
   m_EditorClassIdentifier: 
-  ID: E036A991-7552-4DD8-B0B6-8D6ACC851A75
+  ID: E7D39344-36F4-48E8-87B0-087987BEF3AD
   EffectType: 0
-  Type: 0
-  Name: New Spell
-  Icon: {fileID: 21300000, guid: d08cad4560e86a64ca205e32aa357f0a, type: 3}
-  UnlockPrice: 0
+  Type: 1
+  Name: Fireball
+  Icon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
+  UnlockCost: 0
   BaseSpeed: 0
   BaseDamage: 0
-  BaseManaCost: 0
+  BaseCost: 0
   BaseCooldown: 0
   IsDot: 0
   EffectDuration: 0
   DamagePerLevel: 0
-  ManaCostPerLevel: 0
+  CostPerLevel: 0
   SpeedPerLevel: 0
   CooldownPerLevel: 0
   MovementSettings: {fileID: 0}

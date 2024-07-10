@@ -20,12 +20,13 @@ MonoBehaviour:
   UnlockPrice: 0
   BaseSpeed: 0
   BaseDamage: 0
-  BaseManaCost: 0
+  BaseCost: 0
   BaseCooldown: 0
   IsDot: 1
   EffectDuration: 0
+  Test: 
   DamagePerLevel: 0
-  ManaCostPerLevel: 0
+  CostPerLevel: 0
   SpeedPerLevel: 0
   CooldownPerLevel: 0
   MovementSettings: {fileID: 0}
