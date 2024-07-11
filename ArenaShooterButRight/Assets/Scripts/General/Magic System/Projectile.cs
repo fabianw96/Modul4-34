@@ -37,8 +37,13 @@ public class Projectile : MonoBehaviour
     {
         if (other.gameObject.GetComponent<HealthSystem>() != null)
         {
-            MagicEffect magicEffect = other.gameObject.GetComponent<MagicEffect>();
-            if (magicEffect == null)
+            MagicEffect lingeringEffect = other.gameObject.GetComponent<MagicEffect>();
+
+            if(lingeringEffect != null && spellData.Type == SpellTypes.Fireball && lingeringEffect.GetSpellData().EffectType == EffectTypes.Electrified)
+            {
+                lingeringEffect.TriggerExplosion();
+            }
+            else if (magicEffect == null)
             {
                 magicEffect = other.gameObject.AddComponent<MagicEffect>();
             }

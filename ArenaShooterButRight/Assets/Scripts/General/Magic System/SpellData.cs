@@ -7,6 +7,7 @@ public enum EffectTypes
     None,
     Burn,
     Slow,
+    Electrified,
 }
 
 public enum SpellTypes
@@ -48,9 +49,13 @@ public class SpellData : ScriptableObject
     public float SpeedPerLevel;
     public float CooldownPerLevel;
 
+    [Header("Explosion Effect Stats")]
+    public float ExplosionDamage;
+    public float ExplosionRadius;
+
     public FPSController FPSController;
     public VisualEffectAsset VisualEffectAsset; // visual Asset of the spell
-    public VisualEffectAsset VisualImpactEffectAsset; // visual Asset of the status effect caused by the spell
+    public VisualEffectAsset VisualLingeringEffectAsset; // visual Asset of the status effect caused by the spell
 
     public float CalculateSpeed(int _level)
     {
