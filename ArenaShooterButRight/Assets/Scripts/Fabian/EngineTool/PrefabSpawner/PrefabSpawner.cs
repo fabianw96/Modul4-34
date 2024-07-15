@@ -103,22 +103,22 @@ namespace Fabian.EngineTool.PrefabSpawner
             _root.Add(_clearButton);
         }
 
-        private void LoadPrefabsFromFolder(ClickEvent evt)
-        {
-            _prefabChoiceLst.Clear();
-
-            if (_root.Contains(_listView))
-            {
-                _root.Remove(_listView);
-            }
-            
-            GameObject[] gos = Resources.LoadAll<GameObject>(_dataPath);
-            
-            foreach (var gosobj in gos)
-            {
-                _prefabChoiceLst.Add(gosobj);
-            }
-        }
+        // private void LoadPrefabsFromFolder(ClickEvent evt)
+        // {
+        //     _prefabChoiceLst.Clear();
+        //
+        //     if (_root.Contains(_listView))
+        //     {
+        //         _root.Remove(_listView);
+        //     }
+        //     
+        //     GameObject[] gos = Resources.LoadAll<GameObject>(_dataPath);
+        //     
+        //     foreach (var gosobj in gos)
+        //     {
+        //         _prefabChoiceLst.Add(gosobj);
+        //     }
+        // }
 
         private void EvaluateMousePosition(SceneView obj)
         {
