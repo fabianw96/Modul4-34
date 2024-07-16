@@ -102,7 +102,7 @@ public class FPSController : MonoBehaviour
         
         HandleLook();
         HandleShoot();
-        HandleInteraction();
+        // HandleInteraction();
     }
 
     private void FixedUpdate()
@@ -166,19 +166,17 @@ public class FPSController : MonoBehaviour
     }
     private void HandleInteraction()
     {
-        if (_isInteractPressed)
-        {
-            RaycastHit hitInfo = new RaycastHit();
-            int layer = 1 << LayerMask.NameToLayer("Portal");
-            bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance, layer, QueryTriggerInteraction.Ignore);
+        RaycastHit hitInfo = new RaycastHit();
+        int layer = 1 << LayerMask.NameToLayer("Portal");
+        // bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance, layer, QueryTriggerInteraction.Ignore);
+        bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance);
 
-            if (!hit) return;
-            GameObject hitObject = hitInfo.transform.gameObject;
-            if (hitObject != null && hitObject.GetComponent<IInteractable>() != null)
-            {
-                Debug.Log("Interaction!");
-                hitObject.GetComponent<IInteractable>().Interaction();
-            }
+        if (!hit) return;
+        GameObject hitObject = hitInfo.transform.gameObject;
+        if (hitObject != null && hitObject.GetComponent<IInteractable>() != null)
+        {
+            Debug.Log("Interaction!");
+            hitObject.GetComponent<IInteractable>().Interaction();
         }
     }
 
@@ -200,6 +198,10 @@ public class FPSController : MonoBehaviour
     }
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        _isInteractPressed = ctx.ReadValueAsButton();
+        if (ctx.performed)
+        {
+            Debug.Log("Interacted");
+            HandleInteraction();
+        }
     }
 }

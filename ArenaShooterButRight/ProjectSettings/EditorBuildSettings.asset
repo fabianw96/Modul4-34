@@ -8,4 +8,31 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
+  - enabled: 1
+    path: Assets/Scenes/Fabian/FabianGen.unity
+    guid: c8481fd0c0519444aab154dc4e4c0e21
+  - enabled: 1
+    path: Assets/Scenes/Fabian/FabianKI.unity
+    guid: dcc631568dcc2d5428d318a2921ed374
+  - enabled: 1
+    path: Assets/Scenes/Fabian/FabianShowcase.unity
+    guid: 9cfbad97496e47d40bf907bbc1c3b633
+  - enabled: 1
+    path: Assets/Scenes/Fabian/FabianSimulation.unity
+    guid: 5684cb6e5cfb84b4698a199b609c91ec
+  - enabled: 1
+    path: Assets/Scenes/Justin/JustinGen.unity
+    guid: 81c9ff857454a1d49b6e1fe1099848bf
+  - enabled: 1
+    path: Assets/Scenes/Justin/JustinKI.unity
+    guid: f78b1d908c1dd994cbe63d580d995b85
+  - enabled: 1
+    path: Assets/Scenes/Justin/JustinShowcase.unity
+    guid: 1886d597a4f70084188be00dbeca9ff4
+  - enabled: 1
+    path: Assets/Scenes/Justin/JustinSimulation.unity
+    guid: 5667290625e33dc4e9023b6d26323011
+  - enabled: 1
+    path: Assets/Scenes/HubWorld.unity
+    guid: bf11120e9af3d9841b843b00c974c000
   m_configObjects: {}

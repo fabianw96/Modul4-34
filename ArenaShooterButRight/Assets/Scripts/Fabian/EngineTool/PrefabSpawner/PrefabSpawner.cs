@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
@@ -20,12 +22,14 @@ namespace Fabian.EngineTool.PrefabSpawner
         //Visual UI Elements
         private VisualElement _root;
         private ListView _listView;
-        private Label _label;
+        private Label _titleLabel;
         private DropdownField _prefabDropDown;
         private Toggle _enableButton;
         private Toggle _placeMultiPrefabs;
         private Button _clearButton;
-        private Button _loadPrefabsButton;
+        // private Button _loadPrefabsButton;
+        private Button _loadDataButton;
+        private Button _saveDataButton;
         private Slider _radiusSlider;
         private Slider _minDistanceSlider;
     
@@ -34,19 +38,29 @@ namespace Fabian.EngineTool.PrefabSpawner
         private float _minDistanceBetweenPrefabs;
         private string _dataPath;
         private string[] _subPaths;
-
-
-        [MenuItem("Window/UI Toolkit/PrefabSpawner")]
+        
+        //Testing
+        private Scene _currentScene;
+        
+        [MenuItem("Fabian/PrefabSpawner")]
         public static void ShowExample()
         {
             PrefabSpawner wnd = GetWindow<PrefabSpawner>();
             wnd.titleContent = new GUIContent("PrefabSpawner");
         }
+        
 
         public void CreateGUI()
         {
-            SceneView.duringSceneGui += EvaluateMousePosition;
+            //TODO: Save and Load spawned prefabs from json?
             _root = rootVisualElement;
+            
+            SceneView.duringSceneGui += EvaluateMousePosition;
+            
+            _titleLabel = new Label("PrefabSpawner");
+            _root.Add(_titleLabel);
+            
+            DrawReorderableList(_prefabChoiceLst, rootVisualElement);
 
             #region FolderTesting
             //
@@ -78,30 +92,29 @@ namespace Fabian.EngineTool.PrefabSpawner
             // _root.Add(_loadPrefabsButton);
             #endregion
             
-            _label = new Label("PrefabSpawner");
-            _root.Add(_label);
-            DrawReorderableList(_prefabChoiceLst, rootVisualElement);
             _enableButton = new Toggle("Enable spawning");
             _placeMultiPrefabs = new Toggle("Spawn Multiple");
-            _label = new Label("Radius");
-            _root.Add(_label);
+            _titleLabel = new Label("Radius");
+            _root.Add(_titleLabel);
             _radiusSlider = new Slider(0f, 5f);
             _root.Add(_radiusSlider);
-            _label = new Label("Min Distance between Prefabs");
-            _root.Add(_label);
+            _titleLabel = new Label("Min Distance between Prefabs");
+            _root.Add(_titleLabel);
             _minDistanceSlider = new Slider(0f, 5f);
             _root.Add(_minDistanceSlider);
-            _clearButton = new Button
-            {
-                text = "Clear spawned prefabs!",
-            };
+            _clearButton = new Button { text = "Clear spawned prefabs!" };
+            _saveDataButton = new Button { text = "Save current List" };
+            _loadDataButton = new Button { text = "Load List from File" };
         
             _clearButton.RegisterCallback<ClickEvent>(ClearSpawnedObjects);
         
             _root.Add(_enableButton);
             _root.Add(_placeMultiPrefabs);
             _root.Add(_clearButton);
+            _root.Add(_saveDataButton);
+            _root.Add(_loadDataButton);
         }
+        
 
         // private void LoadPrefabsFromFolder(ClickEvent evt)
         // {
@@ -131,23 +144,22 @@ namespace Fabian.EngineTool.PrefabSpawner
             _radius = _radiusSlider.value;
             _minDistanceBetweenPrefabs = _minDistanceSlider.value;
 
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                DrawCircle(hit);
+            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            
+            DrawCircle(hit);
 
-                if (!_enableButton.value) return;
+            if (!_enableButton.value) return;
                 
-                GUIUtility.hotControl = 1;
+            GUIUtility.hotControl = 1;
 
-                switch (_placeMultiPrefabs.value)
-                {
-                    case true:
-                        SpawnMultiPrefabs(hit);
-                        break;
-                    case false:
-                        SpawnSinglePrefab(hit);
-                        break;
-                }
+            switch (_placeMultiPrefabs.value)
+            {
+                case true:
+                    SpawnMultiPrefabs(hit);
+                    break;
+                case false:
+                    SpawnSinglePrefab(hit);
+                    break;
             }
         }
 
