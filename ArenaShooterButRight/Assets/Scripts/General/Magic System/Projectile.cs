@@ -9,6 +9,7 @@ public class Projectile : MonoBehaviour
     private Vector3 direction;
     private float speed;
     private float damage;
+    [SerializeField] private Mesh mesh;
 
     public void Launch(SpellData _spellData, Vector3 _launchDirection, int _level)
     {
@@ -47,7 +48,7 @@ public class Projectile : MonoBehaviour
             {
                 magicEffect = other.gameObject.AddComponent<MagicEffect>();
             }
-            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage);
+            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage, mesh);
             Destroy(gameObject); // Destroy Projectile upon impact
         }
     }
