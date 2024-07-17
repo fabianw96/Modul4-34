@@ -44,7 +44,7 @@ namespace General
 
         private void Kill()
         {
-            if (this.gameObject.GetComponent<PlayerController>() != null)
+            if (this.gameObject.GetComponent<FPSController>() != null)
             {
                 Camera.main.transform.parent = null;
             }
