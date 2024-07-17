@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
@@ -18,12 +20,13 @@ namespace Fabian.EngineTool.PrefabSpawner
         private List<GameObject> _spawnedPrefabs = new();
         private GameObject[] _batchingObjects;
         private Dictionary<GameObject, Transform> _positionDictionary = new ();
+        private List<String> _layerMasks;
     
         //Visual UI Elements
         private VisualElement _root;
         private ListView _listView;
         private Label _titleLabel;
-        private DropdownField _prefabDropDown;
+        private DropdownField _layerDropDown;
         private Toggle _enableButton;
         private Toggle _placeMultiPrefabs;
         private Button _clearButton;
@@ -38,6 +41,8 @@ namespace Fabian.EngineTool.PrefabSpawner
         private float _minDistanceBetweenPrefabs;
         private string _dataPath;
         private string[] _subPaths;
+
+        private Collider[] _test;
         
         //Testing
         private Scene _currentScene;
@@ -61,6 +66,20 @@ namespace Fabian.EngineTool.PrefabSpawner
             _root.Add(_titleLabel);
             
             DrawReorderableList(_prefabChoiceLst, rootVisualElement);
+
+            _layerMasks = new();
+            
+            for (int i = 0; i < 32; i++)
+            {
+                if (LayerMask.LayerToName(i) == string.Empty)
+                {
+                    continue;
+                }
+                _layerMasks.Add(LayerMask.LayerToName(i));
+            }
+            
+            _layerDropDown = new DropdownField("Layer: ", _layerMasks,0);
+            _root.Add(_layerDropDown);
 
             #region FolderTesting
             //
@@ -144,14 +163,18 @@ namespace Fabian.EngineTool.PrefabSpawner
             _radius = _radiusSlider.value;
             _minDistanceBetweenPrefabs = _minDistanceSlider.value;
 
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
+            if (!Physics.Raycast(ray, out RaycastHit hit, float.MaxValue, LayerMask.NameToLayer(_layerDropDown.value)))
+                return;
             
             DrawCircle(hit);
 
-            if (!_enableButton.value) return;
+            if (!_enableButton.value) 
+                return;
                 
             GUIUtility.hotControl = 1;
-
+            
+            _test = Physics.OverlapSphere(hit.point, _radius);
+            
             switch (_placeMultiPrefabs.value)
             {
                 case true:
@@ -192,29 +215,69 @@ namespace Fabian.EngineTool.PrefabSpawner
             CheckOverlappingPrefabs(o);
 
             if (o == null) return;
+            o.layer = LayerMask.NameToLayer(_layerDropDown.value);
+            o.AddComponent<MeshCollider>();
+            
+            
             
             _positionDictionary.Add(o, o.transform);
             o.GetComponent<MeshRenderer>().sharedMaterial.enableInstancing = true;
             _spawnedPrefabs.Add(o);
         }
+        
+        private void DeletePrefab(RaycastHit hit)
+        {
+            if (_test == null) return;
+            
+            foreach (var coll in _test)
+            {
+                if (coll.gameObject.layer != LayerMask.NameToLayer(_layerDropDown.value)) continue;
+
+                if (!_positionDictionary.ContainsKey(coll.gameObject)) continue;
+                
+                _positionDictionary.Remove(coll.gameObject);
+                DestroyImmediate(coll.gameObject);
+            }
+        }
+        
 
         private void SpawnSinglePrefab(RaycastHit hit)
         {
-            if (Event.current.type != EventType.MouseDown) return;
-            DrawPrefabs(hit);
-        }
+            if (Event.current.type == EventType.MouseDown)
+            {            
+                switch (Event.current.button)
+                {
+                    case 0:
+                        DrawPrefabs(hit);
+                        break;
+                    case 1:
+                        DeletePrefab(hit);
+                        break;
+                }
+            };
 
+        }
+        
         private void SpawnMultiPrefabs(RaycastHit hit)
         {
             if (Event.current.type != EventType.MouseDrag) return;
-            DrawPrefabs(hit);
+            
+            switch (Event.current.button)
+            {
+                case 0:
+                    DrawPrefabs(hit);
+                    break;
+                case 1:
+                    DeletePrefab(hit);
+                    break;
+            }
         }
 
         private void CheckOverlappingPrefabs(GameObject o)
         {
             foreach (KeyValuePair<GameObject, Transform> obj in _positionDictionary)
             {
-                if (Vector3.Distance(o.transform.position, obj.Value.position) < _minDistanceBetweenPrefabs)
+                if (obj.Value != null && Vector3.Distance(o.transform.position, obj.Value.position) < _minDistanceBetweenPrefabs)
                 {
                     DestroyImmediate(o);
                     return;
