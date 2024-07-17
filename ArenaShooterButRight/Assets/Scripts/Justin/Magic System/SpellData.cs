@@ -25,6 +25,6 @@ public class SpellData : ScriptableObject
     public bool isDot; 
     public float effectDuration; // e.g, dot duration
     public float manaCost; // Mana cost of the spell
-    public PlayerController movementSettings; // to apply status effects
+    public FPSController movementSettings; // to apply status effects
     public VisualEffectAsset visualEffectAsset; // visual Asset of the spell
 }

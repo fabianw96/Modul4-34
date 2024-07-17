@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
 
         if (spellData.visualEffectAsset != null)
         {
-            VisualEffect visualEffect = gameObject.AddComponent<VisualEffect>();
+            VisualEffect visualEffect = gameObject.GetComponent<VisualEffect>();
             visualEffect.visualEffectAsset = _spellData.visualEffectAsset;
             visualEffect.Play();
         }

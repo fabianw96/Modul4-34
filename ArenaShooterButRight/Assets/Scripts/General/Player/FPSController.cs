@@ -21,7 +21,9 @@ public class FPSController : MonoBehaviour
     [SerializeField] private float rotationSmoothTime = 0.1f;
 
     private CharacterController _controller;
+    private Shooter _shooter;
     private Camera _cam;
+    private SpellType _chosenSpell;
     [SerializeField] private float yaw;
     [SerializeField] private float pitch;
     private float _smoothYaw;
@@ -49,6 +51,8 @@ public class FPSController : MonoBehaviour
 
     void Start () {
         _cam = Camera.main;
+        _shooter = GetComponent<Shooter>();
+        
         if (lockCursor) {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -79,10 +83,26 @@ public class FPSController : MonoBehaviour
 
         _mX = Input.GetAxisRaw("Mouse X");
         _mY = Input.GetAxisRaw("Mouse Y");
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            _chosenSpell = SpellType.Fireball;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _chosenSpell = SpellType.Iceball;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            _chosenSpell = SpellType.Electroball;
+        }
+        
         
         HandleLook();
         HandleShoot();
-        HandleInteraction();
+        // HandleInteraction();
     }
 
     private void FixedUpdate()
@@ -124,7 +144,7 @@ public class FPSController : MonoBehaviour
     {
         if (_isShootPressed)
         {
-            Debug.Log("pew pew");
+            // _shooter.ChooseSpell(_chosenSpell);
         }
     }
     private void HandleLook()
@@ -146,19 +166,17 @@ public class FPSController : MonoBehaviour
     }
     private void HandleInteraction()
     {
-        if (_isInteractPressed)
-        {
-            RaycastHit hitInfo = new RaycastHit();
-            int layer = 1 << LayerMask.NameToLayer("Portal");
-            bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance, layer, QueryTriggerInteraction.Ignore);
+        RaycastHit hitInfo = new RaycastHit();
+        int layer = 1 << LayerMask.NameToLayer("Portal");
+        // bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance, layer, QueryTriggerInteraction.Ignore);
+        bool hit = Camera.main != null && Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo, raycastDistance);
 
-            if (!hit) return;
-            GameObject hitObject = hitInfo.transform.gameObject;
-            if (hitObject != null && hitObject.GetComponent<IInteractable>() != null)
-            {
-                Debug.Log("Interaction!");
-                hitObject.GetComponent<IInteractable>().Interaction();
-            }
+        if (!hit) return;
+        GameObject hitObject = hitInfo.transform.gameObject;
+        if (hitObject != null && hitObject.GetComponent<IInteractable>() != null)
+        {
+            Debug.Log("Interaction!");
+            hitObject.GetComponent<IInteractable>().Interaction();
         }
     }
 
@@ -180,6 +198,10 @@ public class FPSController : MonoBehaviour
     }
     public void OnInteract(InputAction.CallbackContext ctx)
     {
-        _isInteractPressed = ctx.ReadValueAsButton();
+        if (ctx.performed)
+        {
+            Debug.Log("Interacted");
+            HandleInteraction();
+        }
     }
 }
