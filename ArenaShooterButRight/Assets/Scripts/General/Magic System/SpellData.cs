@@ -53,7 +53,6 @@ public class SpellData : ScriptableObject
     public float ExplosionDamage;
     public float ExplosionRadius;
 
-    public FPSController FPSController;
     public VisualEffectAsset VisualEffectAsset; // visual Asset of the spell
     public VisualEffectAsset VisualLingeringEffectAsset; // visual Asset of the status effect caused by the spell
 

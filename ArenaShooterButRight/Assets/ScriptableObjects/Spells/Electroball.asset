@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
-  m_Name: Iceshard
+  m_Name: Electroball
   m_EditorClassIdentifier: 
-  ID: E7503483-933B-4F30-8E09-B7BAEECE4F5A
-  EffectType: 1
-  Type: 2
-  Name: IceShard
-  Icon: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
-  BaseSpeed: 4
-  BaseDamage: 10
-  BaseCost: 5
-  BaseCooldown: 0.5
+  ID: 3227BFCA-85DE-4F59-80F4-335DF00D236C
+  EffectType: 0
+  Type: 3
+  Name: Electroball
+  Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
+  BaseSpeed: 7
+  BaseDamage: 20
+  BaseCost: 10
+  BaseCooldown: 1
   UnlockCost: 0
   IsDot: 0
-  IsSlow: 1
-  EffectDuration: 5
+  IsSlow: 0
+  EffectDuration: 0
   DotDamagePerTick: 0
   DotTickRate: 0
-  SlowStrength: 0.8
-  DamagePerLevel: 1
-  CostPerLevel: 1
-  SpeedPerLevel: 0.5
+  SlowStrength: 0
+  DamagePerLevel: 5
+  CostPerLevel: 2
+  SpeedPerLevel: 2
   CooldownPerLevel: 1
   ExplosionDamage: 0
   ExplosionRadius: 0
   FPSController: {fileID: 0}
-  VisualEffectAsset: {fileID: 8926484042661614526, guid: 3811295d187630d49bde7fae31052ff1,
+  VisualEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
     type: 3}
-  VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 72a0e8d5e77f16043a37d3706d5aa937,
+  VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 7517ab5dfe569164fb508e1581ca83d4,
     type: 3}

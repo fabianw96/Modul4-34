@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2259.5762, g: 2399.4172, b: 3493.2686, a: 1}
+  m_IndirectSpecularColor: {r: 2256.642, g: 2397.245, b: 3492.0662, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -340,6 +340,71 @@ MonoBehaviour:
   m_PointlightHDType: 0
   m_SpotLightShape: 0
   m_AreaLightShape: 0
+--- !u!1 &249210969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 249210971}
+  - component: {fileID: 249210970}
+  m_Layer: 0
+  m_Name: SpellLevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &249210970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249210969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c89ffcfa924dfb41976d59a2907cb08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spellLevels:
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+  - spellType: 0
+    level: 0
+--- !u!4 &249210971
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249210969}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.13636349, y: 0.7670746, z: -3.9651623}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &310707694
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +622,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3728192323056732715, guid: 5101aee443b6c4e028aae23d799c5fa4,
+        type: 3}
+      propertyPath: spellLevelManager
+      value: 
+      objectReference: {fileID: 249210970}
+    - target: {fileID: 3728192323056732715, guid: 5101aee443b6c4e028aae23d799c5fa4,
+        type: 3}
+      propertyPath: spellDataList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: ffb8bcbbd23503f408815ca8fb4e5a25,
+        type: 2}
+    - target: {fileID: 3728192323056732715, guid: 5101aee443b6c4e028aae23d799c5fa4,
+        type: 3}
+      propertyPath: spellDataList.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: b9b12b95c8b308d4d8a8cc9f5dd0e4e0,
+        type: 2}
     - target: {fileID: 7807329084604328330, guid: 5101aee443b6c4e028aae23d799c5fa4,
         type: 3}
       propertyPath: m_ActionEvents.Array.size
@@ -812,15 +894,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5101aee443b6c4e028aae23d799c5fa4, type: 3}
---- !u!1 &939970044 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1535381019623673784, guid: 5101aee443b6c4e028aae23d799c5fa4,
-    type: 3}
-  m_PrefabInstance: {fileID: 514466187}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &939970048 stripped
+--- !u!114 &514466188 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6529958636212804304, guid: 5101aee443b6c4e028aae23d799c5fa4,
+  m_CorrespondingSourceObject: {fileID: 3978511687201215396, guid: 5101aee443b6c4e028aae23d799c5fa4,
     type: 3}
   m_PrefabInstance: {fileID: 514466187}
   m_PrefabAsset: {fileID: 0}
@@ -830,6 +906,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41476d6e9f054b24e864bf6044466b45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &939970044 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1535381019623673784, guid: 5101aee443b6c4e028aae23d799c5fa4,
+    type: 3}
+  m_PrefabInstance: {fileID: 514466187}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &939970050 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1535381019623673787, guid: 5101aee443b6c4e028aae23d799c5fa4,
@@ -1202,7 +1284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 2022489087}
   Enemy: {fileID: 2022489089}
-  Player: {fileID: 939970048}
+  Player: {fileID: 514466188}
 --- !u!114 &2022489089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,3 +1640,4 @@ SceneRoots:
   - {fileID: 2084391349}
   - {fileID: 2022489086}
   - {fileID: 514466187}
+  - {fileID: 249210971}
