@@ -52,6 +52,7 @@ namespace Justin.ProcGen
                     }
                 }
             }
+
             MapDisplay display = FindObjectOfType<MapDisplay>();
             if (drawMode == DrawMode.NoiseMap)
             {

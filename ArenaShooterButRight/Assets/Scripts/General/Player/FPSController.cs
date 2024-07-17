@@ -124,7 +124,7 @@ public class FPSController : MonoBehaviour
     {
         if (_isShootPressed)
         {
-            Debug.Log("pew pew");
+            
         }
     }
     private void HandleLook()

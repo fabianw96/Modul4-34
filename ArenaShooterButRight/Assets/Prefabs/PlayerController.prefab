@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1535381019623673786}
   - component: {fileID: 1535381019623673787}
   - component: {fileID: 1535381019623673733}
+  - component: {fileID: 6529958636212804304}
   - component: {fileID: 9182534957324518024}
   - component: {fileID: 6786213208533618943}
   - component: {fileID: 7807329084604328330}
@@ -51,6 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d6a5ccf8889c4d978067bb5dc639458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  raycastDistance: 1.5
   walkSpeed: 4
   runSpeed: 8
   smoothMoveTime: 0.15
@@ -88,6 +90,21 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &6529958636212804304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535381019623673784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41476d6e9f054b24e864bf6044466b45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  currentHealth: 0
+  hasTakenDamage: 0
 --- !u!114 &9182534957324518024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,10 +134,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectilePrefab: {fileID: 1064929345243570042, guid: 0263cd37ba3774e4ca730da908f1b520,
     type: 3}
-  spellDataList: []
-  casterPoint: {fileID: 0}
+  spellDataList:
+  - {fileID: 11400000, guid: 667c056b301cb8b448c31c40093425ac, type: 2}
+  - {fileID: 11400000, guid: b74d47c62b794d74c820e8995ce8631d, type: 2}
+  - {fileID: 11400000, guid: 19fe1107b39d6f54ba1d0b8a3e3a57c2, type: 2}
+  casterPoint: {fileID: 7721116683240926468}
   mana: {fileID: 9182534957324518024}
   spellLevelManager: {fileID: 0}
+  spellData: {fileID: 0}
+  magicEffect: {fileID: 0}
+  damage: 0
+  mesh: {fileID: 0}
 --- !u!114 &7807329084604328330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -153,20 +177,12 @@ MonoBehaviour:
     m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 3a25b153-2b66-466a-8b6b-32ef75f6529d
-    m_ActionName: Player/Look[/Mouse/delta]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: eb8f6d8e-f8dc-4fc0-a039-d90a23b4b622
     m_ActionName: Player/Run[/Keyboard/leftShift]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: 99ede621-af2e-43fa-bc70-f6790e4ccaf7
     m_ActionName: Player/Jump[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 00a01b46-1bc8-4f85-a1db-a9203ffbd9cd
-    m_ActionName: Player/Crouch[/Keyboard/leftCtrl]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: bcb5f35f-372f-474d-9966-59b45ba8a4b3
@@ -177,8 +193,8 @@ MonoBehaviour:
     m_ActionName: Player/Shoot[/Mouse/leftButton]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 799623f5-428a-4ba9-a2dd-9556762c3127
-    m_ActionName: Player/Reload[/Keyboard/r]
+    m_ActionId: c92debec-3cc0-4134-9332-6845e98d5f0b
+    m_ActionName: Player/Look[/Mouse/delta]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

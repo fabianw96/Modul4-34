@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using General;
 using UnityEngine;
 
 public class Shooter : MonoBehaviour
@@ -12,12 +11,12 @@ public class Shooter : MonoBehaviour
     [SerializeField] private SpellLevelManager spellLevelManager;
     private bool isCooldown = false;
     
-    [Space(5)]
-    [Header("DEBUG")]
-    [SerializeField] private SpellData spellData;
-    [SerializeField] private MagicEffect magicEffect;
-    [SerializeField] private float damage;
-    [SerializeField] private Mesh mesh;
+    //[Space(5)]
+    //[Header("DEBUG")]
+    //[SerializeField] private SpellData spellData;
+    //[SerializeField] private MagicEffect magicEffect;
+    //[SerializeField] private float damage;
+    //[SerializeField] private Mesh mesh;
 
     private void Start()
     {
@@ -31,18 +30,18 @@ public class Shooter : MonoBehaviour
             spellLevelManager = GetComponent<SpellLevelManager>();
         }
 
-        MagicEffect lingeringEffect = this.gameObject.GetComponent<MagicEffect>();
+        //MagicEffect lingeringEffect = this.gameObject.GetComponent<MagicEffect>();
 
-        if (lingeringEffect != null && spellData.Type == SpellTypes.Fireball && lingeringEffect.GetSpellData().EffectType == EffectTypes.Electrified)
-        {
-            lingeringEffect.TriggerExplosion();
-        }
-        else if (magicEffect == null)
-        {
-            magicEffect = this.gameObject.AddComponent<MagicEffect>();
-        }
-        magicEffect.InitEffect(spellData, this.gameObject.GetComponent<HealthSystem>(), damage, mesh);
-        Destroy(gameObject); // Destroy Projectile upon impact
+        //if (lingeringEffect != null && spellData.Type == SpellTypes.Fireball && lingeringEffect.GetSpellData().EffectType == EffectTypes.Electrified)
+        //{
+        //    lingeringEffect.TriggerExplosion();
+        //}
+        //else if (magicEffect == null)
+        //{
+        //    magicEffect = this.gameObject.AddComponent<MagicEffect>();
+        //}
+        //magicEffect.InitEffect(spellData, this.gameObject.GetComponent<HealthSystem>(), damage, mesh);
+        //Destroy(gameObject); // Destroy Projectile upon impact
     }
 
     public void ChooseSpell(SpellTypes _chosenSpell)
