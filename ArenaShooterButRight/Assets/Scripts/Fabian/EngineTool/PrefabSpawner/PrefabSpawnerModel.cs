@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fabian.EngineTool.PrefabSpawner
 {
@@ -11,7 +12,7 @@ namespace Fabian.EngineTool.PrefabSpawner
         public Dictionary<GameObject, Transform> PositionDictionary { get; set; } = new();
         public List<string> LayerMasks { get; set; } = new();
         public Collider[] FoundCollidersForDeletion { get; set; }
-        
+
         public float Radius { get; set; }
         public float MinDistanceBetweenPrefabs { get; set; }
 
@@ -26,5 +27,15 @@ namespace Fabian.EngineTool.PrefabSpawner
                 }
             }
         }
+    }
+
+    [Serializable]
+    public struct PrefabSpawnerContainer
+    {
+        public List<GameObject> prefabChoiceLst;
+        public List<GameObject> spawnedPrefabs;
+        public string layer;
+        public float radius;
+        public float minDistanceBetweenPrefabs;
     }
 }

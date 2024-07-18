@@ -24,6 +24,7 @@ namespace Fabian.EngineTool.PrefabSpawner
         private DropdownField _layerDropDown;
         private Toggle _enableButton;
         private Toggle _placeMultiPrefabs;
+        private Toggle _checkForOverlap;
         private Button _clearButton;
         private Button _loadDataButton;
         private Button _saveDataButton;
@@ -39,29 +40,41 @@ namespace Fabian.EngineTool.PrefabSpawner
             PrefabSpawnerView wnd = GetWindow<PrefabSpawnerView>();
             wnd.titleContent = new GUIContent("PrefabSpawner");
         }
-        
 
         public void CreateGUI()
         {
             _viewModel = new PrefabSpawnerViewModel();
-            //TODO: Save and Load spawned prefabs from json?
+            
+            String currentScene =  SceneManager.GetActiveScene().name;
+            
             _root = rootVisualElement;
             
             _root.Add(new Label("Prefab Spawner"));
             
-            DrawReorderableList(_viewModel.PrefabChoiceList, rootVisualElement);
+            _saveDataButton = new Button { text = "Save current List" };
+            _saveDataButton.clicked += () => _viewModel.SaveDataToJson(currentScene, _layerDropDown.value);
+            _root.Add(_saveDataButton);
+            
+            _loadDataButton = new Button { text = "Load List from File" };
+            _loadDataButton.clicked += () => _viewModel.LoadDataFromJson(currentScene);
+            _loadDataButton.clicked += SetValues;
+            _root.Add(_loadDataButton);
             
             _layerDropDown = new DropdownField("Layer: ", _viewModel.LayerMasks,0);
             _root.Add(_layerDropDown);
             
-            _enableButton = new Toggle("Enable spawning");
+            _enableButton = new Toggle("Enable Painting");
             _root.Add(_enableButton);
             
-            _placeMultiPrefabs = new Toggle("Spawn Multiple");
+            _placeMultiPrefabs = new Toggle("Paint Multiple");
             _root.Add(_placeMultiPrefabs);
+
+            _checkForOverlap = new Toggle("Check for overlapping Objects");
+            _root.Add(_checkForOverlap);
             
             _root.Add(new Label("Radius"));
             _radiusSlider = new Slider(0f, 5f);
+            _radiusSlider.value = _viewModel.Radius;
             _radiusSlider.RegisterValueChangedCallback(evt => _viewModel.Radius = evt.newValue);
             _root.Add(_radiusSlider);
             
@@ -73,14 +86,18 @@ namespace Fabian.EngineTool.PrefabSpawner
             _clearButton = new Button { text = "Clear spawned prefabs!" };
             _clearButton.clicked += () => _viewModel.ClearSpawnedObjects();
             _root.Add(_clearButton);
-
-            _saveDataButton = new Button { text = "Save current List" };
-            _root.Add(_saveDataButton);
-            _loadDataButton = new Button { text = "Load List from File" };
-            _root.Add(_loadDataButton);
+            
+            DrawReorderableList(_viewModel.PrefabChoiceList, rootVisualElement, false);
             
             SceneView.duringSceneGui += EvaluateMousePosition;
+        }
 
+        private void SetValues()
+        {
+            DrawReorderableList(_viewModel.PrefabChoiceList, rootVisualElement, true);
+            _layerDropDown.value = _viewModel.ChosenLayer;
+            _minDistanceSlider.value = _viewModel.MinDistanceBetweenPrefabs;
+            _radiusSlider.value = _viewModel.Radius;
         }
 
         private void EvaluateMousePosition(SceneView obj)
@@ -131,7 +148,7 @@ namespace Fabian.EngineTool.PrefabSpawner
                 switch (Event.current.button)
                 {
                     case 0:
-                        _viewModel.SpawnPrefabs(hit.point, _layerDropDown.value);
+                        _viewModel.SpawnPrefabs(hit.point, _layerDropDown.value, _checkForOverlap.value);
                         break;
                     case 1:
                         _viewModel.DeletePrefabs(_layerDropDown.value);
@@ -148,7 +165,7 @@ namespace Fabian.EngineTool.PrefabSpawner
             switch (Event.current.button)
             {
                 case 0:
-                    _viewModel.SpawnPrefabs(hit.point, _layerDropDown.value);
+                    _viewModel.SpawnPrefabs(hit.point, _layerDropDown.value, _checkForOverlap.value);
                     break;
                 case 1:
                     _viewModel.DeletePrefabs(_layerDropDown.value);
@@ -156,8 +173,13 @@ namespace Fabian.EngineTool.PrefabSpawner
             }
         }
 
-        private void DrawReorderableList<T>(List<T> sourceList, VisualElement rootVisElement, bool allowSceneObjects = true) where T : UnityEngine.Object
+        private void DrawReorderableList<T>(List<T> sourceList, VisualElement rootVisElement, bool update, bool allowSceneObjects = true) where T : UnityEngine.Object
         {
+            if (update && rootVisElement.Contains(_listView))
+            {
+                rootVisElement.Remove(_listView);
+            }
+            
             _listView = new ListView(sourceList)
             {
                 virtualizationMethod = CollectionVirtualizationMethod.DynamicHeight,
