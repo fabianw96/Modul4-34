@@ -24,7 +24,7 @@ namespace Fabian.Generation.Cellular_Automata
         public List<GameObject> spawnedMeshList;
 
 
-        private void OnEnable()
+        public void EnableMesh()
         {
             if (spawnedMeshList != null)
             {
@@ -41,6 +41,8 @@ namespace Fabian.Generation.Cellular_Automata
 
         private void SpawnMeshes()
         {
+            
+            //Generate a noise, so it's not just a whole cube.
             for (int y = 0; y < size.y; y++)
             {
                 for (int x = 0; x < size.x; x++)
@@ -69,8 +71,6 @@ namespace Fabian.Generation.Cellular_Automata
                     }
                 }
             }
-            
-            Debug.Log("Spawned all meshes!");
         }
 
         private Mesh GenerateCube()
