@@ -22,9 +22,11 @@ namespace Fabian.Generation.Cellular_Automata
         [SerializeField] private int seed;
         [SerializeField] private int minNeighborCount = 4;
         [SerializeField] private bool useCoroutine = false;
+        [SerializeField] private int iterationAmount = 1;
 
         private MeshSpawner _meshSpawner;
         private List<Cell> _cellList = new List<Cell>();
+        private bool _isRunning = false;
 
         private void Awake()
         {
@@ -33,9 +35,18 @@ namespace Fabian.Generation.Cellular_Automata
 
         private void OnGUI()
         {
-            if (GUI.Button(new Rect(10,70,200,100), "Generate"))
+            if (GUI.Button(new Rect(10,70,200,50), "Generate"))
             {
                 _meshSpawner.EnableMesh();
+            }
+            
+            if (GUI.Button(new Rect(10,150,200,50), "Iterate"))
+            {
+                if (!_isRunning)
+                {
+                    CalculateCellularAutomata();
+                    _isRunning = true;
+                }
             }
         }
 
@@ -56,10 +67,10 @@ namespace Fabian.Generation.Cellular_Automata
                 _cellList.Add(tempCell);
             }
 
-            ApplyNoiseToCells();
+            CalculateNoise();
         }
 
-        private void ApplyNoiseToCells()
+        private void CalculateNoise()
         {
             Random rndm = new Random(seed);
 
@@ -69,7 +80,7 @@ namespace Fabian.Generation.Cellular_Automata
 
             for (int i = _cellList.Count - 1; i >= 0; i--)
             {
-                if (_cellList[i].CellTransform == null)
+                if (_cellList[i].CellTransform is null)
                 {
                     continue;
                 }
@@ -88,23 +99,17 @@ namespace Fabian.Generation.Cellular_Automata
                 _cellList[i] = cell;
             }
 
+            //use coroutine if bool is true
             if (useCoroutine)
             {
                 StartCoroutine(ApplyNoiseCoroutine());
             }
             else
             {
-                foreach (Cell cell in _cellList)
-                {
-                    if (!cell.IsAlive)
-                    {
-                        cell.CellGameObject.SetActive(false);
-                    }
-                }
-                CalculateCellularAutomata();
+                ApplyNoise();
             }
         }
-        
+
         private void CalculateCellularAutomata()
         {
             //apply cellular automata to the rest of the cells in _cellList
@@ -115,7 +120,7 @@ namespace Fabian.Generation.Cellular_Automata
                 Cell cell = _cellList[i];
                 cell.Neighbors = 0;
 
-                Vector3[] directions = new[]
+                Vector3[] directions =
                 {
                     new Vector3(-1,0,0),
                     new Vector3(1,0,0),
@@ -128,12 +133,15 @@ namespace Fabian.Generation.Cellular_Automata
                 foreach (Vector3 direction in directions)
                 {
                     Vector3 neighborPosition = cell.CellTransform.position + direction;
-                    
-                    Cell? neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
-                    
-                    if (neighborCell.HasValue && neighborCell.Value.IsAlive)
+
+                    if (IsWithinBounds(neighborPosition))
                     {
-                        cell.Neighbors++;
+                        Cell? neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
+                    
+                        if (neighborCell.HasValue && neighborCell.Value.IsAlive)
+                        {
+                            cell.Neighbors++;
+                        }
                     }
                 }
                 _cellList[i] = cell;
@@ -149,19 +157,30 @@ namespace Fabian.Generation.Cellular_Automata
             }
         }
         
+        private bool IsWithinBounds(Vector3 position)
+        {
+            return position.x >= 0 && position.x < _meshSpawner.size.x &&
+                   position.y >= 0 && position.y < _meshSpawner.size.y &&
+                   position.z >= 0 && position.y < _meshSpawner.size.z;
+        }
         
         private void ApplyCellularAutomata()
         {
-            foreach (Cell cell in _cellList)
+            for (int i = 0; i < _cellList.Count; i++)
             {
-                if (cell.Neighbors < minNeighborCount)
+                if (_cellList[i].Neighbors < minNeighborCount)
                 {
-                    cell.CellGameObject.SetActive(false);
+                    Cell cell = _cellList[i];
+                    cell.IsAlive = false;
+                    _cellList[i] = cell;
+                    
+                    _cellList[i].CellGameObject.SetActive(false);
                 }
             }
+            _isRunning = false;
         }
 
-        private IEnumerator ApplyNoiseCoroutine()
+        private void ApplyNoise()
         {
             foreach (Cell cell in _cellList)
             {
@@ -169,21 +188,40 @@ namespace Fabian.Generation.Cellular_Automata
                 {
                     cell.CellGameObject.SetActive(false);
                 }
-                yield return new WaitForSeconds(0.05f);
+            }
+            CalculateCellularAutomata();
+        }
+
+        private IEnumerator ApplyNoiseCoroutine()
+        {
+            // ApplyNoise();
+            foreach (Cell cell in _cellList)
+            {
+                if (!cell.IsAlive)
+                {
+                    cell.CellGameObject.SetActive(false);
+                }
+                yield return new WaitForSeconds(0.01f);
             }
             CalculateCellularAutomata();
         }
         
         private IEnumerator ApplyCaCoroutine()
         {
-            foreach (Cell cell in _cellList)
+            // ApplyCellularAutomata();
+            for (int i = 0; i < _cellList.Count; i++)
             {
-                if (cell.Neighbors < minNeighborCount)
+                if (_cellList[i].Neighbors < minNeighborCount)
                 {
-                    cell.CellGameObject.SetActive(false);
+                    Cell cell = _cellList[i];
+                    cell.IsAlive = false;
+                    _cellList[i] = cell;
+                    
+                    _cellList[i].CellGameObject.SetActive(false);
                 }
-                yield return new WaitForSeconds(0.05f);
+                yield return new WaitForSeconds(0.01f);
             }
+            _isRunning = false;
         }
     }
 }

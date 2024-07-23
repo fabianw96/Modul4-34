@@ -11,7 +11,7 @@ namespace Fabian.Generation.Cellular_Automata
         //Generate planes, depending on the noise value set their color to White or Black.
         //Black planes are Dead planes, White planes are Alive planes.
         
-        [SerializeField] private Vector3 size;
+        [SerializeField] public Vector3 size;
         [SerializeField] private Material defaultMaterial;
         [SerializeField] private bool spawnCubes;
         [SerializeField] private CellularAutomaton cellularAutomaton;
