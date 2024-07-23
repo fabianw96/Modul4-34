@@ -14,15 +14,24 @@ namespace Fabian.Generation.Cellular_Automata
             public GameObject CellGameObject;
             public Transform CellTransform;
             public bool IsAlive;
+            public int States;
             public int Neighbors;
+        }
+
+        private enum CellularAutomatonType
+        {
+            Moore,
+            Neumann
         }
 
         [SerializeField] private float noiseScale = 0.1f;
         [SerializeField] private float aliveThreshold = 0.5f;
         [SerializeField] private int seed;
         [SerializeField] private int minNeighborCount = 4;
+        [SerializeField] private int rebirthNeighborCount = 4;
+        [SerializeField] private int numberOfStates = 5;
         [SerializeField] private bool useCoroutine = false;
-        [SerializeField] private int iterationAmount = 1;
+        [SerializeField] private CellularAutomatonType cellularType;
 
         private MeshSpawner _meshSpawner;
         private List<Cell> _cellList = new List<Cell>();
@@ -31,6 +40,11 @@ namespace Fabian.Generation.Cellular_Automata
         private void Awake()
         {
             _meshSpawner = GetComponent<MeshSpawner>();
+        }
+
+        private void Update()
+        {
+            Debug.Log(_isRunning);
         }
 
         private void OnGUI()
@@ -44,8 +58,7 @@ namespace Fabian.Generation.Cellular_Automata
             {
                 if (!_isRunning)
                 {
-                    CalculateCellularAutomata();
-                    _isRunning = true;
+                    ChooseCellularAutomata();
                 }
             }
         }
@@ -61,6 +74,7 @@ namespace Fabian.Generation.Cellular_Automata
                     CellGameObject = obj,
                     CellTransform = obj.transform,
                     IsAlive = true,
+                    States = numberOfStates,
                     Neighbors = 0
                 };
 
@@ -110,41 +124,25 @@ namespace Fabian.Generation.Cellular_Automata
             }
         }
 
-        private void CalculateCellularAutomata()
+        private void ChooseCellularAutomata()
         {
-            //apply cellular automata to the rest of the cells in _cellList
-            //increase each cells neighbor count by one for each neighboring alive cell in -x, +x, -y, +y, -z, +z direction
-            
+            _isRunning = true;
             for (int i = 0; i < _cellList.Count; i++)
             {
                 Cell cell = _cellList[i];
                 cell.Neighbors = 0;
 
-                Vector3[] directions =
+                switch (cellularType)
                 {
-                    new Vector3(-1,0,0),
-                    new Vector3(1,0,0),
-                    new Vector3(0,-1,0),
-                    new Vector3(0,1,0),
-                    new Vector3(0,0,-1),
-                    new Vector3(0,0,1),
-                };
-
-                foreach (Vector3 direction in directions)
-                {
-                    Vector3 neighborPosition = cell.CellTransform.position + direction;
-
-                    if (IsWithinBounds(neighborPosition))
-                    {
-                        Cell? neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
-                    
-                        if (neighborCell.HasValue && neighborCell.Value.IsAlive)
-                        {
-                            cell.Neighbors++;
-                        }
-                    }
+                    case CellularAutomatonType.Moore:
+                        //increase each cells neighbor count by one for each neighboring alive cell in a 3x3x3 cube around the cell
+                        _cellList[i] = CalculateMooreNeighbors(cell);
+                        break;
+                    case CellularAutomatonType.Neumann:
+                        //increase each cells neighbor count by one for each neighboring alive cell in -x, +x, -y, +y, -z, +z direction
+                        _cellList[i] = CalculateNeumannNeighbors(cell); 
+                        break;
                 }
-                _cellList[i] = cell;
             }
 
             if (useCoroutine)
@@ -156,26 +154,96 @@ namespace Fabian.Generation.Cellular_Automata
                 ApplyCellularAutomata();
             }
         }
+
+        private Cell  CalculateNeumannNeighbors(Cell cell)
+        {
+            Vector3[] directions =
+            {
+                new Vector3(-1,0,0),
+                new Vector3(1,0,0),
+                new Vector3(0,-1,0),
+                new Vector3(0,1,0),
+                new Vector3(0,0,-1),
+                new Vector3(0,0,1),
+            };
+
+            foreach (Vector3 direction in directions)
+            {
+                Vector3 neighborPosition = cell.CellTransform.position + direction;
+
+                if (IsWithinBounds(neighborPosition))
+                {
+                    Cell? neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
+                    
+                    if (neighborCell.HasValue && neighborCell.Value.IsAlive)
+                    {
+                        cell.Neighbors++;
+                    }
+                }
+            }
+            return cell;
+        }
+
+        private Cell CalculateMooreNeighbors(Cell cell)
+        {
+            for (int x = -1; x <= 1;  ++x)
+                for (int y = -1; y <= 1;  ++y)
+                    for (int z = -1; z <= 1;  ++z)
+                        if (x != 0 || y != 0 || z != 0)
+                        {
+                            Vector3 neighborPosition = cell.CellTransform.position + new Vector3(x, y, z);
+                            if (IsWithinBounds(neighborPosition))
+                            {
+                                Cell? neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
+                                
+                                if (neighborCell.HasValue && neighborCell.Value.IsAlive)
+                                {
+                                    cell.Neighbors++;
+                                }
+                            }
+                        }
+            return cell;
+        }
         
         private bool IsWithinBounds(Vector3 position)
         {
             return position.x >= 0 && position.x < _meshSpawner.size.x &&
                    position.y >= 0 && position.y < _meshSpawner.size.y &&
-                   position.z >= 0 && position.y < _meshSpawner.size.z;
+                   position.z >= 0 && position.z < _meshSpawner.size.z;
         }
         
         private void ApplyCellularAutomata()
         {
             for (int i = 0; i < _cellList.Count; i++)
             {
-                if (_cellList[i].Neighbors < minNeighborCount)
+                //TODO: check if the cell still has a "life" left. eg: _cellList[i].States < numberOfStates. if not, set IsAlive to false and disable.
+                Cell cell = _cellList[i];
+                
+                if (_cellList[i].Neighbors < minNeighborCount )
                 {
-                    Cell cell = _cellList[i];
+                    // Debug.Log(_cellList[i].CellGameObject.name + " has lives: " + _cellList[i].States);
+                    cell.States--;
+                    _cellList[i] = cell;
+                }
+                
+                if ( _cellList[i].States == 0)
+                {
                     cell.IsAlive = false;
                     _cellList[i] = cell;
                     
                     _cellList[i].CellGameObject.SetActive(false);
                 }
+
+                if (_cellList[i].Neighbors >= minNeighborCount && !_cellList[i].CellGameObject.activeSelf)
+                {
+                    cell.IsAlive = true;
+                    cell.States = numberOfStates;
+                    _cellList[i] = cell;
+
+                    _cellList[i].CellGameObject.SetActive(true);
+                }
+                
+                //TODO: set cell active again if the gameobject is inactive but has more minNeighborCount neighbors, set IsAlive to true again.
             }
             _isRunning = false;
         }
@@ -189,7 +257,7 @@ namespace Fabian.Generation.Cellular_Automata
                     cell.CellGameObject.SetActive(false);
                 }
             }
-            CalculateCellularAutomata();
+            ChooseCellularAutomata();
         }
 
         private IEnumerator ApplyNoiseCoroutine()
@@ -203,7 +271,7 @@ namespace Fabian.Generation.Cellular_Automata
                 }
                 yield return new WaitForSeconds(0.01f);
             }
-            CalculateCellularAutomata();
+            ChooseCellularAutomata();
         }
         
         private IEnumerator ApplyCaCoroutine()
