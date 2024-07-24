@@ -1,0 +1,29 @@
+
+int3 size;
+
+int get_uid(uint3 id)
+{
+	return id.x + (id.y * size.x) +( id.z * size.y * size.z);
+}
+
+int ComputeNeighborsMoore(uint3 id)
+{
+	int neighboursCount = 0;
+
+	for(int x = -1; x <= 1 ; ++x)
+	{
+		for(int y = -1; x <= 1 ; ++y)
+		{
+			for(int z = -1; x <= 1 ; ++z)
+			{
+				if(x != 0 || y != 0 || z != 0)
+				{
+					int3 neighborPos = id + int3(x,y,z);
+					
+				}
+			}
+		}
+	}
+
+	return neighboursCount;
+}
