@@ -11,7 +11,6 @@ namespace Fabian.Generation.Cellular_Automata
     {
         private struct Cell
         {
-            public GameObject CellGameObject; //TODO: Index for gameobjects as int, create new list of gameobjects, iterate and deactivate
             public Vector3 CellPosition;
             public bool IsAlive;
             public int States;
@@ -62,24 +61,22 @@ namespace Fabian.Generation.Cellular_Automata
         public void GetListFromSpawner(List<GameObject> gosList)
         {
             _cellList.Clear();
+            _cellObjects.Clear();
 
-            foreach (GameObject obj in gosList)
+            for (int i = 0; i < gosList.Count; i++)
             {
                 Cell tempCell = new Cell
                 {
-                    CellGameObject = obj,
-                    CellPosition = obj.transform.position,
+                    CellPosition = gosList[i].transform.position,
                     IsAlive = true,
                     States = numberOfStates,
                     Neighbors = 0
                 };
                 _cellList.Add(tempCell);
                 
-                _cellObjects.Add(obj);
+                _cellObjects.Add(gosList[i].gameObject);
             }
             
-            
-
             CalculateNoise();
         }
 
@@ -93,7 +90,7 @@ namespace Fabian.Generation.Cellular_Automata
 
             for (int i = _cellList.Count - 1; i >= 0; i--)
             {
-                if (!_cellList[i]. CellGameObject) //TODO: Find way to check if list at index is null
+                if (!_cellObjects[i].gameObject)  //TODO: Find way to check if list at index is null
                 {
                     continue;
                 }
@@ -143,7 +140,7 @@ namespace Fabian.Generation.Cellular_Automata
                         break;
                 }
             }
-
+            
             if (useCoroutine)
             {
                 StartCoroutine(ApplyCaCoroutine());
@@ -215,7 +212,6 @@ namespace Fabian.Generation.Cellular_Automata
         {
             for (int i = 0; i < _cellList.Count; i++)
             {
-                //check if the cell still has a "life" left. eg: _cellList[i].States < numberOfStates. if not, set IsAlive to false and disable.
                 Cell cell = _cellList[i];
 
                 if (_cellList[i].Neighbors < minNeighborCount)
@@ -229,42 +225,39 @@ namespace Fabian.Generation.Cellular_Automata
                     cell.IsAlive = false;
                     _cellList[i] = cell;
 
-                    _cellList[i].CellGameObject.SetActive(false);
+                    _cellObjects[i].SetActive(false);
                 }
 
-                if (_cellList[i].Neighbors >= rebirthNeighborCount && !_cellList[i].CellGameObject.activeSelf)
+                if (_cellList[i].Neighbors >= rebirthNeighborCount && !_cellObjects[i].activeSelf)
                 {
                     cell.IsAlive = true;
                     cell.States = numberOfStates;
                     _cellList[i] = cell;
 
-                    _cellList[i].CellGameObject.SetActive(true);
+                    _cellObjects[i].SetActive(true);
                 }
-
-                //set cell active again if the gameobject is inactive but has more minNeighborCount neighbors, set IsAlive to true again.
             }
             _isRunning = false;
         }
 
         private void ApplyNoise()
         {
-            foreach (Cell cell in _cellList)
+            for (int i = 0; i < _cellObjects.Count; i++)
             {
-                if (!cell.IsAlive)
+                if (!_cellList[i].IsAlive)
                 {
-                    cell.CellGameObject.SetActive(false);
+                    _cellObjects[i].SetActive(false);
                 }
             }
         }
 
         private IEnumerator ApplyNoiseCoroutine()
         {
-            // ApplyNoise();
-            foreach (Cell cell in _cellList)
+            for (int i = 0; i < _cellObjects.Count; i++)
             {
-                if (!cell.IsAlive)
+                if (!_cellList[i].IsAlive)
                 {
-                    cell.CellGameObject.SetActive(false);
+                    _cellObjects[i].SetActive(false);
                 }
                 yield return new WaitForSeconds(0.0001f);
             }
@@ -272,7 +265,6 @@ namespace Fabian.Generation.Cellular_Automata
 
         private IEnumerator ApplyCaCoroutine()
         {
-            // ApplyCellularAutomata();
             for (int i = 0; i < _cellList.Count; i++)
             {
                 if (_cellList[i].Neighbors < minNeighborCount)
@@ -280,8 +272,8 @@ namespace Fabian.Generation.Cellular_Automata
                     Cell cell = _cellList[i];
                     cell.IsAlive = false;
                     _cellList[i] = cell;
-
-                    _cellList[i].CellGameObject.SetActive(false);
+                    
+                    _cellObjects[i].gameObject.SetActive(false);
                 }
                 yield return new WaitForSeconds(0.0001f);
             }

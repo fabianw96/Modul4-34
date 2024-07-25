@@ -1,4 +1,6 @@
 #pragma kernel ApplyCellularAutomata
+#pragma kernel PrepareBuffer
+#pragma kernel ApplyBuffer
 
 int3 size;
 
@@ -9,12 +11,25 @@ int get_uid(uint3 id)
 
 struct Cell
 {
-	int CellGameObject;
-	float3 CellTransform;
-	bool IsAlive;
-	int States;
-	int Neighbors;
+	int cell_game_object;
+	float3 cell_transform;
+	bool is_alive;
+	int states;
+	int neighbors;
 };
+
+RWStructuredBuffer<Cell> cells_buffer;
+RWStructuredBuffer<Cell> cells;
+
+int GetNeighborState(int3 neighborID)
+{
+	if(neighborID.x >= size.x || neighborID.y >= size.y || neighborID.z >= size.z)
+		return 0;
+
+	Cell neighbor = cells[get_uid(neighborID)];
+	return neighbor.is_alive ? 1 : 0;
+}
+
 
 int ComputeNeighborsMoore(uint3 id)
 {
@@ -28,8 +43,7 @@ int ComputeNeighborsMoore(uint3 id)
 			{
 				if(x != 0 || y != 0 || z != 0)
 				{
-					int3 neighborPos = id + int3(x,y,z);
-
+					neighborsCount += GetNeighborState(id + int3(x,y,z));
 				}
 			}
 		}
@@ -42,5 +56,32 @@ int ComputeNeighborsNeumann(uint3 id)
 {
 	int neighborsCount = 0;
 
+	neighborsCount += GetNeighborState(id - int3(1,0,0));
+	neighborsCount += GetNeighborState(id + int3(1,0,0));
+	neighborsCount += GetNeighborState(id - int3(0,1,0));
+	neighborsCount += GetNeighborState(id + int3(0,1,0));
+	neighborsCount += GetNeighborState(id - int3(0,0,1));
+	neighborsCount += GetNeighborState(id + int3(0,0,1));
+
 	return neighborsCount;
+}
+
+[numthreads(8,8,8)]
+void ApplyCellularAutomata(uint3 id : SV_DispatchThreadID)
+{
+	
+}
+
+[numthreads(8,8,8)]
+void PrepareBuffer(uint3 id : SV_DispatchThreadID)
+{
+	int uid = get_uid(id);
+	cells_buffer[uid] = cells[uid];
+}
+
+[numthreads(8,8,8)]
+void ApplyBuffer(uint3 id : SV_DispatchThreadID)
+{
+	int uid = get_uid(id);
+	cells[uid] = cells_buffer[uid];
 }
