@@ -11,8 +11,8 @@ namespace Fabian.Generation.Cellular_Automata
     {
         private struct Cell
         {
-            public GameObject CellGameObject;
-            public Transform CellTransform;
+            public GameObject CellGameObject; //TODO: Index for gameobjects as int, create new list of gameobjects, iterate and deactivate
+            public Vector3 CellPosition;
             public bool IsAlive;
             public int States;
             public int Neighbors;
@@ -30,12 +30,13 @@ namespace Fabian.Generation.Cellular_Automata
         [SerializeField] private int minNeighborCount = 4;
         [SerializeField] private int rebirthNeighborCount = 4;
         [SerializeField] private int numberOfStates = 5;
-        [SerializeField] private bool useCoroutine = false;
+        [SerializeField] private bool useCoroutine;
         [SerializeField] private CellularAutomatonType cellularType;
 
         private MeshSpawner _meshSpawner;
         private List<Cell> _cellList = new List<Cell>();
-        private bool _isRunning = false;
+        private List<GameObject> _cellObjects = new List<GameObject>();
+        private bool _isRunning;
 
         private void Awake()
         {
@@ -67,14 +68,17 @@ namespace Fabian.Generation.Cellular_Automata
                 Cell tempCell = new Cell
                 {
                     CellGameObject = obj,
-                    CellTransform = obj.transform,
+                    CellPosition = obj.transform.position,
                     IsAlive = true,
                     States = numberOfStates,
                     Neighbors = 0
                 };
-
                 _cellList.Add(tempCell);
+                
+                _cellObjects.Add(obj);
             }
+            
+            
 
             CalculateNoise();
         }
@@ -89,14 +93,14 @@ namespace Fabian.Generation.Cellular_Automata
 
             for (int i = _cellList.Count - 1; i >= 0; i--)
             {
-                if (_cellList[i].CellTransform is null)
+                if (!_cellList[i]. CellGameObject) //TODO: Find way to check if list at index is null
                 {
                     continue;
                 }
 
-                float xInput = (_cellList[i].CellTransform.position.x + offsetX) * noiseScale;
-                float yInput = (_cellList[i].CellTransform.position.y + offsetY) * noiseScale;
-                float zInput = (_cellList[i].CellTransform.position.z + offsetZ) * noiseScale;
+                float xInput = (_cellList[i].CellPosition.x + offsetX) * noiseScale;
+                float yInput = (_cellList[i].CellPosition.y + offsetY) * noiseScale;
+                float zInput = (_cellList[i].CellPosition.z + offsetZ) * noiseScale;
 
                 float noiseValueXZ = Mathf.PerlinNoise(xInput, zInput);
                 float noiseValueYZ = Mathf.PerlinNoise(yInput, zInput);
@@ -164,11 +168,11 @@ namespace Fabian.Generation.Cellular_Automata
 
             foreach (Vector3 direction in directions)
             {
-                Vector3 neighborPosition = cell.CellTransform.position + direction;
+                Vector3 neighborPosition = cell.CellPosition + direction;
 
                 if (IsWithinBounds(neighborPosition))
                 {
-                    Cell neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
+                    Cell neighborCell = _cellList.Find(c => c.CellPosition == neighborPosition);
 
                     if (neighborCell.IsAlive)
                     {
@@ -186,10 +190,10 @@ namespace Fabian.Generation.Cellular_Automata
             for (int z = -1; z <= 1; ++z)
                 if (x != 0 || y != 0 || z != 0)
                 {
-                    Vector3 neighborPosition = cell.CellTransform.position + new Vector3(x, y, z);
+                    Vector3 neighborPosition = cell.CellPosition + new Vector3(x, y, z);
                     if (IsWithinBounds(neighborPosition))
                     {
-                        Cell neighborCell = _cellList.Find(c => c.CellTransform.position == neighborPosition);
+                        Cell neighborCell = _cellList.Find(c => c.CellPosition == neighborPosition);
 
                         if (neighborCell.IsAlive)
                         {
@@ -211,7 +215,7 @@ namespace Fabian.Generation.Cellular_Automata
         {
             for (int i = 0; i < _cellList.Count; i++)
             {
-                //TODO: check if the cell still has a "life" left. eg: _cellList[i].States < numberOfStates. if not, set IsAlive to false and disable.
+                //check if the cell still has a "life" left. eg: _cellList[i].States < numberOfStates. if not, set IsAlive to false and disable.
                 Cell cell = _cellList[i];
 
                 if (_cellList[i].Neighbors < minNeighborCount)
@@ -237,7 +241,7 @@ namespace Fabian.Generation.Cellular_Automata
                     _cellList[i].CellGameObject.SetActive(true);
                 }
 
-                //TODO: set cell active again if the gameobject is inactive but has more minNeighborCount neighbors, set IsAlive to true again.
+                //set cell active again if the gameobject is inactive but has more minNeighborCount neighbors, set IsAlive to true again.
             }
             _isRunning = false;
         }
