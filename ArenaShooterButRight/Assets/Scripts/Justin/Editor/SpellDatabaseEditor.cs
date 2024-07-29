@@ -1,28 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+// Editor: SpellDatabaseEditor.cs
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public sealed class SpellDatabaseEditor : EditorWindow
 {
-    private Sprite defaultSpellIcon;
-    private static List<SpellData> spellDatabase = new List<SpellData>();
-
-    // Spell List View
-    private VisualElement spellTab;
-    private static VisualTreeAsset spellRowTemplate;
-    private ListView spellListView;
-    private float spellHeight = 50;
-
-    // Spell Details Panel
-    private ScrollView spellDetails;
-    private VisualElement largeDisplayIcon;
-    private SpellData activeSpell;
-
     [MenuItem("Tools/Spell Database")]
     public static void Init()
     {
@@ -36,121 +18,25 @@ public sealed class SpellDatabaseEditor : EditorWindow
 
     public void CreateGUI()
     {
-        // Get UI File Path
-        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uxml");
-        VisualElement rootFromUXML = visualTree.Instantiate();
-        rootVisualElement.Add(rootFromUXML);
+        var view = new SpellDatabaseView(
+            rootVisualElement,
+            "Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uxml",
+            "Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss",
+            "Assets/Scripts/Justin/Editor/SpellRowTemplate.uxml",
+            "Assets/Sprites/UnknownIcon.png"
+        );
 
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss");
-        rootVisualElement.styleSheets.Add(styleSheet);
-        spellRowTemplate = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Scripts/Justin/Editor/SpellRowTemplate.uxml");
-        defaultSpellIcon = (Sprite)AssetDatabase.LoadAssetAtPath("Assets/Sprites/UnknownIcon.png", typeof(Sprite));
-
-        LoadAllItems();
-
-        // SpellTab Init
-        spellTab = rootVisualElement.Q<VisualElement>("SpellTab");
-        GenerateListView();
-
-        // SpellDetails Init
-        spellDetails = rootVisualElement.Q<ScrollView>("SpellDetails");
-        spellDetails.style.visibility = Visibility.Hidden;
-        largeDisplayIcon = spellDetails.Q<VisualElement>("Icon");
-
-        // Add Spell Init
-        rootVisualElement.Q<Button>("AddSpellButton").clicked += AddSpell_OnClick;
-        rootVisualElement.Q<Button>("DeleteSpellButton").clicked += DeleteSpell_OnClick;
-
-        // Change Name and Icon in Itemlist if changed in Spell
-
-        spellDetails.Q<TextField>("SpellName").RegisterValueChangedCallback(evt =>
-            {
-                activeSpell.Name = evt.newValue;
-                spellListView.Rebuild();
-            });
-
-        spellDetails.Q<ObjectField>("IconPicker").RegisterValueChangedCallback(evt =>
-            {
-                Sprite newSprite = evt.newValue as Sprite;
-                activeSpell.Icon = newSprite == null ? defaultSpellIcon : newSprite;
-                largeDisplayIcon.style.backgroundImage = newSprite == null ? defaultSpellIcon.texture : newSprite.texture;
-                spellListView.Rebuild();
-            });
-    }
-
-    private void DeleteSpell_OnClick()
-    {
-        // Get the path of the file and delete it through AssetDatabase
-        string path = AssetDatabase.GetAssetPath(activeSpell);
-        AssetDatabase.DeleteAsset(path);
-
-        // remove the reference from the list and refresh the ListView
-        spellDatabase.Remove(activeSpell);
-        spellListView.Rebuild();
-
-        spellDetails.style.visibility = Visibility.Hidden;
-    }
-
-    private void AddSpell_OnClick()
-    {
-        // Create a new Scriptable Object and set default parameters
-        SpellData newSpell = SpellData.CreateInstance<SpellData>();
-        newSpell.Name = $"New Spell";
-        newSpell.Icon = defaultSpellIcon;
-
-        // Create the asset, using the unique ID for the name
-        AssetDatabase.CreateAsset(newSpell, $"Assets/ScriptableObjects/Spells/{newSpell.ID}.asset");
-
-        // Add it to the item list
-        spellDatabase.Add(newSpell);
-
-        // Refresh the ListView so everything is redrawn again
-        spellListView.Rebuild();
-        spellListView.style.height = spellDatabase.Count * spellHeight;
-    }
-
-    private void GenerateListView()
-    {
-        Func<VisualElement> makeSpell = () => spellRowTemplate.CloneTree();
-
-        Action<VisualElement, int> bindItem = (e, i) =>
+        if (view == null)
         {
-            e.Q<VisualElement>("Icon").style.backgroundImage =
-                spellDatabase[i] == null ? defaultSpellIcon.texture :
-                spellDatabase[i].Icon.texture;
-            e.Q<Label>("Name").text = spellDatabase[i].Name;
-        };
-
-        spellListView = new ListView(spellDatabase, 50, makeSpell, bindItem);
-        spellListView.selectionType = SelectionType.Single;
-        spellListView.style.height = spellDatabase.Count * spellHeight;
-        spellTab.Add(spellListView);
-
-        spellListView.selectionChanged += ListView_onSelectionChanged;
-    }
-
-    private void ListView_onSelectionChanged(IEnumerable<object> selectedSpells)
-    {
-        activeSpell = (SpellData)selectedSpells.First();
-        SerializedObject so = new SerializedObject(activeSpell);
-        spellDetails.Bind(so);
-
-        if (activeSpell.Icon != null)
-        {
-            largeDisplayIcon.style.backgroundImage = activeSpell.Icon.texture;
+            Debug.LogError("Failed to initialize SpellDatabaseView.");
+            return;
         }
-        spellDetails.style.visibility = Visibility.Visible;
-    }
 
-    private void LoadAllItems()
-    {
-        spellDatabase.Clear();
-        string[] allPaths = Directory.GetFiles("Assets/ScriptableObjects/Spells", "*.asset", SearchOption.AllDirectories);
-
-        foreach (string path in allPaths)
+        var controller = new SpellDatabaseController(view);
+        if (controller == null)
         {
-            string cleanedPath = path.Replace("\\", "/");
-            spellDatabase.Add((SpellData)AssetDatabase.LoadAssetAtPath(cleanedPath, typeof(SpellData)));
+            Debug.LogError("Failed to initialize SpellDatabaseController.");
+            return;
         }
     }
 }
