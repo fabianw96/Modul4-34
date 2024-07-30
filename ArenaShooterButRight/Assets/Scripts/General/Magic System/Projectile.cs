@@ -1,4 +1,5 @@
 using General;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -21,9 +22,9 @@ public class Projectile : MonoBehaviour
         // Disable gravity
         GetComponent<Rigidbody>().useGravity = false;
 
-        if (spellData.VisualEffectAsset != null)
+        if (_spellData.VisualEffectAsset != null)
         {
-            VisualEffect visualEffect = gameObject.AddComponent<VisualEffect>();
+            VisualEffect visualEffect = gameObject.GetComponent<VisualEffect>();
             visualEffect.visualEffectAsset = _spellData.VisualEffectAsset;
             visualEffect.Play();
         }

@@ -96,7 +96,7 @@ public class FPSController : MonoBehaviour
             _chosenSpell = SpellTypes.Iceball;
         }
         
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
             Debug.Log("Electroball Selected");
             _chosenSpell = SpellTypes.Electroball;

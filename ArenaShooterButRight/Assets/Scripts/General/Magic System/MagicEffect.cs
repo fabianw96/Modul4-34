@@ -17,8 +17,6 @@ public class MagicEffect : MonoBehaviour
     private SpellData spellData;
     private VisualEffect lingeringEffect;
     private float originalSpeed;
-
-    
     private Mesh targetMesh;
 
 

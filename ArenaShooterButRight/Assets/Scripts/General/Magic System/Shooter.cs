@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class Shooter : MonoBehaviour
 {
@@ -76,6 +78,7 @@ public class Shooter : MonoBehaviour
         {
             meshRenderer.enabled = false;
         }
+
         // Get the direction the player is looking
         Vector3 launchDirection = Camera.main.transform.forward;
 
