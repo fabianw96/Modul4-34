@@ -52,6 +52,7 @@ public class FPSController : MonoBehaviour
     void Start () {
         _cam = Camera.main;
         _shooter = GetComponent<Shooter>();
+        _chosenSpell = SpellTypes.Fireball;
         
         if (lockCursor) {
             Cursor.lockState = CursorLockMode.Locked;

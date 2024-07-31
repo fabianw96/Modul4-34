@@ -25,16 +25,17 @@ public class MagicEffect : MonoBehaviour
         return spellData; 
     }
     
-    public void InitEffect(SpellData _spellData, HealthSystem _healthSys, float _damage, Mesh _mesh)
+    public void InitEffect(SpellData _spellData, HealthSystem _healthSys, float _damage)
     {
+        Debug.Log("Entered InitEffect");
         healthSystem = _healthSys;
         dmg = _damage;
         effectDuration = _spellData.EffectDuration;
         isDot = _spellData.IsDot;
         spellData = _spellData;
-        targetMesh = _mesh;
+        targetMesh = gameObject.GetComponent<MeshFilter>().mesh;
 
-        // Attaches hthe visual lingering effect to the target
+        // Attaches the visual lingering effect to the target
         if (spellData.VisualLingeringEffectAsset != null)
         {
             lingeringEffect = gameObject.AddComponent<VisualEffect>();

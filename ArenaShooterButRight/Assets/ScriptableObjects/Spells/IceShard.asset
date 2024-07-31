@@ -17,7 +17,7 @@ MonoBehaviour:
   Type: 2
   Name: IceShard
   Icon: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
-  BaseSpeed: 4
+  BaseSpeed: 10
   BaseDamage: 10
   BaseCost: 5
   BaseCooldown: 0.5
@@ -34,7 +34,6 @@ MonoBehaviour:
   CooldownPerLevel: 1
   ExplosionDamage: 0
   ExplosionRadius: 0
-  FPSController: {fileID: 0}
   VisualEffectAsset: {fileID: 8926484042661614526, guid: 3811295d187630d49bde7fae31052ff1,
     type: 3}
   VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 72a0e8d5e77f16043a37d3706d5aa937,

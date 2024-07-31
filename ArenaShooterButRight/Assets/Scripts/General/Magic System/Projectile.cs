@@ -10,14 +10,13 @@ public class Projectile : MonoBehaviour
     private Vector3 direction;
     private float speed;
     private float damage;
-    [SerializeField] private Mesh mesh;
 
-    public void Launch(SpellData _spellData, Vector3 _launchDirection, int _level)
+    public void Launch(SpellData _spellData, Vector3 _launchDirection)
     {
         spellData = _spellData;
         direction = _launchDirection.normalized;
-        speed = _spellData.CalculateSpeed(_level);
-        damage = _spellData.CalculateDamage(_level);
+        speed = _spellData.CalculateSpeed(SpellLevelManager.Instance.GetSpellLevel(_spellData.Type));
+        damage = _spellData.CalculateDamage(SpellLevelManager.Instance.GetSpellLevel(_spellData.Type));
 
         // Disable gravity
         GetComponent<Rigidbody>().useGravity = false;
@@ -39,17 +38,12 @@ public class Projectile : MonoBehaviour
     {
         if (other.gameObject.GetComponent<HealthSystem>() != null)
         {
-            MagicEffect lingeringEffect = other.gameObject.GetComponent<MagicEffect>();
-
-            if(lingeringEffect != null && spellData.Type == SpellTypes.Fireball && lingeringEffect.GetSpellData().EffectType == EffectTypes.Electrified)
+            if (magicEffect == null)
             {
-                lingeringEffect.TriggerExplosion();
-            }
-            else if (magicEffect == null)
-            {
+                Debug.Log("MagicEffect Added to Enemy");
                 magicEffect = other.gameObject.AddComponent<MagicEffect>();
             }
-            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage, mesh);
+            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage);
             Destroy(gameObject); // Destroy Projectile upon impact
         }
     }

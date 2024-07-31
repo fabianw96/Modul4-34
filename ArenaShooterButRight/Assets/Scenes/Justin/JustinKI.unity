@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2256.642, g: 2397.245, b: 3492.0662, a: 1}
+  m_IndirectSpecularColor: {r: 2259.5876, g: 2399.4045, b: 3493.2754, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -370,12 +370,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spellLevels:
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
+  - spellType: 1
+    level: 1
+  - spellType: 2
+    level: 1
+  - spellType: 3
+    level: 1
   - spellType: 0
     level: 0
   - spellType: 0

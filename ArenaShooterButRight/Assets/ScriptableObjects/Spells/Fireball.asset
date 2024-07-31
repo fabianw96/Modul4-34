@@ -17,7 +17,7 @@ MonoBehaviour:
   Type: 1
   Name: Fireball
   Icon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
-  BaseSpeed: 5
+  BaseSpeed: 15
   BaseDamage: 20
   BaseCost: 10
   BaseCooldown: 1
@@ -34,7 +34,6 @@ MonoBehaviour:
   CooldownPerLevel: 1
   ExplosionDamage: 0
   ExplosionRadius: 0
-  FPSController: {fileID: 0}
   VisualEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
     type: 3}
   VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 2634c31c57079fa4f86f2862364561ac,

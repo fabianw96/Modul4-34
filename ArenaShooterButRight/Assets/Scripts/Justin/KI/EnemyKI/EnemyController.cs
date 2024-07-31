@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.VFX;
 
 namespace Justin.KI
 {
     public class EnemyController : BaseController
     {
+        private VisualEffect visualEffect;
         EnemyPatrolState PatrolState;
         EnemyChaseState ChaseState;
         EnemyAttackState AttackState;

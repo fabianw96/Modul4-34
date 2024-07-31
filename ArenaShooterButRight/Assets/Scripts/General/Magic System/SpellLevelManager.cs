@@ -1,9 +1,24 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpellLevelManager : MonoBehaviour
 {
+
+    public static SpellLevelManager Instance { get; private set; }
     [SerializeField] private List<SpellLevel> spellLevels;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     [System.Serializable]
     public class SpellLevel

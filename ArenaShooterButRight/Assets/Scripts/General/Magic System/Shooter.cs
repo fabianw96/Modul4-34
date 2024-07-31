@@ -48,12 +48,12 @@ public class Shooter : MonoBehaviour
         if (spellData != null && mana.HasEnoughMana(manaCost) && isCooldown == false)
         {
             mana.UseMana(manaCost);
-            Shoot(spellData, spellLevel);
+            Shoot(spellData);
             StartCoroutine(CooldownRoutine(spellData.CalculateCooldown(spellLevel)));
         }
         else
         {
-            Debug.Log("Not enough mana to cast the spell");
+            Debug.Log("Not enough mana to cast the spell or spell on cooldown");
         }
     }
 
@@ -65,7 +65,7 @@ public class Shooter : MonoBehaviour
         isCooldown = false;
     }
 
-    private void Shoot(SpellData _spellData, int _level)
+    private void Shoot(SpellData _spellData)
     {
         GameObject projectileInstance = Instantiate(projectilePrefab);
         Physics.IgnoreCollision(projectileInstance.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
@@ -83,6 +83,6 @@ public class Shooter : MonoBehaviour
         Vector3 launchDirection = Camera.main.transform.forward;
 
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
-        projectile.Launch(_spellData, launchDirection, _level);
+        projectile.Launch(_spellData, launchDirection);
     }
 }
