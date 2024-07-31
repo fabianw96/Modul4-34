@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Electroball
   m_EditorClassIdentifier: 
   ID: 3227BFCA-85DE-4F59-80F4-335DF00D236C
-  EffectType: 0
+  EffectType: 3
   Type: 3
   Name: Electroball
   Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
   UnlockCost: 0
   IsDot: 0
   IsSlow: 0
-  EffectDuration: 0
+  EffectDuration: 5
   DotDamagePerTick: 0
   DotTickRate: 0
   SlowStrength: 0

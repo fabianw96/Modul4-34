@@ -36,15 +36,17 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<HealthSystem>() != null)
-        {
-            if (magicEffect == null)
+        // make sure that Launch was called before OnTrigger happens
+        if (spellData != null)
+            if (other.gameObject.GetComponent<HealthSystem>() != null)
             {
-                Debug.Log("MagicEffect Added to Enemy");
-                magicEffect = other.gameObject.AddComponent<MagicEffect>();
+                if (other.gameObject.GetComponent<MagicEffect>() == null)
+                {
+                    magicEffect = other.gameObject.AddComponent<MagicEffect>();
+                }
+                magicEffect = other.gameObject.GetComponent<MagicEffect>();
+                magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage);
+                Destroy(gameObject); // Destroy Projectile upon impact
             }
-            magicEffect.InitEffect(spellData, other.gameObject.GetComponent<HealthSystem>(), damage);
-            Destroy(gameObject); // Destroy Projectile upon impact
-        }
     }
 }

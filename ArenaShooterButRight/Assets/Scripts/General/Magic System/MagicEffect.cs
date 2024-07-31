@@ -7,27 +7,22 @@ using UnityEngine.AI;
 using UnityEngine.VFX;
 
 public class MagicEffect : MonoBehaviour
-{
+{ 
+    private EffectTypes currentLingeringEffect;
     private HealthSystem healthSystem;
     private NavMeshAgent navMeshAgent;
+    private SpellData spellData;
+    private float originalSpeed;
     private float dmg;
     private float effectDuration;
     private bool isDot;
     private bool hasEffectApplied = false;
-    private SpellData spellData;
     private VisualEffect lingeringEffect;
-    private float originalSpeed;
     private Mesh targetMesh;
-
-
-    public SpellData GetSpellData()
-    {
-        return spellData; 
-    }
+    [SerializeField] private float elapsedTime = 0;
     
     public void InitEffect(SpellData _spellData, HealthSystem _healthSys, float _damage)
     {
-        Debug.Log("Entered InitEffect");
         healthSystem = _healthSys;
         dmg = _damage;
         effectDuration = _spellData.EffectDuration;
@@ -36,13 +31,23 @@ public class MagicEffect : MonoBehaviour
         targetMesh = gameObject.GetComponent<MeshFilter>().mesh;
 
         // Attaches the visual lingering effect to the target
-        if (spellData.VisualLingeringEffectAsset != null)
+        if (gameObject.GetComponent<VisualEffect>() == null)
         {
             lingeringEffect = gameObject.AddComponent<VisualEffect>();
-            lingeringEffect.visualEffectAsset = spellData.VisualLingeringEffectAsset;
-            lingeringEffect.SetMesh(Shader.PropertyToID("TargetMesh"), targetMesh);
-            lingeringEffect.Play();
         }
+
+        if (lingeringEffect != null && spellData.Type == SpellTypes.Fireball && currentLingeringEffect == EffectTypes.Electrified)
+        {
+            TriggerExplosion();
+        }
+
+        currentLingeringEffect = spellData.EffectType;
+        lingeringEffect = gameObject.GetComponent<VisualEffect>();
+        lingeringEffect.visualEffectAsset = spellData.VisualLingeringEffectAsset;
+        lingeringEffect.SetMesh(Shader.PropertyToID("TargetMesh"), targetMesh);
+        lingeringEffect.Play();
+
+
 
         if (isDot)
         {
@@ -57,11 +62,11 @@ public class MagicEffect : MonoBehaviour
 
     private IEnumerator ApplyDotEffect()
     {
-        float elapsedTime = 0f;
+        elapsedTime = 0f;
         while (elapsedTime < effectDuration)
         {
-            healthSystem.TakeDamage(dmg);
-            yield return new WaitForSeconds(spellData.DotTickRate); // Damage applied every second
+            healthSystem.TakeDamage(spellData.DotDamagePerTick);
+            yield return new WaitForSeconds(spellData.DotTickRate);
             elapsedTime += spellData.DotTickRate;
         }
         CleanupEffect();
@@ -112,12 +117,13 @@ public class MagicEffect : MonoBehaviour
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, spellData.ExplosionRadius);
         foreach (var hitCollider in hitColliders)
         {
-            HealthSystem hs = hitCollider.GetComponent<HealthSystem>();
-            if (hs != null)
+            healthSystem = hitCollider.GetComponent<HealthSystem>();
+            if (healthSystem != null)
             {
-                hs.TakeDamage(spellData.ExplosionDamage);
+                healthSystem.TakeDamage(spellData.ExplosionDamage);
             }
         }
+        CleanupEffect();
     }
 
     private void CleanupEffect()
