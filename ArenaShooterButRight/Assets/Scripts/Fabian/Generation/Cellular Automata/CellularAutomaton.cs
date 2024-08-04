@@ -14,9 +14,9 @@ namespace Fabian.Generation.Cellular_Automata
         private struct Cell
         {
             public Vector3 CellPosition;
-            public int IsAlive;
+            // public int IsAlive;
             public int States;
-            public int Neighbors;
+            // public int Neighbors;
         }
 
         private enum CellularAutomatonType
@@ -42,10 +42,14 @@ namespace Fabian.Generation.Cellular_Automata
         private bool _isRunning;
         private ComputeBuffer _cellsBuffer;
         private ComputeBuffer _cellsBufferCopy;
+        private ComputeBuffer _debugBuffer;
+
+        private const int CHUNKSIZE = 512;
 
         private void Awake()
         {
             _meshSpawner = GetComponent<MeshSpawner>();
+            Debug.Log(CHUNKSIZE);
         }
 
         private void OnGUI()
@@ -74,12 +78,11 @@ namespace Fabian.Generation.Cellular_Automata
                 Cell tempCell = new Cell
                 {
                     CellPosition = gosList[i].transform.position,
-                    IsAlive = 1,
+                    // IsAlive = 1,
                     States = numberOfStates,
-                    Neighbors = 0
+                    // Neighbors = 0
                 };
                 _cellList.Add(tempCell);
-                
                 _cellObjects.Add(gosList[i].gameObject);
             }
             
@@ -111,18 +114,12 @@ namespace Fabian.Generation.Cellular_Automata
                 float combinedNoiseValue = (noiseValueXZ + noiseValueYZ) / 2;
 
                 Cell cell = _cellList[i];
-                cell.IsAlive = combinedNoiseValue > aliveThreshold ? 1 : 0;
+                cell.States = combinedNoiseValue > aliveThreshold ? numberOfStates : 0;
                 _cellList[i] = cell;
             }
+            
+            ApplyNoise();
 
-            if (useCoroutine)
-            {
-                StartCoroutine(ApplyNoiseCoroutine());
-            }
-            else
-            {
-                ApplyNoise();
-            }
         }
 
         private void ChooseCellularAutomata()
@@ -136,36 +133,30 @@ namespace Fabian.Generation.Cellular_Automata
             {
                 for (int i = 0; i < _cellList.Count; i++)
                 {
-                    Cell cell = _cellList[i];
-                    cell.Neighbors = 0;
-
+                    int neighbors = 0;
                     //TODO: Move calculation to Compute shader so that 8x8x8 chunks can be compiled at once!
                     switch (cellularType)
                     {
                         case CellularAutomatonType.Moore:
                             //increase each cells neighbor count by one for each neighboring alive cell in a 3x3x3 cube around the cell
-                            _cellList[i] = CalculateMooreNeighbors(cell);
+                            neighbors = CalculateMooreNeighbors(_cellList[i]);
                             break;
                         case CellularAutomatonType.Neumann:
                             //increase each cells neighbor count by one for each neighboring alive cell in -x, +x, -y, +y, -z, +z direction
-                            _cellList[i] = CalculateNeumannNeighbors(cell);
+                            neighbors = CalculateNeumannNeighbors(_cellList[i]);
                             break;
                     }
+
+                    Cell cell = _cellList[i];
+                    ApplyLogic(ref cell, neighbors);
+                    _cellList[i] = cell;
                 }
-            
-                if (useCoroutine)
-                {
-                    StartCoroutine(ApplyCaCoroutine());
-                }
-                else
-                {
-                    ApplyCellularAutomata();
-                }
+                ApplyCellularAutomata();
             }
             else
             {
-                InitBuffers();
                 DispatchComputeShader();
+                ApplyCellularAutomata();
             }
 
             
@@ -173,16 +164,29 @@ namespace Fabian.Generation.Cellular_Automata
             Debug.Log(stopwatch.Elapsed);
         }
 
-        private void InitBuffers()
+        private void ApplyLogic(ref Cell cell, int neigbors)
+        {
+            if (cell.States > 0)
+            {
+                if (neigbors < minNeighborCount)
+                {
+                    cell.States--;
+                }
+            }
+            else
+            {
+                if (neigbors >= rebirthNeighborCount)
+                {
+                    cell.States = numberOfStates;
+                }
+            }
+        }
+        
+        void InitializeBuffers()
         {
             int totalCells = _cellList.Count;
-            Cell[] cells = _cellList.ToArray();
-
             _cellsBuffer = new ComputeBuffer(totalCells, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Cell)));
             _cellsBufferCopy = new ComputeBuffer(totalCells, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Cell)));
-            
-            _cellsBuffer.SetData(cells);
-            _cellsBufferCopy.SetData(cells);
         }
 
         private void DispatchComputeShader()
@@ -190,38 +194,70 @@ namespace Fabian.Generation.Cellular_Automata
             int kernelPrepare = computeShader.FindKernel("PrepareBuffer");
             int kernelApply = computeShader.FindKernel("ApplyCellularAutomata");
             int kernelApplyBuffer = computeShader.FindKernel("ApplyBuffer");
-            
-            computeShader.SetBuffer(kernelPrepare, "cells", _cellsBuffer);
-            computeShader.SetBuffer(kernelPrepare, "cells_buffer", _cellsBufferCopy);
-            computeShader.SetInt("size.x", Mathf.CeilToInt(_meshSpawner.size.x));
-            computeShader.SetInt("size.y", Mathf.CeilToInt(_meshSpawner.size.y));
-            computeShader.SetInt("size.z", Mathf.CeilToInt(_meshSpawner.size.z));
-            
-            computeShader.Dispatch(kernelPrepare, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
 
-            computeShader.SetBuffer(kernelApply, "cells", _cellsBuffer);
-            computeShader.SetBuffer(kernelApply, "cells_buffer", _cellsBufferCopy);
-            
-            computeShader.Dispatch(kernelApply,Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f) );
-            
-            computeShader.SetBuffer(kernelApplyBuffer, "cells", _cellsBuffer);
-            computeShader.SetBuffer(kernelApplyBuffer, "cells_buffer", _cellsBufferCopy);
-            
-            computeShader.Dispatch(kernelApplyBuffer,Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f) );
+            if (kernelPrepare < 0 || kernelApply < 0 || kernelApplyBuffer < 0)
+            {
+                Debug.LogError("Invalid kernel index");
+                return;
+            }
 
-            Cell[] cells = new Cell[_cellList.Count];
-            _cellsBuffer.GetData(cells);
-            _cellList = new List<Cell>(cells);
-        }
+            InitializeBuffers();
 
-        private void OnDestroy()
-        {
+            int totalCells = _cellList.Count;
+            int numChunks = Mathf.CeilToInt((float)totalCells / CHUNKSIZE);
+
+            for (int chunk = 0; chunk < numChunks; chunk++)
+            {
+                int chunkStart = chunk * CHUNKSIZE;
+                int chunkSize = Mathf.Min(CHUNKSIZE, totalCells - chunkStart);
+
+                Cell[] chunkCells = new Cell[chunkSize];
+                Array.Copy(_cellList.ToArray(), chunkStart, chunkCells, 0, chunkSize);
+
+                _cellsBuffer.SetData(chunkCells);
+                _cellsBufferCopy.SetData(chunkCells);
+
+                computeShader.SetBuffer(kernelPrepare, "cells", _cellsBuffer);
+                computeShader.SetBuffer(kernelPrepare, "cells_buffer", _cellsBufferCopy);
+                computeShader.SetInt("size.x", Mathf.CeilToInt(_meshSpawner.size.x));
+                computeShader.SetInt("size.y", Mathf.CeilToInt(_meshSpawner.size.y));
+                computeShader.SetInt("size.z", Mathf.CeilToInt(_meshSpawner.size.z));
+
+                computeShader.Dispatch(kernelPrepare, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
+
+                computeShader.SetBuffer(kernelApply, "cells", _cellsBuffer);
+                computeShader.SetBuffer(kernelApply, "cells_buffer", _cellsBufferCopy);
+
+                computeShader.Dispatch(kernelApply, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
+
+                computeShader.SetBuffer(kernelApplyBuffer, "cells", _cellsBuffer);
+                computeShader.SetBuffer(kernelApplyBuffer, "cells_buffer", _cellsBufferCopy);
+
+                computeShader.Dispatch(kernelApplyBuffer, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
+
+                Cell[] processedCells = new Cell[chunkSize];
+                _cellsBuffer.GetData(processedCells);
+                
+                for (int i = 0; i < processedCells.Length; i++)
+                {
+                    _cellList[i] = processedCells[i];
+                }
+            }
+
             _cellsBuffer.Release();
             _cellsBufferCopy.Release();
-        }
 
-        private Cell CalculateNeumannNeighbors(Cell cell)
+            foreach (var cell in _cellList)
+            {
+                Debug.Log(cell.States);
+            }
+        }
+        
+
+        private int CalculateNeumannNeighbors(Cell cell)
         {
+            int neighbors = 0;
+            
             Vector3[] directions =
             {
                 new Vector3(-1, 0, 0),
@@ -240,17 +276,18 @@ namespace Fabian.Generation.Cellular_Automata
                 {
                     Cell neighborCell = _cellList.Find(c => c.CellPosition == neighborPosition);
 
-                    if (neighborCell.IsAlive == 1)
+                    if (neighborCell.States > 0)
                     {
-                        cell.Neighbors++;
+                        neighbors++;
                     }
                 }
             }
-            return cell;
+            return neighbors;
         }
 
-        private Cell CalculateMooreNeighbors(Cell cell)
+        private int CalculateMooreNeighbors(Cell cell)
         {
+            int neighbors = 0;
             for (int x = -1; x <= 1; ++x)
             for (int y = -1; y <= 1; ++y)
             for (int z = -1; z <= 1; ++z)
@@ -261,13 +298,13 @@ namespace Fabian.Generation.Cellular_Automata
                     {
                         Cell neighborCell = _cellList.Find(c => c.CellPosition == neighborPosition);
 
-                        if (neighborCell.IsAlive == 1)
+                        if (neighborCell.States > 0)
                         {
-                            cell.Neighbors++;
+                            neighbors++;
                         }
                     }
                 }
-            return cell;
+            return neighbors;
         }
 
         private bool IsWithinBounds(Vector3 position)
@@ -281,28 +318,12 @@ namespace Fabian.Generation.Cellular_Automata
         {
             for (int i = 0; i < _cellList.Count; i++)
             {
-                Cell cell = _cellList[i];
-
-                if (_cellList[i].Neighbors < minNeighborCount)
+                if (_cellList[i].States <= 0)
                 {
-                    cell.States--;
-                    _cellList[i] = cell;
-                }
-
-                if (_cellList[i].States == 0)
-                {
-                    cell.IsAlive = 0;
-                    _cellList[i] = cell;
-
                     _cellObjects[i].SetActive(false);
                 }
-
-                if (_cellList[i].Neighbors >= rebirthNeighborCount && !_cellObjects[i].activeSelf)
+                else
                 {
-                    cell.IsAlive = 1;
-                    cell.States = numberOfStates;
-                    _cellList[i] = cell;
-
                     _cellObjects[i].SetActive(true);
                 }
             }
@@ -313,40 +334,11 @@ namespace Fabian.Generation.Cellular_Automata
         {
             for (int i = 0; i < _cellObjects.Count; i++)
             {
-                if (_cellList[i].IsAlive == 0)
+                if (_cellList[i].States <= 0)
                 {
                     _cellObjects[i].SetActive(false);
                 }
             }
-        }
-
-        private IEnumerator ApplyNoiseCoroutine()
-        {
-            for (int i = 0; i < _cellObjects.Count; i++)
-            {
-                if (_cellList[i].IsAlive == 0)
-                {
-                    _cellObjects[i].SetActive(false);
-                }
-                yield return new WaitForSeconds(0.0001f);
-            }
-        }
-
-        private IEnumerator ApplyCaCoroutine()
-        {
-            for (int i = 0; i < _cellList.Count; i++)
-            {
-                if (_cellList[i].Neighbors < minNeighborCount)
-                {
-                    Cell cell = _cellList[i];
-                    cell.IsAlive = 0;
-                    _cellList[i] = cell;
-                    
-                    _cellObjects[i].gameObject.SetActive(false);
-                }
-                yield return new WaitForSeconds(0.0001f);
-            }
-            _isRunning = false;
         }
     }
 }

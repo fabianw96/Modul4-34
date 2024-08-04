@@ -1,21 +1,19 @@
-#pragma kernel ApplyCellularAutomata
 #pragma kernel PrepareBuffer
 #pragma kernel ApplyBuffer
+#pragma kernel ApplyCellularAutomata
 
 int3 size;
 
 int get_uid(uint3 id)
 {
-	return id.x + (id.y * size.x) +( id.z * size.y * size.z);
+	return id.x + (id.y * size.x) +(id.z * size.x * size.y);
 }
 
 struct Cell
 {
-	int cell_game_object;
-	float3 cell_transform;
-	int is_alive;
-	int states;
-	int neighbors;
+	float3 CellPosition;
+	// int IsAlive;
+	int States;
 };
 
 RWStructuredBuffer<Cell> cells_buffer;
@@ -23,11 +21,11 @@ RWStructuredBuffer<Cell> cells;
 
 int GetNeighborState(int3 neighborID)
 {
-	if(neighborID.x >= size.x || neighborID.y >= size.y || neighborID.z >= size.z)
+	if(neighborID.x < 0 || neighborID.x >= size.x || neighborID.y < 0 || neighborID.y >= size.y || neighborID.z < 0 || neighborID.z >= size.z)
 		return 0;
 
 	Cell neighbor = cells[get_uid(neighborID)];
-	return neighbor.is_alive;
+	return neighbor.States > 0 ? 1 : 0;
 }
 
 
@@ -37,9 +35,9 @@ int ComputeNeighborsMoore(uint3 id)
 
 	for(int x = -1; x <= 1 ; ++x)
 	{
-		for(int y = -1; x <= 1 ; ++y)
+		for(int y = -1; y <= 1 ; ++y)
 		{
-			for(int z = -1; x <= 1 ; ++z)
+			for(int z = -1; z <= 1 ; ++z)
 			{
 				if(x != 0 || y != 0 || z != 0)
 				{
@@ -75,23 +73,18 @@ void ApplyCellularAutomata(uint3 id : SV_DispatchThreadID)
 	//test moore first. Try and see if I can implement Neumann later.
 	int neighborsCount = ComputeNeighborsMoore(id);
 
-	if(cell.is_alive)
+	if(cell.States > 0)
 	{
 		if(neighborsCount < 4)
 		{
-			cell.states -= 1;
-			if(cell.states <= 0)
-			{
-				cell.is_alive = 0;
-			}
+			cell.States -= 1;
 		}
 	}
 	else
 	{
 		if(neighborsCount >= 4)
 		{
-			cell.states = 2;
-			cell.is_alive = 1;
+			cell.States = 2;
 		}
 	}
 
