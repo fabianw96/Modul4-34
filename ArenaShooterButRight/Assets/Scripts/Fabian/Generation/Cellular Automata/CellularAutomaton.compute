@@ -13,7 +13,7 @@ struct Cell
 {
 	int cell_game_object;
 	float3 cell_transform;
-	bool is_alive;
+	int is_alive;
 	int states;
 	int neighbors;
 };
@@ -27,7 +27,7 @@ int GetNeighborState(int3 neighborID)
 		return 0;
 
 	Cell neighbor = cells[get_uid(neighborID)];
-	return neighbor.is_alive ? 1 : 0;
+	return neighbor.is_alive;
 }
 
 
@@ -69,7 +69,33 @@ int ComputeNeighborsNeumann(uint3 id)
 [numthreads(8,8,8)]
 void ApplyCellularAutomata(uint3 id : SV_DispatchThreadID)
 {
-	
+	int uid = get_uid(id);
+	Cell cell = cells[uid];
+
+	//test moore first. Try and see if I can implement Neumann later.
+	int neighborsCount = ComputeNeighborsMoore(id);
+
+	if(cell.is_alive)
+	{
+		if(neighborsCount < 4)
+		{
+			cell.states -= 1;
+			if(cell.states <= 0)
+			{
+				cell.is_alive = 0;
+			}
+		}
+	}
+	else
+	{
+		if(neighborsCount >= 4)
+		{
+			cell.states = 2;
+			cell.is_alive = 1;
+		}
+	}
+
+	cells_buffer[uid] = cell;
 }
 
 [numthreads(8,8,8)]
