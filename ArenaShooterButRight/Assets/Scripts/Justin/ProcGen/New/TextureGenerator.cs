@@ -17,7 +17,7 @@ namespace Justin.ProcGen.New
             Texture2D texture = new Texture2D(width, height);
             Color[] colorMap = new Color[width * height];
 
-            // Asign to every Point in the map a Color based on the height
+            // Assign to every Point in the map a Color based on the height
             for (int y = 0; y < height; y++) 
             {
                 for (int x = 0; x < width; x++)

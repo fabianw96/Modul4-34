@@ -32,13 +32,15 @@ namespace Justin.ProcGen.New
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private MeshFilter meshFilter;
 
+        public bool autoUpdate;
+
         // Start is called before the first frame update
         void Start()
         {
             GenerateMap();
         }
 
-        private void GenerateMap()
+        public void GenerateMap()
         {
             // Generate Noisemap based on given parameters
             float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);

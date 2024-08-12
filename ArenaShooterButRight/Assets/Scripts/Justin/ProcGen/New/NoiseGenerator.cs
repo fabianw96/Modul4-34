@@ -44,7 +44,7 @@ namespace Justin.ProcGen.New
                     {
                         // calculate the position in the Noise-Function
                         float sampleX = (x - width / 2f) / noiseScale * frequency + octaveOffsets[i].x;
-                        float sampleY = (y - height / 2f) / noiseScale * frequency + octaveOffsets[i].x;
+                        float sampleY = (y - height / 2f) / noiseScale * frequency + octaveOffsets[i].y;
 
                         // Calculate Perlin Noise value
                         float perlinValue = Mathf.PerlinNoise(sampleX, sampleY) * 2 - 1;
@@ -76,7 +76,6 @@ namespace Justin.ProcGen.New
                     noiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, noiseMap[x, y]);
                 }
             }
-
             return noiseMap;
         }
     }
