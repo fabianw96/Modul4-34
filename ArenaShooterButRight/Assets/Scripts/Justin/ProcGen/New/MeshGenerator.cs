@@ -1,9 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.ProBuilder.Shapes;
+using static UnityEngine.Mesh;
 
 namespace Justin.ProcGen.New
 {
@@ -17,7 +13,6 @@ namespace Justin.ProcGen.New
 
             // Create Meshdata with more space for vertices, to enable the hard edges look
             MeshData meshData = new MeshData(width * height * 6);
-            int vertexIndex = 0;
 
             // Loop through every Mapposition
             for (int y = 0; y < height - 1; y++)
@@ -34,10 +29,8 @@ namespace Justin.ProcGen.New
                     };
 
                     // Add the two triangles of the Quad
-                    meshData.AddTriangle(quadVertices[0], quadVertices[2], quadVertices[1]);
-                    meshData.AddTriangle(quadVertices[1], quadVertices[2], quadVertices[3]);
-
-                    vertexIndex++;
+                    meshData.AddTriangle(quadVertices[0], quadVertices[2], quadVertices[1], width, height);
+                    meshData.AddTriangle(quadVertices[1], quadVertices[2], quadVertices[3], width, height);
                 }
             }
 
@@ -63,7 +56,7 @@ namespace Justin.ProcGen.New
         }
 
         // Method to add Triangles
-        public void AddTriangle(Vector3 v0, Vector3 v1, Vector3 v2)
+        public void AddTriangle(Vector3 v0, Vector3 v1, Vector3 v2, int mapWidth, int mapHeight)
         {
             int vertexIndex = triangleIndex;
 
@@ -79,14 +72,13 @@ namespace Justin.ProcGen.New
             normals[vertexIndex + 2] = normal;
 
             //// Set UV-Coordinates
-            uvs[vertexIndex] = new Vector2(v0.x / 100.0f, v0.z / 100.0f);
-            uvs[vertexIndex + 1] = new Vector2(v1.x / 100.0f, v1.z / 100.0f);
-            uvs[vertexIndex + 2] = new Vector2(v2.x / 100.0f, v2.z / 100.0f);
+            //uvs[vertexIndex] = new Vector2(v0.x, v0.z);
+            //uvs[vertexIndex + 1] = new Vector2(v1.x, v1.z);
+            //uvs[vertexIndex + 2] = new Vector2(v2.x, v2.z);
 
-            //meshData.uvs[vertexIndex] = new Vector2(x / (float)width, y / (float)height);
-            //meshData.uvs[vertexIndex + 1] = new Vector2(x / (float)width, y / (float)height);
-            //meshData.uvs[vertexIndex + 2] = new Vector2(x / (float)width, y / (float)height);
-            //meshData.uvs[vertexIndex + 3] = new Vector2(x / (float)width, y / (float)height);
+            uvs[vertexIndex] = new Vector2(v0.x / (mapWidth - 1), v0.z / (mapHeight - 1));
+            uvs[vertexIndex + 1] = new Vector2(v1.x / (mapWidth - 1), v1.z / (mapHeight - 1));
+            uvs[vertexIndex + 2] = new Vector2(v2.x / (mapWidth - 1), v2.z / (mapHeight - 1));
 
             // Add the indices for the Triangels
             triangles[triangleIndex] = vertexIndex;
@@ -103,7 +95,7 @@ namespace Justin.ProcGen.New
             mesh.vertices = vertices;
             mesh.triangles = triangles;
             mesh.normals = normals; // Use manual Normals for Low-Poly-Look
-            //mesh.uv = uvs;
+            mesh.uv = uvs;
             return mesh;
         }
     }
