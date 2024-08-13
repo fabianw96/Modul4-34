@@ -72,10 +72,6 @@ namespace Justin.ProcGen.New
             normals[vertexIndex + 2] = normal;
 
             //// Set UV-Coordinates
-            //uvs[vertexIndex] = new Vector2(v0.x, v0.z);
-            //uvs[vertexIndex + 1] = new Vector2(v1.x, v1.z);
-            //uvs[vertexIndex + 2] = new Vector2(v2.x, v2.z);
-
             uvs[vertexIndex] = new Vector2(v0.x / (mapWidth - 1), v0.z / (mapHeight - 1));
             uvs[vertexIndex + 1] = new Vector2(v1.x / (mapWidth - 1), v1.z / (mapHeight - 1));
             uvs[vertexIndex + 2] = new Vector2(v2.x / (mapWidth - 1), v2.z / (mapHeight - 1));
