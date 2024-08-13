@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using General;
-using General.Player;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fabian.KI.EnemyFSM
 {
@@ -18,11 +16,6 @@ namespace Fabian.KI.EnemyFSM
         [SerializeField] public GameObject gunArm;
         [SerializeField] public float projectileSpeed;
         [SerializeField] public float projectileDecayDelay;
-
-        protected override void Start()
-        {
-            base.Start();
-        }
 
         protected override void Update()
         {

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using Random = UnityEngine.Random;
 
@@ -7,7 +6,7 @@ namespace Fabian.Generation.Cellular_Automata
 {
     public class CellAutomata : MonoBehaviour
     {
-        public enum Grid
+        private enum Grid
         {
             FLOOR,
             WALL
@@ -85,12 +84,11 @@ namespace Fabian.Generation.Cellular_Automata
                             {
                                 if (IsWithMapBounds(x, y))
                                 {
-                                    if (y != j || x != k)
+                                    if (y == j && x == k) continue;
+                                    
+                                    if (tempGrid[x,y] == Grid.WALL)
                                     {
-                                        if (tempGrid[x,y] == Grid.WALL)
-                                        {
-                                            neighborWallCount++;
-                                        }
+                                        neighborWallCount++;
                                     }
                                 }
                                 else

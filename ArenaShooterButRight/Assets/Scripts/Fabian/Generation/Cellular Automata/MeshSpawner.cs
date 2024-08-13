@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Fabian.Generation.Cellular_Automata
 {
@@ -25,7 +23,7 @@ namespace Fabian.Generation.Cellular_Automata
         {
             if (spawnedMeshList != null)
             {
-                foreach (var obj in spawnedMeshList)
+                foreach (GameObject obj in spawnedMeshList)
                 {
                     DestroyImmediate(obj);
                 }

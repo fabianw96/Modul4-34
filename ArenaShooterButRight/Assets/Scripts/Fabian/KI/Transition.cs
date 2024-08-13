@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Fabian.KI
 {
     public delegate bool TransitionCondition();
