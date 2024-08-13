@@ -1,0 +1,104 @@
+// #pragma kernel PrepareBuffer
+#pragma kernel ApplyCellularAutomata
+// #pragma kernel ApplyBuffer
+
+int3 size;
+
+struct Cell
+{
+    float3 CellPosition;
+    int3 GridPosition;   
+    int States;          
+};
+
+RWStructuredBuffer<Cell> cells_copy_buffer; 
+RWStructuredBuffer<Cell> cells;
+RWStructuredBuffer<float4> color_buffer;
+
+int get_uid(int3 gridPos)
+{
+    return gridPos.x + (gridPos.y * size.x) + (gridPos.z * size.x * size.y);
+}
+
+int GetNeighborState(int3 neighborGridPos)
+{
+    if (neighborGridPos.x >= 0 && neighborGridPos.x < size.x &&
+        neighborGridPos.y >= 0 && neighborGridPos.y < size.y &&
+        neighborGridPos.z >= 0 && neighborGridPos.z < size.z)
+    {
+        Cell neighbor = cells[get_uid(neighborGridPos)];
+        if(neighbor.States > 0)
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int ComputeNeighborsMoore(int3 gridPos)
+{
+    int neighborsCount = 0;
+
+    for (int x = -1; x <= 1; x++)
+    {
+        for (int y = -1; y <= 1; y++)
+        {
+            for (int z = -1; z <= 1; z++)
+            {
+                // Skip the cell itself
+                if (x != 0 || y != 0 || z != 0)
+                {
+                    int3 neighborPos = gridPos + int3(x,y,z);
+                    
+                    if(neighborPos.x >= 0 && neighborPos.x < size.x &&
+                        neighborPos.y >= 0 && neighborPos.y < size.y &&
+                        neighborPos.z >= 0 && neighborPos.z < size.z)
+                    {
+                        uint uid = get_uid(neighborPos);
+                        Cell neighbor = cells[uid];
+                        neighborsCount += (neighbor.States > 0) ? 1 : 0;
+                    }
+                }
+            }
+        }
+    }
+
+    return neighborsCount;
+}
+
+[numthreads(8,8,8)]
+void ApplyCellularAutomata(uint3 id : SV_DispatchThreadID)
+{    
+    int3 gridPos = uint3(id.x, id.y, id.z);
+    
+    if(gridPos.x < size.x && gridPos.y < size.y && gridPos.z < size.z)
+    {
+        uint uid = get_uid(gridPos);
+        
+        cells_copy_buffer[uid] = cells[uid];
+        
+        Cell cell = cells[uid]; 
+
+        // Compute the number of alive neighbors using Moore neighborhood
+        int neighborsCount = ComputeNeighborsMoore(gridPos);
+
+        float4 color;
+        color.rgb = float3(neighborsCount / 26.0f, 0.0f, (1.0f - neighborsCount) / 26.0f);
+        color.a = 1.0f;
+        color_buffer[uid] = color;
+        
+        
+        if (cell.States > 0 && neighborsCount < 4)
+        {
+            cell.States -= 1; 
+        }
+
+        if(cell.States <= 0 && neighborsCount >= 4)
+        {
+            cell.States = 2;
+        }
+                
+        cells[uid].States = cell.States;
+    }
+}
