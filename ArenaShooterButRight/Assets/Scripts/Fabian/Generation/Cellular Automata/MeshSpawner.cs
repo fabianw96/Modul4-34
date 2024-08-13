@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,7 +9,7 @@ namespace Fabian.Generation.Cellular_Automata
     [ExecuteInEditMode]
     public class MeshSpawner : MonoBehaviour
     {
-        [SerializeField] public Vector3 size;
+        [SerializeField] public int3 size;
         [SerializeField] private Material defaultMaterial;
         [SerializeField] private bool spawnCubes;
         [SerializeField] private CellularAutomaton cellularAutomaton;

@@ -1,9 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 using Random = System.Random;
 
@@ -11,12 +12,11 @@ namespace Fabian.Generation.Cellular_Automata
 {
     public class CellularAutomaton : MonoBehaviour
     {
-        private struct Cell
+        public struct Cell
         {
-            public Vector3 CellPosition;
-            // public int IsAlive;
+            public float3 CellPosition;
+            public int3 GridPosition;
             public int States;
-            // public int Neighbors;
         }
 
         private enum CellularAutomatonType
@@ -31,9 +31,9 @@ namespace Fabian.Generation.Cellular_Automata
         [SerializeField] private int minNeighborCount = 4;
         [SerializeField] private int rebirthNeighborCount = 4;
         [SerializeField] private int numberOfStates = 5;
-        [SerializeField] private bool useCoroutine;
         [SerializeField] private CellularAutomatonType cellularType;
         [SerializeField] private bool useComputeShader;
+        [SerializeField] private bool useJobSystem;
         [SerializeField] private ComputeShader computeShader;
 
         private MeshSpawner _meshSpawner;
@@ -42,14 +42,13 @@ namespace Fabian.Generation.Cellular_Automata
         private bool _isRunning;
         private ComputeBuffer _cellsBuffer;
         private ComputeBuffer _cellsBufferCopy;
-        private ComputeBuffer _debugBuffer;
-
-        private const int CHUNKSIZE = 512;
+        private ComputeBuffer _colorBuffer;
+        
+        //Compute Shader Property to ID
 
         private void Awake()
         {
             _meshSpawner = GetComponent<MeshSpawner>();
-            Debug.Log(CHUNKSIZE);
         }
 
         private void OnGUI()
@@ -73,19 +72,17 @@ namespace Fabian.Generation.Cellular_Automata
             _cellList.Clear();
             _cellObjects.Clear();
 
-            for (int i = 0; i < gosList.Count; i++)
+            foreach (GameObject gameObj in gosList)
             {
                 Cell tempCell = new Cell
                 {
-                    CellPosition = gosList[i].transform.position,
-                    // IsAlive = 1,
+                    CellPosition = gameObj.transform.position,
                     States = numberOfStates,
-                    // Neighbors = 0
                 };
                 _cellList.Add(tempCell);
-                _cellObjects.Add(gosList[i].gameObject);
+                _cellObjects.Add(gameObj.gameObject);
             }
-            
+
             CalculateNoise();
         }
 
@@ -99,14 +96,22 @@ namespace Fabian.Generation.Cellular_Automata
 
             for (int i = _cellList.Count - 1; i >= 0; i--)
             {
-                if (!_cellObjects[i].gameObject)  //TODO: Find way to check if list at index is null
+                if (!_cellObjects[i].gameObject)
                 {
                     continue;
                 }
 
-                float xInput = (_cellList[i].CellPosition.x + offsetX) * noiseScale;
-                float yInput = (_cellList[i].CellPosition.y + offsetY) * noiseScale;
-                float zInput = (_cellList[i].CellPosition.z + offsetZ) * noiseScale;
+                Vector3 position = _cellList[i].CellPosition;
+                
+                int3 gridPos = new int3(
+                    Mathf.FloorToInt(position.x),
+                    Mathf.FloorToInt(position.y),
+                    Mathf.FloorToInt(position.z)
+                );
+
+                float xInput = (position.x + offsetX) * noiseScale;
+                float yInput = (position.y + offsetY) * noiseScale;
+                float zInput = (position.z + offsetZ) * noiseScale;
 
                 float noiseValueXZ = Mathf.PerlinNoise(xInput, zInput);
                 float noiseValueYZ = Mathf.PerlinNoise(yInput, zInput);
@@ -114,12 +119,12 @@ namespace Fabian.Generation.Cellular_Automata
                 float combinedNoiseValue = (noiseValueXZ + noiseValueYZ) / 2;
 
                 Cell cell = _cellList[i];
+                cell.GridPosition = gridPos;
                 cell.States = combinedNoiseValue > aliveThreshold ? numberOfStates : 0;
                 _cellList[i] = cell;
             }
             
             ApplyNoise();
-
         }
 
         private void ChooseCellularAutomata()
@@ -128,54 +133,108 @@ namespace Fabian.Generation.Cellular_Automata
             _isRunning = true;
             stopwatch.Restart();
 
-
-            if (!useComputeShader)
+            if (!useComputeShader && !useJobSystem)
             {
-                for (int i = 0; i < _cellList.Count; i++)
+                int neighbors = 0;
+                
+                switch (cellularType)
                 {
-                    int neighbors = 0;
-                    //TODO: Move calculation to Compute shader so that 8x8x8 chunks can be compiled at once!
-                    switch (cellularType)
-                    {
-                        case CellularAutomatonType.Moore:
-                            //increase each cells neighbor count by one for each neighboring alive cell in a 3x3x3 cube around the cell
+                    case CellularAutomatonType.Moore:
+                        for (int i = 0; i < _cellList.Count; i++)
+                        {
                             neighbors = CalculateMooreNeighbors(_cellList[i]);
-                            break;
-                        case CellularAutomatonType.Neumann:
-                            //increase each cells neighbor count by one for each neighboring alive cell in -x, +x, -y, +y, -z, +z direction
+                            Cell cell = _cellList[i];
+                            ApplyLogic(ref cell, neighbors);
+                            _cellList[i] = cell;
+                        }
+                        break;
+                    case CellularAutomatonType.Neumann:
+                        for (int i = 0; i < _cellList.Count; i++)
+                        {
                             neighbors = CalculateNeumannNeighbors(_cellList[i]);
-                            break;
-                    }
-
-                    Cell cell = _cellList[i];
-                    ApplyLogic(ref cell, neighbors);
-                    _cellList[i] = cell;
+                            Cell cell = _cellList[i];
+                            ApplyLogic(ref cell, neighbors);
+                            _cellList[i] = cell;
+                        }
+                        break;
                 }
                 ApplyCellularAutomata();
             }
-            else
+            else if (useComputeShader)
             {
                 DispatchComputeShader();
                 ApplyCellularAutomata();
             }
+            else if (useJobSystem)
+            {
+                NativeArray<Cell> cells = new NativeArray<Cell>(_cellList.ToArray(), Allocator.TempJob);
+                NativeArray<int> neighborCount = new NativeArray<int>(_cellList.Count, Allocator.TempJob);
 
-            
+                NativeHashMap<float3, Cell> cellMap = new NativeHashMap<float3, Cell>(_cellList.Count, Allocator.TempJob);
+                for (int i = 0; i < cells.Length; i++)
+                {
+                    cellMap.TryAdd(cells[i].CellPosition, cells[i]);
+                }
+
+                JobHandle jobHandle = default;
+
+                switch (cellularType)
+                {
+                    case CellularAutomatonType.Moore:
+                        MooreNeighborsJob mooreJob = new MooreNeighborsJob()
+                        {
+                            Cells = cells,
+                            NeighborCount = neighborCount,
+                            CellMap = cellMap,
+                            Size = _meshSpawner.size
+                        };
+                        jobHandle = mooreJob.Schedule(_cellList.Count, 64);
+                        break;
+                    case CellularAutomatonType.Neumann:
+                        NeumannNeighborsJob neumannJob = new NeumannNeighborsJob
+                        {
+                            Cells = cells,
+                            NeighborCounts = neighborCount,
+                            CellMap = cellMap,
+                            Size = _meshSpawner.size
+                        };
+                        jobHandle = neumannJob.Schedule(_cellList.Count, 64);
+                        break;
+                }
+                
+                jobHandle.Complete();
+
+                for (int i = 0; i < _cellList.Count; i++)
+                {
+                    Cell cell = _cellList[i];
+                    int neighbors = neighborCount[i];
+                    ApplyLogic(ref cell, neighbors);
+                    _cellList[i] = cell;
+                }
+
+                cells.Dispose();
+                neighborCount.Dispose();
+                cellMap.Dispose();
+                
+                ApplyCellularAutomata();
+            }
+
             stopwatch.Stop();
             Debug.Log(stopwatch.Elapsed);
         }
 
-        private void ApplyLogic(ref Cell cell, int neigbors)
+        private void ApplyLogic(ref Cell cell, int neighbors)
         {
             if (cell.States > 0)
             {
-                if (neigbors < minNeighborCount)
+                if (neighbors < minNeighborCount)
                 {
                     cell.States--;
                 }
             }
             else
             {
-                if (neigbors >= rebirthNeighborCount)
+                if (neighbors >= rebirthNeighborCount)
                 {
                     cell.States = numberOfStates;
                 }
@@ -185,79 +244,73 @@ namespace Fabian.Generation.Cellular_Automata
         void InitializeBuffers()
         {
             int totalCells = _cellList.Count;
-            _cellsBuffer = new ComputeBuffer(totalCells, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Cell)));
-            _cellsBufferCopy = new ComputeBuffer(totalCells, System.Runtime.InteropServices.Marshal.SizeOf(typeof(Cell)));
+            int cellSize = sizeof(float) * 3 + sizeof(int) * 4;
+            
+            _cellsBuffer = new ComputeBuffer(totalCells, cellSize);
+            _cellsBufferCopy = new ComputeBuffer(totalCells, cellSize);
+            _colorBuffer = new ComputeBuffer(totalCells, sizeof(float) * 4);
+
+            _cellsBuffer.SetData(_cellList.ToArray());
+            _cellsBufferCopy.SetData(_cellList.ToArray());
         }
 
         private void DispatchComputeShader()
         {
-            int kernelPrepare = computeShader.FindKernel("PrepareBuffer");
-            int kernelApply = computeShader.FindKernel("ApplyCellularAutomata");
-            int kernelApplyBuffer = computeShader.FindKernel("ApplyBuffer");
+            int kernelApplyCa = computeShader.FindKernel("ApplyCellularAutomata");
 
-            if (kernelPrepare < 0 || kernelApply < 0 || kernelApplyBuffer < 0)
+            if (kernelApplyCa < 0)
             {
                 Debug.LogError("Invalid kernel index");
                 return;
             }
 
             InitializeBuffers();
+            
+            int totalCells = _meshSpawner.size.x * _meshSpawner.size.y * _meshSpawner.size.z;
+            
+            computeShader.SetInts("size", _meshSpawner.size.x, _meshSpawner.size.y, _meshSpawner.size.y);
+            
+            computeShader.SetBuffer(kernelApplyCa, "cells", _cellsBuffer);
+            computeShader.SetBuffer(kernelApplyCa, "cells_copy_buffer", _cellsBufferCopy);
+            computeShader.SetBuffer(kernelApplyCa, "color_buffer", _colorBuffer);
 
-            int totalCells = _cellList.Count;
-            int numChunks = Mathf.CeilToInt((float)totalCells / CHUNKSIZE);
+            computeShader.GetKernelThreadGroupSizes(kernelApplyCa, out uint threadGroupSizeX, out uint threadGroupSizeY, out uint threadGroupSizeZ);
 
-            for (int chunk = 0; chunk < numChunks; chunk++)
+            int threadGroupsX = (int)(_meshSpawner.size.x / threadGroupSizeX);
+            int threadGroupsY = (int)(_meshSpawner.size.y / threadGroupSizeY);
+            int threadGroupsZ = (int)(_meshSpawner.size.z /threadGroupSizeZ);
+            
+            computeShader.Dispatch(kernelApplyCa, threadGroupsX, threadGroupsY, threadGroupsZ);
+            
+            Cell[] processedCells = new Cell[totalCells];
+            _cellsBuffer.GetData(processedCells);
+            
+            for (int i = 0; i < totalCells; i++)
             {
-                int chunkStart = chunk * CHUNKSIZE;
-                int chunkSize = Mathf.Min(CHUNKSIZE, totalCells - chunkStart);
+                _cellList[i] = processedCells[i];
+            }
 
-                Cell[] chunkCells = new Cell[chunkSize];
-                Array.Copy(_cellList.ToArray(), chunkStart, chunkCells, 0, chunkSize);
+            float4[] colorData = new float4[totalCells];
+            _colorBuffer.GetData(colorData);
 
-                _cellsBuffer.SetData(chunkCells);
-                _cellsBufferCopy.SetData(chunkCells);
-
-                computeShader.SetBuffer(kernelPrepare, "cells", _cellsBuffer);
-                computeShader.SetBuffer(kernelPrepare, "cells_buffer", _cellsBufferCopy);
-                computeShader.SetInt("size.x", Mathf.CeilToInt(_meshSpawner.size.x));
-                computeShader.SetInt("size.y", Mathf.CeilToInt(_meshSpawner.size.y));
-                computeShader.SetInt("size.z", Mathf.CeilToInt(_meshSpawner.size.z));
-
-                computeShader.Dispatch(kernelPrepare, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
-
-                computeShader.SetBuffer(kernelApply, "cells", _cellsBuffer);
-                computeShader.SetBuffer(kernelApply, "cells_buffer", _cellsBufferCopy);
-
-                computeShader.Dispatch(kernelApply, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
-
-                computeShader.SetBuffer(kernelApplyBuffer, "cells", _cellsBuffer);
-                computeShader.SetBuffer(kernelApplyBuffer, "cells_buffer", _cellsBufferCopy);
-
-                computeShader.Dispatch(kernelApplyBuffer, Mathf.CeilToInt(_meshSpawner.size.x / 8.0f), Mathf.CeilToInt(_meshSpawner.size.y / 8.0f), Mathf.CeilToInt(_meshSpawner.size.z / 8.0f));
-
-                Cell[] processedCells = new Cell[chunkSize];
-                _cellsBuffer.GetData(processedCells);
-                
-                for (int i = 0; i < processedCells.Length; i++)
+            for (int i = 0; i < _cellObjects.Count; i++)
+            {
+                Renderer renderer = _cellObjects[i].GetComponent<Renderer>();
+                if (renderer != null)
                 {
-                    _cellList[i] = processedCells[i];
+                    renderer.material.color = new Color(colorData[i].x, colorData[i].y,colorData[i].z, colorData[i].w);
                 }
             }
-
+            
             _cellsBuffer.Release();
             _cellsBufferCopy.Release();
-
-            foreach (var cell in _cellList)
-            {
-                Debug.Log(cell.States);
-            }
+            _colorBuffer.Release();
         }
-        
 
         private int CalculateNeumannNeighbors(Cell cell)
         {
             int neighbors = 0;
-            
+
             Vector3[] directions =
             {
                 new Vector3(-1, 0, 0),
@@ -270,16 +323,15 @@ namespace Fabian.Generation.Cellular_Automata
 
             foreach (Vector3 direction in directions)
             {
-                Vector3 neighborPosition = cell.CellPosition + direction;
+                Vector3 neighborPosition = (Vector3)cell.CellPosition + direction;
 
-                if (IsWithinBounds(neighborPosition))
+                if (!IsWithinBounds(neighborPosition)) continue;
+                
+                Cell neighborCell = _cellList.Find(c => (Vector3)c.CellPosition == neighborPosition);
+
+                if (neighborCell.States > 0)
                 {
-                    Cell neighborCell = _cellList.Find(c => c.CellPosition == neighborPosition);
-
-                    if (neighborCell.States > 0)
-                    {
-                        neighbors++;
-                    }
+                    neighbors++;
                 }
             }
             return neighbors;
@@ -288,15 +340,19 @@ namespace Fabian.Generation.Cellular_Automata
         private int CalculateMooreNeighbors(Cell cell)
         {
             int neighbors = 0;
-            for (int x = -1; x <= 1; ++x)
-            for (int y = -1; y <= 1; ++y)
-            for (int z = -1; z <= 1; ++z)
-                if (x != 0 || y != 0 || z != 0)
+
+            for (int x = -1; x <= 1; x++)
+            {
+                for (int y = -1; y <= 1; y++)
                 {
-                    Vector3 neighborPosition = cell.CellPosition + new Vector3(x, y, z);
-                    if (IsWithinBounds(neighborPosition))
+                    for (int z = -1; z <= 1; z++)
                     {
-                        Cell neighborCell = _cellList.Find(c => c.CellPosition == neighborPosition);
+                        if (x == 0 && y == 0 && z == 0) continue;
+                        
+                        Vector3 neighborPosition = (Vector3)cell.CellPosition + new Vector3(x, y, z);
+                        if (!IsWithinBounds(neighborPosition)) continue;
+                        
+                        Cell neighborCell = _cellList.Find(c => (Vector3)c.CellPosition == neighborPosition);
 
                         if (neighborCell.States > 0)
                         {
@@ -304,6 +360,8 @@ namespace Fabian.Generation.Cellular_Automata
                         }
                     }
                 }
+            }
+
             return neighbors;
         }
 
@@ -318,14 +376,7 @@ namespace Fabian.Generation.Cellular_Automata
         {
             for (int i = 0; i < _cellList.Count; i++)
             {
-                if (_cellList[i].States <= 0)
-                {
-                    _cellObjects[i].SetActive(false);
-                }
-                else
-                {
-                    _cellObjects[i].SetActive(true);
-                }
+                _cellObjects[i].SetActive(_cellList[i].States > 0);
             }
             _isRunning = false;
         }
