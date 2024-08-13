@@ -1694,9 +1694,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   size:
-    x: 16
-    y: 16
-    z: 16
+    x: 32
+    y: 32
+    z: 32
   defaultMaterial: {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
   spawnCubes: 1
   cellularAutomaton: {fileID: 1221350361}

@@ -6,7 +6,6 @@ using UnityEngine.Serialization;
 
 namespace Fabian.Generation.Cellular_Automata
 {
-    [ExecuteInEditMode]
     public class MeshSpawner : MonoBehaviour
     {
         [SerializeField] public int3 size;
@@ -39,8 +38,6 @@ namespace Fabian.Generation.Cellular_Automata
 
         private void SpawnMeshes()
         {
-
-            //Generate a noise, so it's not just a whole cube.
             for (int y = 0; y < size.y; y++)
             {
                 for (int x = 0; x < size.x; x++)
@@ -62,10 +59,10 @@ namespace Fabian.Generation.Cellular_Automata
                         _meshRenderer = _generatedGameObject.AddComponent<MeshRenderer>();
 
                         _meshRenderer.sharedMaterial = defaultMaterial;
-                        // _meshRenderer.sharedMaterial.enableInstancing = true;
+                        _meshRenderer.sharedMaterial.enableInstancing = true;
 
                         _meshFilter.sharedMesh = !spawnCubes ? GeneratePlane() : GenerateCube();
-
+                        
                         spawnedMeshList.Add(_generatedGameObject);
                     }
                 }
