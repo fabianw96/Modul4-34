@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Justin.ProcGen.New.SOs
+namespace Justin.ProcGen.New
 {
-    [CreateAssetMenu(fileName = "TerrainTypeConfig", menuName = "ScriptableObjects/JustinGen/New/TerrainDataset", order = 1)]
+    [CreateAssetMenu(menuName = "ScriptableObjects/JustinGen/New/TerrainDataset", order = 1)]
     public class TerrainTypeConfig : ScriptableObject
     {
         public TerrainType[] regions;
@@ -18,4 +16,3 @@ namespace Justin.ProcGen.New.SOs
         public Color color;
     }
 }
-
