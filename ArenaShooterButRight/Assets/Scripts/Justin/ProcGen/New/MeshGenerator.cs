@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using static UnityEngine.Mesh;
 
 namespace Justin.ProcGen.New
@@ -88,6 +89,7 @@ namespace Justin.ProcGen.New
         public Mesh CreateMesh()
         {
             Mesh mesh = new Mesh();
+            mesh.indexFormat = IndexFormat.UInt32;
             mesh.vertices = vertices;
             mesh.triangles = triangles;
             mesh.normals = normals; // Use manual Normals for Low-Poly-Look
