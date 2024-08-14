@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.Collections;
@@ -44,6 +43,12 @@ namespace Fabian.Generation.Cellular_Automata
         private ComputeBuffer _cellsBufferCopy;
         private ComputeBuffer _colorBuffer;
         
+        //Compute shader PropertyToID instead of string base eval
+        private static readonly int ColorBuffer = Shader.PropertyToID("color_buffer");
+        private static readonly int CellsCopyBuffer = Shader.PropertyToID("cells_copy_buffer");
+        private static readonly int Cells = Shader.PropertyToID("cells");
+        private static readonly int Size = Shader.PropertyToID("size");
+
         //Compute Shader Property to ID
 
         private void Awake()
@@ -135,11 +140,12 @@ namespace Fabian.Generation.Cellular_Automata
 
             if (!useComputeShader && !useJobSystem)
             {
-                int neighbors = 0;
+                int neighbors;
                 
                 switch (cellularType)
                 {
                     case CellularAutomatonType.Moore:
+                        //TODO: Case currently does "too much". Fix bug if possible before portfolio
                         for (int i = 0; i < _cellList.Count; i++)
                         {
                             neighbors = CalculateMooreNeighbors(_cellList[i]);
@@ -240,8 +246,8 @@ namespace Fabian.Generation.Cellular_Automata
                 }
             }
         }
-        
-        void InitializeBuffers()
+
+        private void InitializeBuffers()
         {
             int totalCells = _cellList.Count;
             int cellSize = sizeof(float) * 3 + sizeof(int) * 4;
@@ -268,11 +274,11 @@ namespace Fabian.Generation.Cellular_Automata
             
             int totalCells = _meshSpawner.size.x * _meshSpawner.size.y * _meshSpawner.size.z;
             
-            computeShader.SetInts("size", _meshSpawner.size.x, _meshSpawner.size.y, _meshSpawner.size.y);
+            computeShader.SetInts(Size, _meshSpawner.size.x, _meshSpawner.size.y, _meshSpawner.size.y);
             
-            computeShader.SetBuffer(kernelApplyCa, "cells", _cellsBuffer);
-            computeShader.SetBuffer(kernelApplyCa, "cells_copy_buffer", _cellsBufferCopy);
-            computeShader.SetBuffer(kernelApplyCa, "color_buffer", _colorBuffer);
+            computeShader.SetBuffer(kernelApplyCa, Cells, _cellsBuffer);
+            computeShader.SetBuffer(kernelApplyCa, CellsCopyBuffer, _cellsBufferCopy);
+            computeShader.SetBuffer(kernelApplyCa, ColorBuffer, _colorBuffer);
 
             computeShader.GetKernelThreadGroupSizes(kernelApplyCa, out uint threadGroupSizeX, out uint threadGroupSizeY, out uint threadGroupSizeZ);
 
@@ -295,10 +301,10 @@ namespace Fabian.Generation.Cellular_Automata
 
             for (int i = 0; i < _cellObjects.Count; i++)
             {
-                Renderer renderer = _cellObjects[i].GetComponent<Renderer>();
-                if (renderer != null)
+                Renderer objectRenderer = _cellObjects[i].GetComponent<Renderer>();
+                if (objectRenderer != null)
                 {
-                    renderer.material.color = new Color(colorData[i].x, colorData[i].y,colorData[i].z, colorData[i].w);
+                    objectRenderer.material.color = new Color(colorData[i].x, colorData[i].y,colorData[i].z, colorData[i].w);
                 }
             }
             

@@ -1,25 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using Unity.Mathematics;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Fabian.EngineTool.PrefabSpawner
 {
     public class PrefabSpawnerViewModel : INotifyPropertyChanged
     {
-        private PrefabSpawnerModel _model;
+        private PrefabSpawnerModel _model = new PrefabSpawnerModel();
         
-        // private PrefabSpawnerContainer _spawnerContainer;
         public event PropertyChangedEventHandler PropertyChanged;
-
-        public PrefabSpawnerViewModel()
-        {
-            _model = new PrefabSpawnerModel();
-        }
 
         public List<GameObject> PrefabChoiceList
         {
@@ -27,13 +18,13 @@ namespace Fabian.EngineTool.PrefabSpawner
             private set => _model.PrefabChoiceLst = value;
         }
 
-        public List<GameObject> SpawnedPrefabs
+        private List<GameObject> SpawnedPrefabs
         {
             get => _model.SpawnedPrefabs;
             set => _model.SpawnedPrefabs = value;
         }
 
-        public Dictionary<GameObject, Transform> PositionDictionary => _model.PositionDictionary;
+        private Dictionary<GameObject, Transform> PositionDictionary => _model.PositionDictionary;
         public List<String> LayerMasks => _model.LayerMasks;
         public Collider[] FoundCollidersForDeletion
         {
@@ -67,7 +58,7 @@ namespace Fabian.EngineTool.PrefabSpawner
             }
         }
 
-        public String ChosenLayer { get; set; }
+        public String ChosenLayer { get; private set; }
 
         private void OnPropertyChanged(string propertyName)
         {
@@ -187,7 +178,7 @@ namespace Fabian.EngineTool.PrefabSpawner
                 }
             }
 
-            foreach (var obj in SpawnedPrefabs)
+            foreach (GameObject obj in SpawnedPrefabs)
             {   
                 PositionDictionary.Add(obj, obj.transform);
             }

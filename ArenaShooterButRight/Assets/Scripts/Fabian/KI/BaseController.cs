@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 
 namespace Fabian.KI
 {
@@ -31,20 +30,19 @@ namespace Fabian.KI
             UpdateFsm();
         }
 
-        protected void UpdateFsm()
+        private void UpdateFsm()
         {
             CurrentState.OnUpdateState();
             
-            foreach (var tran in StateDictionary[CurrentState])
+            foreach (Transition tran in StateDictionary[CurrentState])
             {
-                if (tran.Condition())
-                {
-                    CurrentState.OnExitState();
-                    CurrentState = tran.NextState;
-                    CurrentState.OnEnterState();
+                if (!tran.Condition()) continue;
+                
+                CurrentState.OnExitState();
+                CurrentState = tran.NextState;
+                CurrentState.OnEnterState();
 
-                    break;
-                }
+                break;
             }
         }
     }

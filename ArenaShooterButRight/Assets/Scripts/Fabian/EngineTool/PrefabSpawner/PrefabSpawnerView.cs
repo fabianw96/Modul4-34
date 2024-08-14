@@ -1,15 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
-using Random = UnityEngine.Random;
 
 namespace Fabian.EngineTool.PrefabSpawner
 {
@@ -17,7 +12,7 @@ namespace Fabian.EngineTool.PrefabSpawner
     {
         private PrefabSpawnerViewModel _viewModel;
         
-        //Visual UI Elements
+        //visual UI Elements
         private VisualElement _root;
         private ListView _listView;
         private Label _titleLabel;
@@ -30,9 +25,6 @@ namespace Fabian.EngineTool.PrefabSpawner
         private Button _saveDataButton;
         private Slider _radiusSlider;
         private Slider _minDistanceSlider;
-        
-        //Testing
-        private Scene _currentScene;
         
         [MenuItem("Fabian/PrefabSpawner")]
         public static void ShowExample()
@@ -154,7 +146,7 @@ namespace Fabian.EngineTool.PrefabSpawner
                         _viewModel.DeletePrefabs(_layerDropDown.value);
                         break;
                 }
-            };
+            }
 
         }
         

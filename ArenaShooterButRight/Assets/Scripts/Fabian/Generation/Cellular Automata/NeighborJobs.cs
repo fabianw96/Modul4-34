@@ -33,13 +33,12 @@ namespace Fabian.Generation.Cellular_Automata
                         Vector3 neighborPosition = cell.CellPosition + new float3(x, y, z);
 
                         if (!IsWithinBounds(neighborPosition)) continue;
+
+                        if (!CellMap.TryGetValue(neighborPosition, out Cell neighborCell)) continue;
                         
-                        if (CellMap.TryGetValue(neighborPosition, out Cell neighborCell))
+                        if (neighborCell.States > 0)
                         {
-                            if (neighborCell.States > 0)
-                            {
-                                neighbors++;
-                            }
+                            neighbors++;
                         }
                     }
                 }
@@ -82,15 +81,13 @@ namespace Fabian.Generation.Cellular_Automata
         {
             float3 neighborPosition = cell.CellPosition + direction;
 
-            if (IsWithinBounds(neighborPosition))
+            if (!IsWithinBounds(neighborPosition)) return;
+
+            if (!CellMap.TryGetValue(neighborPosition, out Cell neighborCell)) return;
+            
+            if (neighborCell.States > 0)
             {
-                if (CellMap.TryGetValue(neighborPosition, out Cell neighborCell))
-                {
-                    if (neighborCell.States > 0)
-                    {
-                        neighbors++;
-                    }
-                }
+                neighbors++;
             }
         }
 

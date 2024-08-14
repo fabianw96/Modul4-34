@@ -31,6 +31,7 @@ namespace Fabian.KI.EnemyFSM
         {
             GameObject bullet = Object.Instantiate(_controller.bulletPrefab);
             Physics.IgnoreCollision(bullet.GetComponent<Collider>(), _controller.gunArm.GetComponent<Collider>());
+            _controller.gunArm.transform.LookAt(_controller.player.transform);
             bullet.transform.position = _controller.gunArm.transform.position;
             Vector3 rotation = bullet.transform.rotation.eulerAngles;
             bullet.transform.rotation = Quaternion.Euler(rotation.x, _controller.transform.eulerAngles.y, rotation.z);

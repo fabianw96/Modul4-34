@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace Fabian.KI.EnemyFSM
 {
     public class EnemyChaseState : BaseState
@@ -16,14 +14,5 @@ namespace Fabian.KI.EnemyFSM
             base.OnEnterState();
         }
 
-        public override void OnUpdateState()
-        {
-            base.OnUpdateState();
-        }
-
-        public override void OnExitState()
-        {
-            base.OnExitState();
-        }
     }
 }
