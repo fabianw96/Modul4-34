@@ -140,26 +140,35 @@ namespace Fabian.Generation.Cellular_Automata
 
             if (!useComputeShader && !useJobSystem)
             {
-                int neighbors;
+                int[] neighbors = new int[_cellList.Count];
                 
                 switch (cellularType)
                 {
                     case CellularAutomatonType.Moore:
-                        //TODO: Case currently does "too much". Fix bug if possible before portfolio
+                        //TODO: save processed cells to different list
                         for (int i = 0; i < _cellList.Count; i++)
                         {
-                            neighbors = CalculateMooreNeighbors(_cellList[i]);
+                            neighbors[i] = CalculateMooreNeighbors(_cellList[i]);
+                        }
+
+                        for (int i = 0; i < _cellList.Count; i++)
+                        {
                             Cell cell = _cellList[i];
-                            ApplyLogic(ref cell, neighbors);
+                            ApplyLogic(ref cell, neighbors[i]);
                             _cellList[i] = cell;
                         }
+                        
                         break;
                     case CellularAutomatonType.Neumann:
                         for (int i = 0; i < _cellList.Count; i++)
                         {
-                            neighbors = CalculateNeumannNeighbors(_cellList[i]);
+                            neighbors[i] = CalculateNeumannNeighbors(_cellList[i]);
+                        }
+
+                        for (int i = 0; i < _cellList.Count; i++)
+                        {
                             Cell cell = _cellList[i];
-                            ApplyLogic(ref cell, neighbors);
+                            ApplyLogic(ref cell, neighbors[i]);
                             _cellList[i] = cell;
                         }
                         break;
@@ -284,7 +293,7 @@ namespace Fabian.Generation.Cellular_Automata
 
             int threadGroupsX = (int)(_meshSpawner.size.x / threadGroupSizeX);
             int threadGroupsY = (int)(_meshSpawner.size.y / threadGroupSizeY);
-            int threadGroupsZ = (int)(_meshSpawner.size.z /threadGroupSizeZ);
+            int threadGroupsZ = (int)(_meshSpawner.size.z / threadGroupSizeZ);
             
             computeShader.Dispatch(kernelApplyCa, threadGroupsX, threadGroupsY, threadGroupsZ);
             
