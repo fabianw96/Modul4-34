@@ -3,8 +3,14 @@ using UnityEngine;
 namespace Justin.ProcGen.New
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-    public class MapGenerator : MonoBehaviour
+    public class ProcGenManager : MonoBehaviour
     {
+        public enum DrawMode
+        {
+            ShaderGraph,
+            HeightMap,
+        }
+
         [Header("Mapvalues")]
         [SerializeField] private int mapWidth = 100;
         [SerializeField] private int mapHeight = 100;
@@ -21,6 +27,9 @@ namespace Justin.ProcGen.New
         [SerializeField] private AnimationCurve meshHeightCurve;
 
         [Header("Texturevalues")]
+
+        [SerializeField] private DrawMode drawMode;
+        [SerializeField] private Shader shader;
         [SerializeField] private TerrainTypeConfig terrainTypeConfig;
 
         [Header("Meshreferenzen")]
@@ -45,6 +54,8 @@ namespace Justin.ProcGen.New
 
             // Apply generated mesh to meshfilter
             meshFilter.mesh = meshData.CreateMesh();
+
+
 
             // Generate and apply the texture to the meshrenderer
             Texture2D texture = TextureGenerator.TextureFromHeightMap(noiseMap, terrainTypeConfig);

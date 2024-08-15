@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEditor;
 using Justin.ProcGen.New;
 
-[CustomEditor(typeof(MapGenerator))]
+[CustomEditor(typeof(ProcGenManager))]
 public class MapGeneratorEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        MapGenerator mapGen = (MapGenerator)target;
+        ProcGenManager mapGen = (ProcGenManager)target;
 
         if (DrawDefaultInspector())
         {
