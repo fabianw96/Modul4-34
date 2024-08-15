@@ -23,7 +23,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_TestTestTerrain
+  m_Name: M_TerrainShader
   m_Shader: {fileID: -6465566751694194690, guid: ad5390ed606af3048879619aa1a23d01,
     type: 3}
   m_Parent: {fileID: 0}
@@ -31,7 +31,7 @@ Material:
   m_ValidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2225
@@ -67,6 +67,7 @@ Material:
     - _AlphaSrcBlend: 1
     - _BlendMode: 0
     - _CliffHeight: 2
+    - _CliffSlopeThreshold: 0.6
     - _CliffThreshold: 0
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2
@@ -74,6 +75,9 @@ Material:
     - _DeepWaterHeight: 0
     - _DeepWaterThreshold: 0
     - _DepthOffsetEnable: 0
+    - _DirtHeight: 0.3
+    - _DirtThreshold: 0
+    - _DirtToGrassThreshold: 0.05
     - _DoubleSidedEnable: 0
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
@@ -81,13 +85,16 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
-    - _GrassHeight: 100
+    - _GrassHeight: 0.5
     - _GrassThreshold: 1
+    - _GrassToMountainThreshold: 0.05
     - _Height: 15
     - _HillsHeight: 130
     - _HillsThreshold: 1
-    - _MountainHeight: 140
+    - _MeshHeightMultiplier: 25
+    - _MountainHeight: 0.7
     - _MountainThreshold: 1
+    - _MountainToSnowThreshold: 0.05
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -95,14 +102,16 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _SandHeight: 80
+    - _SandHeight: 0.2
     - _SandThreshold: 1
+    - _SandToDirtThreshold: 0.05
     - _ShallowWaterHeight: 0
     - _ShallowWaterThreshold: 0
     - _SmoothenessBottom: 0
     - _SmoothnessTop: 0
     - _Smoothness_Threshhold: 6
-    - _SnowHeight: 0
+    - _SnowHeight: 0.9
+    - _SnowMountain: 0
     - _SnowThreshhold: 0
     - _SrcBlend: 1
     - _StencilRef: 0
@@ -131,13 +140,19 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Cliff: {r: 0.5, g: 0.5, b: 0.5, a: 0}
+    - _CliffColor: {r: 0.19999993, g: 0.19999993, b: 0.19999993, a: 1}
     - _DeepWater: {r: 0, g: 0.29999998, b: 0.5, a: 1}
+    - _DirtColor: {r: 0.6, g: 0.39999995, b: 0.19999993, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Grass: {r: 0.22387266, g: 0.6509434, b: 0.21186367, a: 0}
+    - _GrassColor: {r: 0.39999995, g: 0.6, b: 0.19999993, a: 1}
     - _Hills: {r: 0.5, g: 0.5, b: 0.29999998, a: 1}
     - _Mountain: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 0}
+    - _MountainColor: {r: 0.5, g: 0.39999995, b: 0.29999995, a: 1}
     - _Sand: {r: 1, g: 0.9, b: 0.6, a: 1}
+    - _SandColor: {r: 0.9, g: 0.8, b: 0.5, a: 1}
     - _ShallowWater: {r: 0.19999996, g: 0.5, b: 0.7, a: 1}
     - _Snow: {r: 1, g: 1, b: 1, a: 1}
+    - _SnowColor: {r: 0.9, g: 0.9, b: 1, a: 1}
   m_BuildTextureStacks: []

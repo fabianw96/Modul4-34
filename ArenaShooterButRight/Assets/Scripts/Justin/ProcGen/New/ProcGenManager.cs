@@ -22,15 +22,14 @@ namespace Justin.ProcGen.New
         [SerializeField] private float lacunarity = 2f;
         [SerializeField] private int seed;
         [SerializeField] private Vector2 offset;
-
         [SerializeField] private float meshHeightMultiplier = 20f;
         [SerializeField] private AnimationCurve meshHeightCurve;
 
         [Header("Texturevalues")]
-
         [SerializeField] private DrawMode drawMode;
         [SerializeField] private Shader shader;
         [SerializeField] private TerrainTypeConfig terrainTypeConfig;
+        private Material material;
 
         [Header("Meshreferenzen")]
         [SerializeField] private MeshRenderer meshRenderer;
@@ -56,10 +55,17 @@ namespace Justin.ProcGen.New
             meshFilter.mesh = meshData.CreateMesh();
 
 
+            if (drawMode == DrawMode.HeightMap)
+            {
+                // Generate and apply the texture to the meshrenderer
+                Texture2D texture = TextureGenerator.TextureFromHeightMap(noiseMap, terrainTypeConfig);
+                meshRenderer.sharedMaterial.mainTexture = texture;
+            }
+            else if (drawMode == DrawMode.ShaderGraph)
+            {
+                meshRenderer.sharedMaterial.shader = shader;
+            }
 
-            // Generate and apply the texture to the meshrenderer
-            Texture2D texture = TextureGenerator.TextureFromHeightMap(noiseMap, terrainTypeConfig);
-            meshRenderer.sharedMaterial.mainTexture = texture;
 
         }
 
