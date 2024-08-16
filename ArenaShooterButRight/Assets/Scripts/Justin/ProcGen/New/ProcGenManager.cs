@@ -12,8 +12,8 @@ namespace Justin.ProcGen.New
         }
 
         [Header("Mapvalues")]
-        [SerializeField] private int mapWidth = 100;
-        [SerializeField] private int mapHeight = 100;
+        [SerializeField] private const int MAP_SIZE = 241;
+        [Range(0,4)][SerializeField] private int levelOfDetail;
 
         [Header("Noisevalues")]
         [SerializeField] private float noiseScale = 20f;
@@ -46,10 +46,10 @@ namespace Justin.ProcGen.New
         public void GenerateMap()
         {
             // Generate Noisemap based on given parameters
-            float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(mapWidth, mapHeight, seed, noiseScale, octaves, persistence, lacunarity, offset);
+            float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(MAP_SIZE, MAP_SIZE, seed, noiseScale, octaves, persistence, lacunarity, offset);
 
             // Generate Terrain-Mesh based on noisemap
-            MeshData meshData = MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve);
+            MeshData meshData = MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail);
 
             // Apply generated mesh to meshfilter
             meshFilter.mesh = meshData.CreateMesh();
@@ -86,6 +86,3 @@ namespace Justin.ProcGen.New
         }
     }
 }
-
-
-
