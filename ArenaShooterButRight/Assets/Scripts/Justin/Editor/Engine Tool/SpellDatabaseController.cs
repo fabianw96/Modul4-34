@@ -41,7 +41,6 @@ public class SpellDatabaseController
             view.LargeDisplayIcon.style.backgroundImage = newSprite == null ? view.DefaultSpellIcon.texture : newSprite.texture;
             view.SpellListView.Rebuild();
         });
-
         GenerateListView();
     }
 
@@ -75,7 +74,7 @@ public class SpellDatabaseController
         view.SpellTab.Add(view.SpellListView);
 
         view.SpellListView.selectionChanged += ListView_onSelectionChanged;
-
+        view.SpellDetails.style.visibility = Visibility.Hidden;
         Debug.Log("GenerateListView completed successfully.");
     }
 

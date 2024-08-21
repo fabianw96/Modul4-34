@@ -20,9 +20,9 @@ public sealed class SpellDatabaseEditor : EditorWindow
     {
         var view = new SpellDatabaseView(
             rootVisualElement,
-            "Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uxml",
-            "Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss",
-            "Assets/Scripts/Justin/Editor/SpellRowTemplate.uxml",
+            "Assets/Scripts/Justin/Editor/Engine Tool/SpellDatabaseEditor.uxml",
+            "Assets/Scripts/Justin/Editor/Engine Tool/SpellDatabaseEditor.uss",
+            "Assets/Scripts/Justin/Editor/Engine Tool/SpellRowTemplate.uxml",
             "Assets/Sprites/UnknownIcon.png"
         );
 

@@ -23,7 +23,6 @@ public class SpellDatabaseView
     public SpellDatabaseView(VisualElement root, string uxmlPath, string ussPath, string rowTemplatePath, string defaultIconPath)
     {
         Root = root;
-
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
         if (visualTree == null)
         {
@@ -108,6 +107,5 @@ public class SpellDatabaseView
     {
         return spellRowTemplate.CloneTree();
     }
-
     public Sprite DefaultSpellIcon => defaultSpellIcon;
 }
