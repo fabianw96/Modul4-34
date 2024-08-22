@@ -85,8 +85,6 @@ public class CapsuleManager : MonoBehaviour
         JobHandle jobHandle = moveJob.Schedule(capsuleTransforms);
         
         jobHandle.Complete();
-
-        //capsuleTransforms.Dispose();
     }
 
 
