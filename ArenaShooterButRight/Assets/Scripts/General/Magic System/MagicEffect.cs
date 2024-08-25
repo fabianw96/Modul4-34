@@ -121,6 +121,7 @@ public class MagicEffect : MonoBehaviour
             if (healthSystem != null)
             {
                 healthSystem.TakeDamage(spellData.ExplosionDamage);
+                
             }
         }
         CleanupEffect();
@@ -128,7 +129,7 @@ public class MagicEffect : MonoBehaviour
 
     private void CleanupEffect()
     {
-        // Reset all values affected by the Effect
+        // Reset all values affected by the MagicEffect
         if (spellData.EffectType == EffectTypes.Slow && navMeshAgent != null)
         {
             navMeshAgent.speed = originalSpeed;
