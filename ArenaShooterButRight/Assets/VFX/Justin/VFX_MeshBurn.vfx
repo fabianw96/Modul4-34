@@ -20,7 +20,7 @@ MonoBehaviour:
     x: -1377
     y: -190
     width: 2742
-    height: 1549
+    height: 1568
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -571,7 +571,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Texture2D, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"fdb2d8c803d35374a9bb019e92e942dd","type":3}}'
+      m_SerializableObject: '{"obj":{"fileID":2800000,"guid":"ebe73ca9363db456bacf42c025bb4847","type":3}}'
     m_Space: 2147483647
   m_Property:
     name: mainTexture

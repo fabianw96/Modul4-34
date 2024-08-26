@@ -18,6 +18,7 @@ public class MagicEffect : MonoBehaviour
     private bool isDot;
     private bool hasEffectApplied = false;
     private VisualEffect lingeringEffect;
+    private VisualEffect explosionEffect;
     private Mesh targetMesh;
     [SerializeField] private float elapsedTime = 0;
     
@@ -38,6 +39,8 @@ public class MagicEffect : MonoBehaviour
 
         if (lingeringEffect != null && spellData.Type == SpellTypes.Fireball && currentLingeringEffect == EffectTypes.Electrified)
         {
+            explosionEffect.visualEffectAsset = spellData.ExplosionEffect;
+            explosionEffect.Play();
             TriggerExplosion();
         }
 
@@ -114,10 +117,12 @@ public class MagicEffect : MonoBehaviour
 
     public void TriggerExplosion()
     {
+        
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, spellData.ExplosionRadius);
         foreach (var hitCollider in hitColliders)
         {
             healthSystem = hitCollider.GetComponent<HealthSystem>();
+            
             if (healthSystem != null)
             {
                 healthSystem.TakeDamage(spellData.ExplosionDamage);

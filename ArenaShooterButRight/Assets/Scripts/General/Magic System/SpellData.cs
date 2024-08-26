@@ -50,6 +50,7 @@ public class SpellData : ScriptableObject
     public float CooldownPerLevel;
 
     [Header("Explosion Effect Stats")]
+    public VisualEffectAsset ExplosionEffect;
     public float ExplosionDamage;
     public float ExplosionRadius;
 

@@ -60,7 +60,6 @@ public class Shooter : MonoBehaviour
     private IEnumerator CooldownRoutine(float _cooldownDuration)
     {
         isCooldown = true;
-        Debug.Log((_cooldownDuration));
         yield return new WaitForSeconds(_cooldownDuration);
         isCooldown = false;
     }
@@ -73,11 +72,11 @@ public class Shooter : MonoBehaviour
         Vector3 rotation = projectileInstance.transform.root.eulerAngles;
         projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
 
-        MeshRenderer meshRenderer = projectileInstance.GetComponent<MeshRenderer>();
-        if (meshRenderer != null)
-        {
-            meshRenderer.enabled = false;
-        }
+        //MeshRenderer meshRenderer = projectileInstance.GetComponent<MeshRenderer>();
+        //if (meshRenderer != null)
+        //{
+        //    meshRenderer.enabled = false;
+        //}
 
         // Get the direction the player is looking
         Vector3 launchDirection = Camera.main.transform.forward;

@@ -32,6 +32,8 @@ MonoBehaviour:
   CostPerLevel: 2
   SpeedPerLevel: 2
   CooldownPerLevel: 1
+  ExplosionEffect: {fileID: 8926484042661614526, guid: 7a6e365e972844b4b83c4d6265a3476e,
+    type: 3}
   ExplosionDamage: 0
   ExplosionRadius: 0
   VisualEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
