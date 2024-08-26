@@ -6,8 +6,24 @@ namespace Justin.KI
 {
     public abstract class BaseState
     {
-        public abstract void EnterState(EnemyController enemy);
-        public abstract void UpdateState(EnemyController enemy);
-        public abstract void ExitState(EnemyController enemy);
+        protected BaseController Controller;
+
+        protected BaseState(EnemyController _controller) 
+        {
+            Controller = _controller;
+        }
+
+        public virtual void EnterState()
+        {
+            
+        }
+        public virtual void UpdateState()
+        {
+
+        }
+        public virtual void ExitState()
+        {
+
+        }
     }
 }

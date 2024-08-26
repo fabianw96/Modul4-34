@@ -9,18 +9,30 @@ namespace Justin.KI
 {
     public class EnemyController : BaseController
     {
-        private VisualEffect visualEffect;
+        [SerializeField] public HealthSystem Enemy;
+        [SerializeField] public HealthSystem Player;
+        [SerializeField] private Animator animator;
+        private string currentAnimation = "";
+        private float distanceToPlayer;
+        
+        [SerializeField] public float VisionRange, AttackRange;
+        [SerializeField] public float enemyShootCooldown;
+
         EnemyPatrolState PatrolState;
         EnemyChaseState ChaseState;
-        EnemyAttackState AttackState;
-        public HealthSystem Enemy;
-        public HealthSystem Player;
-        private float distanceToPlayer;
-        private float VisionRange, AttackRange;
+        EnemyShootState AttackState;
+
+        [SerializeField] public GameObject bulletPrefab;
+        [SerializeField] public GameObject gunArm;
+        [SerializeField] public float projectileSpeed;
+        [SerializeField] public float projectileDecayDelay;
 
         protected override void Start()
         {
             InitFSM();
+            Player = GameObject.Find("Player").GetComponent<HealthSystem>();
+            Enemy = GetComponent<HealthSystem>();
+            animator = GetComponent<Animator>();
         }
 
         protected override void InitFSM()
@@ -28,9 +40,9 @@ namespace Justin.KI
             InitVariables();
             PatrolState = new EnemyPatrolState(this);
             ChaseState = new EnemyChaseState(this);
-            AttackState = new EnemyAttackState(this);
+            AttackState = new EnemyShootState(this);
             CurrentState = PatrolState;
-            CurrentState.EnterState(this);
+            CurrentState.EnterState();
             StateDictionary = new Dictionary<BaseState, List<Transition>>
             {
                 {
@@ -64,29 +76,54 @@ namespace Justin.KI
 
         private void InitVariables()
         {
-            AttackRange = 5.0f;
-            VisionRange = 10.0f;
+            AttackRange = 10.0f;
+            VisionRange = 20.0f;
+        }
+
+        private void ChangeAnimation(string _animation)
+        {
+            if (currentAnimation != _animation)
+            {
+                currentAnimation = _animation;
+                animator.Play(_animation);
+            }
         }
 
         protected override void Update()
         {
             distanceToPlayer = Vector3.Distance(this.transform.position, Player.transform.position);
             UpdateFSM();
+            CheckAnimation();
         }
 
         protected override void UpdateFSM()
         {
-            CurrentState.UpdateState(this);
+            CurrentState.UpdateState();
 
             foreach (var Tran in StateDictionary[CurrentState])
             {
                 if (Tran.Condition() == true)
                 {
-                    CurrentState.ExitState(this);
+                    CurrentState.ExitState();
                     CurrentState = Tran.NextState;
-                    CurrentState.EnterState(this);
+                    CurrentState.EnterState();
                 }
             }
+        }
+
+        private void CheckAnimation()
+        {
+            if (agent.velocity != Vector3.zero && CurrentState == PatrolState)
+                ChangeAnimation("Walk");
+            else if (agent.velocity != Vector3.zero && CurrentState == ChaseState)
+                ChangeAnimation("Chase");
+            else if (agent.velocity != Vector3.zero && CurrentState == AttackState)
+                ChangeAnimation("Shoot Walking");
+            else if (agent.velocity == Vector3.zero && CurrentState == AttackState)
+                ChangeAnimation("Shoot Standing");
+            else
+                ChangeAnimation("Idle");
+
         }
 
         private void OnDrawGizmos()

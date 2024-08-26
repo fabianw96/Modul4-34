@@ -29,7 +29,7 @@ public class MagicEffect : MonoBehaviour
         effectDuration = _spellData.EffectDuration;
         isDot = _spellData.IsDot;
         spellData = _spellData;
-        targetMesh = gameObject.GetComponent<MeshFilter>().mesh;
+        targetMesh = gameObject.GetComponentInChildren<MeshFilter>().mesh;
 
         // Attaches the visual lingering effect to the target
         if (gameObject.GetComponent<VisualEffect>() == null)
