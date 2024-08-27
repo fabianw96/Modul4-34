@@ -75,7 +75,6 @@ public class CapsuleManager : MonoBehaviour
     {
         playerPosition = player.position;
 
-        // Schedule the job
         MoveJob moveJob = new MoveJob
         {
             playerPosition = playerPosition,
