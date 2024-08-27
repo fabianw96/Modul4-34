@@ -19,7 +19,7 @@ public class MagicEffect : MonoBehaviour
     private bool hasEffectApplied = false;
     private VisualEffect lingeringEffect;
     private VisualEffect explosionEffect;
-    private Mesh targetMesh;
+    private SkinnedMeshRenderer targetMesh;
     [SerializeField] private float elapsedTime = 0;
     
     public void InitEffect(SpellData _spellData, HealthSystem _healthSys, float _damage)
@@ -29,7 +29,7 @@ public class MagicEffect : MonoBehaviour
         effectDuration = _spellData.EffectDuration;
         isDot = _spellData.IsDot;
         spellData = _spellData;
-        targetMesh = gameObject.GetComponentInChildren<MeshFilter>().mesh;
+        targetMesh = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
 
         // Attaches the visual lingering effect to the target
         if (gameObject.GetComponent<VisualEffect>() == null)
@@ -47,7 +47,7 @@ public class MagicEffect : MonoBehaviour
         currentLingeringEffect = spellData.EffectType;
         lingeringEffect = gameObject.GetComponent<VisualEffect>();
         lingeringEffect.visualEffectAsset = spellData.VisualLingeringEffectAsset;
-        lingeringEffect.SetMesh(Shader.PropertyToID("TargetMesh"), targetMesh);
+        lingeringEffect.SetSkinnedMeshRenderer(Shader.PropertyToID("TargetMesh"), targetMesh);
         lingeringEffect.Play();
 
 

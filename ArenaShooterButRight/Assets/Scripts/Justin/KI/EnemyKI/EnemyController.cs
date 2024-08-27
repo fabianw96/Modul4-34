@@ -80,12 +80,12 @@ namespace Justin.KI
             VisionRange = 20.0f;
         }
 
-        private void ChangeAnimation(string _animation)
+        private void ChangeAnimation(string _animation, float _crossFade = 0.2f)
         {
             if (currentAnimation != _animation)
             {
                 currentAnimation = _animation;
-                animator.Play(_animation);
+                animator.CrossFade(_animation, _crossFade);
             }
         }
 
