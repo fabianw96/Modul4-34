@@ -96,7 +96,7 @@ namespace Justin.ProcGen.New
             mesh.indexFormat = IndexFormat.UInt32;
             mesh.vertices = vertices;
             mesh.triangles = triangles;
-            mesh.normals = normals; // Use manual Normals for Low-Poly-Look
+            mesh.normals = normals;
             mesh.uv = uvs;
             return mesh;
         }
