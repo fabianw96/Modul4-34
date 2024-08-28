@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEditor;
-using Justin.ProcGen.New;
+using Justin.ProcGen;
 
 [CustomEditor(typeof(ProcGenManager))]
 public class MapGeneratorEditor : Editor

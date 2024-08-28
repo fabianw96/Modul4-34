@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Justin.ProcGen.New
+namespace Justin.ProcGen
 {
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class ProcGenManager : MonoBehaviour

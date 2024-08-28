@@ -1,8 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
-using static UnityEngine.Mesh;
 
-namespace Justin.ProcGen.New
+namespace Justin.ProcGen
 {
     public static class MeshGenerator
     {

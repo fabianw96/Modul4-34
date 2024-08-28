@@ -20,6 +20,16 @@ public class SpellDatabaseView
     private VisualTreeAsset spellRowTemplate;
     private Sprite defaultSpellIcon;
 
+    /// <summary>
+    /// Manages UI elements like the ListView, Spell Details panel, buttons, and fields. 
+    /// The view is initialized with an UXML and USS file that defines the layout and style of the editortool. 
+    /// Checks are included to ensure that essential elements are properly loaded.
+    /// </summary>
+    /// <param name="root"></param>
+    /// <param name="uxmlPath"></param>
+    /// <param name="ussPath"></param>
+    /// <param name="rowTemplatePath"></param>
+    /// <param name="defaultIconPath"></param>
     public SpellDatabaseView(VisualElement root, string uxmlPath, string ussPath, string rowTemplatePath, string defaultIconPath)
     {
         Root = root;

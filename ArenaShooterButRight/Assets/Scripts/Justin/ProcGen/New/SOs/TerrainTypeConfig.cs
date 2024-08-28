@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Justin.ProcGen.New
+namespace Justin.ProcGen
 {
     [CreateAssetMenu(menuName = "ScriptableObjects/JustinGen/New/TerrainDataset", order = 1)]
     public class TerrainTypeConfig : ScriptableObject

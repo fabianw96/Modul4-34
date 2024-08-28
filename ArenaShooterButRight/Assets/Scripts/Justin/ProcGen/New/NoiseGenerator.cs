@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Justin.ProcGen.New
+namespace Justin.ProcGen
 {
     public static class NoiseGenerator
     {
