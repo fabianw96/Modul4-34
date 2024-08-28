@@ -22,10 +22,11 @@ namespace Justin.KI
         EnemyChaseState ChaseState;
         EnemyShootState AttackState;
 
-        [SerializeField] public GameObject bulletPrefab;
-        [SerializeField] public GameObject gunArm;
-        [SerializeField] public float projectileSpeed;
-        [SerializeField] public float projectileDecayDelay;
+        [SerializeField] public GameObject BulletPrefab;
+        [SerializeField] public GameObject Gun;
+        [SerializeField] public Transform GunMuzzlePos;
+        [SerializeField] public float ProjectileSpeed;
+        [SerializeField] public float ProjectileDecayDelay;
 
         protected override void Start()
         {

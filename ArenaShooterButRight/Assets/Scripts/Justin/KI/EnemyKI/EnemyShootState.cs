@@ -28,13 +28,13 @@ namespace Justin.KI
 
         private IEnumerator ShootPlayer()
         {
-            GameObject bullet = Object.Instantiate(controller.bulletPrefab);
-            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), controller.gunArm.GetComponent<Collider>());
-            bullet.transform.position = controller.gunArm.transform.position;
+            GameObject bullet = Object.Instantiate(controller.BulletPrefab);
+            Physics.IgnoreCollision(bullet.GetComponent<Collider>(), controller.Gun.GetComponent<Collider>());
+            bullet.transform.position = controller.GunMuzzlePos.transform.position;
             Vector3 rotation = bullet.transform.rotation.eulerAngles;
             bullet.transform.rotation = Quaternion.Euler(rotation.x, controller.transform.eulerAngles.y, rotation.z);
-            bullet.GetComponent<Rigidbody>().AddForce(controller.gunArm.transform.forward * controller.projectileSpeed, ForceMode.Impulse);
-            controller.StartCoroutine(DestroyProjectile(bullet, controller.projectileDecayDelay));
+            bullet.GetComponent<Rigidbody>().AddForce(controller.GunMuzzlePos.transform.forward * controller.ProjectileSpeed, ForceMode.Impulse);
+            controller.StartCoroutine(DestroyProjectile(bullet, controller.ProjectileDecayDelay));
             _hasShot = true;
             yield return new WaitForSeconds(controller.enemyShootCooldown);
             _hasShot = false;

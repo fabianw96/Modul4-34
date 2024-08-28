@@ -6,7 +6,7 @@ namespace Justin.KI
     public class EnemyPatrolState : BaseState
     {
         private float searchWalkRadius = 10f;
-        private float waitTimeAtPosition = 2f;
+        private float waitTimeAtPosition = 5f;
         private bool timerStarted;
         private bool goToStart;
         private Vector3 startPos;
@@ -34,7 +34,7 @@ namespace Justin.KI
 
         public override void UpdateState()
         {
-            if (controller.agent.remainingDistance <= 0.2f)
+            if (controller.agent.remainingDistance <= 0.1f)
             {
                 if (!timerStarted)
                 {
