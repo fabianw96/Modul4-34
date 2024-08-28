@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b4f9a40c4f1ac468d31252b0716107, type: 3}
+  m_Name: DefaultTerrain
+  m_EditorClassIdentifier: 
+  regions:
+  - name: Deep Water
+    height: 0.2
+    color: {r: 0, g: 0.3, b: 0.7, a: 1}
+  - name: Shallow Water
+    height: 0.4
+    color: {r: 0.1477839, g: 0.6120557, b: 0.764151, a: 1}
+  - name: Beach
+    height: 0.45
+    color: {r: 0.8000001, g: 0.8117648, b: 0.27058825, a: 1}
+  - name: Grassland
+    height: 0.6
+    color: {r: 0.13176396, g: 0.5943396, b: 0.23624752, a: 1}
+  - name: Forest
+    height: 0.75
+    color: {r: 0.1511659, g: 0.4056604, b: 0.22025864, a: 1}
+  - name: Hills
+    height: 0.85
+    color: {r: 0.37121093, g: 0.4245283, b: 0.20625669, a: 1}
+  - name: Mountain
+    height: 0.95
+    color: {r: 0.3679245, g: 0.3361623, b: 0.18222676, a: 1}
+  - name: Snow
+    height: 1
+    color: {r: 1, g: 1, b: 1, a: 1}

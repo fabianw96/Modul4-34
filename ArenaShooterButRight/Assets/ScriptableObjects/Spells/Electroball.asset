@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
+  m_Name: Electroball
+  m_EditorClassIdentifier: 
+  ID: 3227BFCA-85DE-4F59-80F4-335DF00D236C
+  EffectType: 3
+  Type: 3
+  Name: Electroball
+  Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
+  BaseSpeed: 20
+  BaseDamage: 20
+  BaseCost: 10
+  BaseCooldown: 1
+  UnlockCost: 0
+  IsDot: 0
+  IsSlow: 0
+  EffectDuration: 5
+  DotDamagePerTick: 0
+  DotTickRate: 0
+  SlowStrength: 0
+  DamagePerLevel: 5
+  CostPerLevel: 2
+  SpeedPerLevel: 2
+  CooldownPerLevel: 1
+  ExplosionEffect: {fileID: 8926484042661614526, guid: 7a6e365e972844b4b83c4d6265a3476e,
+    type: 3}
+  ExplosionDamage: 0
+  ExplosionRadius: 0
+  VisualEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
+    type: 3}
+  VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 7517ab5dfe569164fb508e1581ca83d4,
+    type: 3}

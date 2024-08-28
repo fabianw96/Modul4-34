@@ -23,7 +23,7 @@ public class FPSController : MonoBehaviour
     private CharacterController _controller;
     private Shooter _shooter;
     private Camera _cam;
-    private SpellType _chosenSpell;
+    private SpellTypes _chosenSpell;
     [SerializeField] private float yaw;
     [SerializeField] private float pitch;
     private float _smoothYaw;
@@ -52,6 +52,7 @@ public class FPSController : MonoBehaviour
     void Start () {
         _cam = Camera.main;
         _shooter = GetComponent<Shooter>();
+        _chosenSpell = SpellTypes.Fireball;
         
         if (lockCursor) {
             Cursor.lockState = CursorLockMode.Locked;
@@ -86,17 +87,20 @@ public class FPSController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            _chosenSpell = SpellType.Fireball;
+            Debug.Log("Fireball Selected");
+            _chosenSpell = SpellTypes.Fireball;
         }
         
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            _chosenSpell = SpellType.Iceball;
+            Debug.Log("Iceshard Selected");
+            _chosenSpell = SpellTypes.Iceball;
         }
         
-        if (Input.GetKeyDown(KeyCode.Alpha2))
+        if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            _chosenSpell = SpellType.Electroball;
+            Debug.Log("Electroball Selected");
+            _chosenSpell = SpellTypes.Electroball;
         }
         
         
@@ -144,7 +148,7 @@ public class FPSController : MonoBehaviour
     {
         if (_isShootPressed)
         {
-            // _shooter.ChooseSpell(_chosenSpell);
+            _shooter.ChooseSpell(_chosenSpell);
         }
     }
     private void HandleLook()

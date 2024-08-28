@@ -1,0 +1,56 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="project://database/Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss?fileID=7433441132597879392&amp;guid=9a40d25cf318e7847b739e09a52d3db9&amp;type=3#SpellDatabaseEditor" />
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="SpellTab" style="flex-grow: 1; margin-left: 0; max-width: 25%; border-right-color: rgb(255, 255, 255); border-right-width: 1px;">
+            <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row; align-items: center;">
+                <ui:Label tabindex="-1" text="Spells" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Spells" style="justify-content: flex-start; align-self: auto; font-size: 24px; -unity-font-style: bold; width: auto; height: auto; margin-left: 5px; margin-top: 5px; flex-grow: 1;" />
+                <ui:Button text="+" parse-escape-sequences="false" display-tooltip-when-elided="true" name="AddSpellButton" style="width: 35px; height: 35px; margin-right: 4px; margin-top: 2px; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-left: 0; margin-bottom: 0; flex-grow: 0;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="SpellDetailTab" style="flex-grow: 3; flex-direction: column; width: auto; max-width: 75%;">
+            <ui:ScrollView name="SpellDetails" style="width: auto; color: rgb(253, 253, 253); background-color: rgba(106, 106, 106, 0); flex-grow: 0;">
+                <ui:VisualElement name="Header" style="flex-direction: row; background-color: rgba(38, 38, 38, 0); -unity-text-align: upper-left; align-items: center; margin-left: 2px; margin-right: 2px; margin-top: 0; margin-bottom: 0; border-bottom-color: rgba(255, 183, 0, 0); border-bottom-width: 1px;">
+                    <ui:Label text="Details" display-tooltip-when-elided="true" style="flex-grow: 1; -unity-font-style: bold; font-size: 24px; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; background-color: rgba(0, 0, 0, 0); padding-right: 0; padding-left: 0;" />
+                    <ui:Button text="Delete" display-tooltip-when-elided="true" name="DeleteSpellButton" style="height: 35px; margin-right: 0; padding-right: 0; padding-left: 0; padding-bottom: 0; padding-top: 0; margin-left: 0; margin-bottom: 0; margin-top: 2px; width: 45px;" />
+                </ui:VisualElement>
+                <ui:VisualElement name="SpellDetailsContainer" style="flex-grow: 1; margin-left: 5px;">
+                    <ui:VisualElement name="SpellGeneralInfoContainer" style="flex-direction: row; align-items: center; margin-left: 0;">
+                        <ui:VisualElement name="Icon" style="padding-right: 0; width: 128px; height: 128px; background-image: url(&apos;row&apos;); border-left-width: 0; border-right-width: 0; border-top-width: 0; border-bottom-width: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; padding-left: 0; padding-top: 0; padding-bottom: 0; margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px;" />
+                        <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-background-image-tint-color: rgb(56, 56, 56); background-color: rgb(65, 65, 65);">
+                            <ui:Label text="General" display-tooltip-when-elided="true" name="Header" class="details-header" />
+                            <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="Name" name="SpellName" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:EnumField label="Type" name="SpellType" binding-path="Type" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:ObjectField label="Icon" name="IconPicker" binding-path="Icon" type="UnityEngine.Sprite, UnityEngine.CoreModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:ObjectField label="Visual Effect" name="VisualEffectPicker" binding-path="VisualEffectAsset" type="UnityEngine.VFX.VisualEffectAsset, UnityEngine.VFXModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="SpellStatsContainer" style="flex-direction: row; align-items: center; margin-left: 0;">
+                        <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-background-image-tint-color: rgb(56, 56, 56); background-color: rgb(65, 65, 65);">
+                            <ui:Label text="Stats" display-tooltip-when-elided="true" name="Header" class="details-header" />
+                            <ui:VisualElement name="CostRow" style="flex-grow: 1; flex-direction: row; padding-bottom: 0; padding-right: 0; padding-left: 0; padding-top: 0; margin-left: 2px; margin-right: 2px; margin-bottom: 2px; margin-top: 0;">
+                                <ui:FloatField label="Base Cost" value="42,2" binding-path="BaseCost" name="BaseCost" style="flex-grow: 1; max-width: 50%; min-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                <ui:FloatField label="Cost Per Level" value="42,2" binding-path="CostPerLevel" name="CostPerLevel" style="flex-grow: 1; max-width: 50%; min-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="DamageRow" style="flex-grow: 1; flex-direction: row; padding-bottom: 0; margin-left: 2px; margin-right: 2px; margin-top: 0; margin-bottom: 2px; padding-top: 0; padding-right: 0; padding-left: 0;">
+                                <ui:FloatField label="Base Damage" value="42,2" binding-path="BaseDamage" name="BaseDamage" style="flex-grow: 1; max-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                <ui:FloatField label="Damage Per Level" value="42,2" binding-path="DamagePerLevel" name="DamagePerLevel" style="flex-grow: 1; max-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="SpeedRow" style="flex-grow: 1; flex-direction: row; padding-bottom: 0; margin-right: 2px; margin-left: 2px; margin-top: 0; margin-bottom: 2px; padding-top: 0; padding-right: 0; padding-left: 0;">
+                                <ui:FloatField label="Base Speed" value="42,2" binding-path="BaseSpeed" name="BaseSpeed" style="flex-grow: 1; max-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                <ui:FloatField label="Speed Per Level" value="42,2" binding-path="SpeedPerLevel" name="SpeedPerLevel" style="flex-grow: 1; max-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="CooldownRow" style="flex-grow: 1; flex-direction: row; padding-bottom: 0; margin-right: 2px; margin-left: 2px; margin-bottom: 2px; margin-top: 0; padding-top: 0; padding-right: 0; padding-left: 0;">
+                                <ui:FloatField label="Base Cooldown" value="42,2" binding-path="BaseCooldown" name="BaseCooldown" style="flex-grow: 1; max-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                                <ui:FloatField label="Cooldown Per Level" value="42,2" binding-path="CooldownPerLevel" is-delayed="false" name="CooldownPerLevel" style="flex-grow: 1; max-width: 50%; margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 0;" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="SpellUnlockContainer" style="flex-grow: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; background-color: rgb(65, 65, 65);">
+                        <ui:Label text="Unlock" display-tooltip-when-elided="true" name="Header" class="details-header" />
+                        <uie:IntegerField label="Unlock Cost" value="42" name="BuyPrice" binding-path="UnlockCost" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

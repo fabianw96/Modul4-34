@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/OutdoorsScene.unity
+    path: Assets/Scenes/General/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
   - enabled: 1
     path: Assets/Scenes/Fabian/FabianGen.unity
@@ -27,7 +27,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Justin/JustinKI.unity
     guid: f78b1d908c1dd994cbe63d580d995b85
   - enabled: 1
-    path: Assets/Scenes/Justin/JustinShowcase.unity
+    path: Assets/Scenes/Justin/JustinMultiThreading.unity
     guid: 1886d597a4f70084188be00dbeca9ff4
   - enabled: 1
     path: Assets/Scenes/Justin/JustinSimulation.unity

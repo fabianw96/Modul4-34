@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
+  m_Name: IceShard
+  m_EditorClassIdentifier: 
+  ID: E7503483-933B-4F30-8E09-B7BAEECE4F5A
+  EffectType: 2
+  Type: 2
+  Name: IceShard
+  Icon: {fileID: 21300000, guid: 4184495d79c523148bd19006e6e88b2d, type: 3}
+  BaseSpeed: 10
+  BaseDamage: 10
+  BaseCost: 5
+  BaseCooldown: 0.5
+  UnlockCost: 0
+  IsDot: 0
+  IsSlow: 1
+  EffectDuration: 5
+  DotDamagePerTick: 0
+  DotTickRate: 0
+  SlowStrength: 0.5
+  DamagePerLevel: 1
+  CostPerLevel: 1
+  SpeedPerLevel: 0.5
+  CooldownPerLevel: 1
+  ExplosionDamage: 0
+  ExplosionRadius: 0
+  VisualEffectAsset: {fileID: 8926484042661614526, guid: 3811295d187630d49bde7fae31052ff1,
+    type: 3}
+  VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 72a0e8d5e77f16043a37d3706d5aa937,
+    type: 3}

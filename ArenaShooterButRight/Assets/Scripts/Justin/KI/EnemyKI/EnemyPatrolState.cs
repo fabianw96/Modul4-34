@@ -1,7 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
+
 namespace Justin.KI
 {
     public class EnemyPatrolState : BaseState
@@ -13,27 +12,27 @@ namespace Justin.KI
         private Vector3 startPos;
 
         private EnemyController controller;
-        public EnemyPatrolState(EnemyController _controller)
+        public EnemyPatrolState(EnemyController _controller) : base(_controller)
         {
             controller = _controller;
         }
 
-        public override void EnterState(EnemyController enemy)
+        public override void EnterState()
         {
             startPos = controller.transform.position;
             Vector3 newPos = Random.insideUnitSphere * 20 * searchWalkRadius;
-            if (enemy.agent.SetDestination(newPos))
+            if (controller.agent.SetDestination(newPos))
             {
-                enemy.agent.SetDestination(newPos);
+                controller.agent.SetDestination(newPos);
             }
         }
 
-        public override void ExitState(EnemyController enemy)
+        public override void ExitState()
         {
 
         }
 
-        public override void UpdateState(EnemyController enemy)
+        public override void UpdateState()
         {
             if (controller.agent.remainingDistance <= 0.2f)
             {
