@@ -85,13 +85,13 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
-    - _GrassHeight: 0.4
+    - _GrassHeight: 0.35
     - _GrassThreshold: 1
     - _GrassToMountainThreshold: 0.05
     - _Height: 15
     - _HillsHeight: 130
     - _HillsThreshold: 1
-    - _MeshHeightMultiplier: 20
+    - _MeshHeightMultiplier: 25
     - _MountainHeight: 0.7
     - _MountainThreshold: 1
     - _MountainToSnowThreshold: 0.05
@@ -102,7 +102,7 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _SandHeight: 0.3
+    - _SandHeight: 0.25
     - _SandThreshold: 1
     - _SandToDirtThreshold: 0.05
     - _ShallowWaterHeight: 0
