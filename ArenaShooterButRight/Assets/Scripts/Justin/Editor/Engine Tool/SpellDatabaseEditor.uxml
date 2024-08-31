@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
-    <Style src="project://database/Assets/Scripts/Justin/Editor/SpellDatabaseEditor.uss?fileID=7433441132597879392&amp;guid=9a40d25cf318e7847b739e09a52d3db9&amp;type=3#SpellDatabaseEditor" />
+    <Style src="project://database/Assets/Scripts/Justin/Editor/Engine%20Tool/SpellDatabaseEditor.uss?fileID=7433441132597879392&amp;guid=9a40d25cf318e7847b739e09a52d3db9&amp;type=3#SpellDatabaseEditor" />
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
         <ui:VisualElement name="SpellTab" style="flex-grow: 1; margin-left: 0; max-width: 25%; border-right-color: rgb(255, 255, 255); border-right-width: 1px;">
             <ui:VisualElement name="Header" style="flex-grow: 0; flex-direction: row; align-items: center;">
@@ -19,7 +19,7 @@
                         <ui:VisualElement name="Container" style="flex-grow: 1; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); margin-left: 5px; margin-right: 5px; margin-top: 5px; margin-bottom: 5px; -unity-background-image-tint-color: rgb(56, 56, 56); background-color: rgb(65, 65, 65);">
                             <ui:Label text="General" display-tooltip-when-elided="true" name="Header" class="details-header" />
                             <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="Name" name="SpellName" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
-                            <uie:EnumField label="Type" name="SpellType" binding-path="Type" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:EnumField label="Element" name="SpellType" binding-path="Element" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
                             <uie:ObjectField label="Icon" name="IconPicker" binding-path="Icon" type="UnityEngine.Sprite, UnityEngine.CoreModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
                             <uie:ObjectField label="Visual Effect" name="VisualEffectPicker" binding-path="VisualEffectAsset" type="UnityEngine.VFX.VisualEffectAsset, UnityEngine.VFXModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
                         </ui:VisualElement>

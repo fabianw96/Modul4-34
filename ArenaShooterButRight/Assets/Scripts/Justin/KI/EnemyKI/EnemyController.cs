@@ -1,9 +1,12 @@
 using General;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.VFX;
 
 namespace Justin.KI
 {
+    [RequireComponent(typeof(NavMeshAgent), typeof(VisualEffectAsset), typeof(Animator))]
     public class EnemyController : BaseController
     {
         [SerializeField] public HealthSystem Enemy;
@@ -11,20 +14,19 @@ namespace Justin.KI
         [SerializeField] private Animator animator;
         private string currentAnimation = "";
         private float distanceToPlayer;
-        
-        [SerializeField] public float VisionRange, AttackRange;
-        [SerializeField] public float enemyShootCooldown;
 
-        EnemyPatrolState PatrolState;
-        EnemyChaseState ChaseState;
-        EnemyShootState AttackState;
-        EnemyFleeState FleeState;
+        [SerializeField] private float VisionRange = 20f;
+        [SerializeField] private float AttackRange = 10f;
+
+        private EnemyPatrolState PatrolState;
+        private EnemyChaseState ChaseState;
+        private EnemyShootState ShootState;
+        private EnemyFleeState FleeState;
 
         [SerializeField] public GameObject BulletPrefab;
         [SerializeField] public GameObject Gun;
         [SerializeField] public Transform GunMuzzlePos;
-        [SerializeField] public float ProjectileSpeed;
-        [SerializeField] public float ProjectileDecayDelay;
+
 
         protected override void Start()
         {
@@ -36,22 +38,28 @@ namespace Justin.KI
 
         protected override void InitFSM()
         {
-            InitVariables();
             PatrolState = new EnemyPatrolState(this);
             ChaseState = new EnemyChaseState(this);
-            AttackState = new EnemyShootState(this);
+            ShootState = new EnemyShootState(this);
             FleeState = new EnemyFleeState(this);
             CurrentState = PatrolState;
             CurrentState.EnterState();
             StateDictionary = new Dictionary<BaseState, List<Transition>>
             {
                 {
+                    FleeState,
+                    new List<Transition>
+                    {
+                         new Transition(CheckFleeCondition, FleeState),
+                    }
+                },
+                {
                     PatrolState,
                     new List<Transition>
                     {
                         new Transition(() => Enemy.hasTakenDamage == true, ChaseState),
                         new Transition(IsInChaseRange, ChaseState ),
-                        new Transition(IsInAttackRange, AttackState ),
+                        new Transition(IsInAttackRange, ShootState ),
                     }
                 },
                 {
@@ -59,41 +67,18 @@ namespace Justin.KI
                     new List<Transition>
                     {
                         new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
-                        new Transition(IsInAttackRange, AttackState ),
+                        new Transition(IsInAttackRange, ShootState ),
                     }
                 },
                 {
-                    AttackState,
+                    ShootState,
                     new List<Transition>
                     {
-
                          new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
                          new Transition(IsInChaseRange, ChaseState),
                     }
                 },
-                {
-                    FleeState,
-                    new List<Transition>
-                    {
-                         new Transition(() => Enemy.GetHealthPercentage() < 0.2, FleeState),
-                    }
-                },
             };
-        }
-
-        private void InitVariables()
-        {
-            AttackRange = 10.0f;
-            VisionRange = 20.0f;
-        }
-
-        private void ChangeAnimation(string _animation, float _crossFade = 0.2f)
-        {
-            if (currentAnimation != _animation)
-            {
-                currentAnimation = _animation;
-                animator.CrossFade(_animation, _crossFade);
-            }
         }
 
         protected override void Update()
@@ -118,27 +103,26 @@ namespace Justin.KI
             }
         }
 
-        private void CheckAnimation()
+        public void ChangeAnimation(string _animation, float _crossFade = 0.2f)
+        {
+            if (currentAnimation != _animation)
+            {
+                currentAnimation = _animation;
+                animator.CrossFade(_animation, _crossFade);
+            }
+        }
+        public void CheckAnimation()
         {
             if (agent.velocity != Vector3.zero && CurrentState == PatrolState)
                 ChangeAnimation("Walk");
             else if (agent.velocity != Vector3.zero && CurrentState == ChaseState)
                 ChangeAnimation("Chase");
-            else if (agent.velocity != Vector3.zero && CurrentState == AttackState)
+            else if (agent.velocity != Vector3.zero && CurrentState == ShootState)
                 ChangeAnimation("Shoot Walking");
-            else if (agent.velocity == Vector3.zero && CurrentState == AttackState)
+            else if (agent.velocity == Vector3.zero && CurrentState == ShootState)
                 ChangeAnimation("Shoot Standing");
             else
                 ChangeAnimation("Idle");
-
-        }
-
-        private void OnDrawGizmos()
-        { 
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(this.transform.position, VisionRange);
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(this.transform.position, AttackRange);
         }
 
         private bool IsInChaseRange()
@@ -149,6 +133,19 @@ namespace Justin.KI
         private bool IsInAttackRange()
         {
             return (distanceToPlayer < AttackRange);
+        }
+
+        private bool CheckFleeCondition()
+        {
+            return (Enemy.GetHealthPercentage() <= 0.2);
+        }
+
+        private void OnDrawGizmos()
+        { 
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(this.transform.position, VisionRange);
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(this.transform.position, AttackRange);
         }
     }
 }

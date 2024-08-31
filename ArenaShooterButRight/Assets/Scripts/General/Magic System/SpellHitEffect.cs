@@ -1,4 +1,5 @@
 using General;
+using General.Weapons;
 using System;
 using System.Collections;
 using System.Threading.Tasks.Sources;
@@ -6,51 +7,50 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
 
-public class MagicEffect : MonoBehaviour
+public class SpellHitEffect : MonoBehaviour
 { 
-    private EffectTypes currentLingeringEffect;
+    private Elements currentElement;
+    private Elements projectileElement;
+    private VisualEffect lingeringEffectAsset;
+    private VisualEffect explosionEffectAsset;
+    private SkinnedMeshRenderer targetMesh;
+    private SpellData spellData;
     private HealthSystem healthSystem;
     private NavMeshAgent navMeshAgent;
-    private SpellData spellData;
     private float originalSpeed;
-    private float dmg;
+    private float damage;
     private float effectDuration;
     private bool isDot;
     private bool hasEffectApplied = false;
-    private VisualEffect lingeringEffect;
-    private VisualEffect explosionEffect;
-    private SkinnedMeshRenderer targetMesh;
-    [SerializeField] private float elapsedTime = 0;
-    
-    public void InitEffect(SpellData _spellData, HealthSystem _healthSys, float _damage)
+    private float elapsedTime = 0;
+
+    public void InitSpellHitEffect(SpellData _spellData, HealthSystem _healthSys)
     {
-        healthSystem = _healthSys;
-        dmg = _damage;
-        effectDuration = _spellData.EffectDuration;
-        isDot = _spellData.IsDot;
         spellData = _spellData;
+        healthSystem = _healthSys;
         targetMesh = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+        lingeringEffectAsset = gameObject.GetComponent<VisualEffect>();
+        damage = spellData.CalculateDamage(SpellLevelManager.Instance.GetSpellLevel(spellData.Element));
+        effectDuration = spellData.EffectDuration;
+        isDot = spellData.IsDot;
+        projectileElement = spellData.Element;
+    }
 
-        // Attaches the visual lingering effect to the target
-        if (gameObject.GetComponent<VisualEffect>() == null)
+    private void Start()
+    {
+        // Check for explosion
+        if (currentElement == Elements.Electro && projectileElement == Elements.Fire)
         {
-            lingeringEffect = gameObject.AddComponent<VisualEffect>();
-        }
-
-        if (lingeringEffect != null && spellData.Type == SpellTypes.Fireball && currentLingeringEffect == EffectTypes.Electrified)
-        {
-            explosionEffect.visualEffectAsset = spellData.ExplosionEffect;
-            explosionEffect.Play();
+            explosionEffectAsset.visualEffectAsset = spellData.ExplosionEffect;
+            explosionEffectAsset.Play();
             TriggerExplosion();
+            return;
         }
 
-        currentLingeringEffect = spellData.EffectType;
-        lingeringEffect = gameObject.GetComponent<VisualEffect>();
-        lingeringEffect.visualEffectAsset = spellData.VisualLingeringEffectAsset;
-        lingeringEffect.SetSkinnedMeshRenderer(Shader.PropertyToID("TargetMesh"), targetMesh);
-        lingeringEffect.Play();
-
-
+        projectileElement = spellData.Element;
+        lingeringEffectAsset.visualEffectAsset = spellData.LingeringEffectAsset;
+        lingeringEffectAsset.SetSkinnedMeshRenderer(Shader.PropertyToID("TargetMesh"), targetMesh);
+        lingeringEffectAsset.Play();
 
         if (isDot)
         {
@@ -62,7 +62,7 @@ public class MagicEffect : MonoBehaviour
             ApplyEffect();
         }
     }
-
+       
     private IEnumerator ApplyDotEffect()
     {
         elapsedTime = 0f;
@@ -86,19 +86,20 @@ public class MagicEffect : MonoBehaviour
         if (!hasEffectApplied)
         {
             hasEffectApplied = true;
-            if (spellData.EffectType == EffectTypes.Slow)
+            if (spellData.OnHitEffect == OnHitEffects.Slow)
             {
                 ApplySlowEffect();
             }
-            else if (spellData.EffectType == EffectTypes.Electrified)
+            else if (spellData.OnHitEffect == OnHitEffects.Electrified)
             {
                 ApplyElectrifiedEffect();
             }
             // Implement other effect types here
+
             // Remove the effect after duration
             StartCoroutine(RemoveEffectAfterDuration());
         }
-        healthSystem.TakeDamage(dmg);
+        healthSystem.TakeDamage(damage);
     }
 
     private void ApplySlowEffect()
@@ -111,8 +112,7 @@ public class MagicEffect : MonoBehaviour
     }
     private void ApplyElectrifiedEffect()
     {
-        // TODO Logic for electrified effect
-        // Not really important. Mostly just for the visuals
+        navMeshAgent.velocity = Vector3.zero;
     }
 
     public void TriggerExplosion()
@@ -122,11 +122,24 @@ public class MagicEffect : MonoBehaviour
         foreach (var hitCollider in hitColliders)
         {
             healthSystem = hitCollider.GetComponent<HealthSystem>();
-            
             if (healthSystem != null)
             {
+                // Apply Damage from the explosion
                 healthSystem.TakeDamage(spellData.ExplosionDamage);
-                
+
+                // Check if the object should also catch fire
+                SpellHitEffect fireEffect = hitCollider.gameObject.GetComponent<SpellHitEffect>();
+                if (fireEffect == null) 
+                {
+                    fireEffect = hitCollider.gameObject.AddComponent<SpellHitEffect>();
+                }
+
+                // Initialize the fire effect on the hit object
+                SpellData fireSpellData = Resources.Load<SpellData>("Assets/Sriptable Objects/Spells/FireSpellData");
+                if (fireSpellData != null) 
+                {
+                    fireEffect.InitSpellHitEffect(fireSpellData, healthSystem);
+                }
             }
         }
         CleanupEffect();
@@ -135,15 +148,15 @@ public class MagicEffect : MonoBehaviour
     private void CleanupEffect()
     {
         // Reset all values affected by the MagicEffect
-        if (spellData.EffectType == EffectTypes.Slow && navMeshAgent != null)
+        if (spellData.OnHitEffect == OnHitEffects.Slow && navMeshAgent != null)
         {
             navMeshAgent.speed = originalSpeed;
         }
         // Stop the effect and remove the component
-        if (lingeringEffect != null)
+        if (lingeringEffectAsset != null)
         {
-            lingeringEffect.Stop();
-            Destroy(lingeringEffect);
+            lingeringEffectAsset.Stop();
+            Destroy(lingeringEffectAsset);
         }
         Destroy(this);
     }

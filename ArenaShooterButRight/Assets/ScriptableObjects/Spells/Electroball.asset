@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Electroball
   m_EditorClassIdentifier: 
   ID: 3227BFCA-85DE-4F59-80F4-335DF00D236C
-  EffectType: 3
-  Type: 3
-  Name: Electroball
+  OnHitEffect: 3
+  Element: 3
+  Name: ElectroOrb
   Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
   BaseSpeed: 50
   BaseDamage: 20
@@ -36,7 +36,7 @@ MonoBehaviour:
     type: 3}
   ExplosionDamage: 0
   ExplosionRadius: 0
-  VisualEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
+  SpellEffectAsset: {fileID: 8926484042661614526, guid: 1513612818fcc6a4a8434969db75736c,
     type: 3}
-  VisualLingeringEffectAsset: {fileID: 8926484042661614526, guid: 7517ab5dfe569164fb508e1581ca83d4,
+  LingeringEffectAsset: {fileID: 8926484042661614526, guid: 7517ab5dfe569164fb508e1581ca83d4,
     type: 3}

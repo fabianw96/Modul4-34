@@ -4,13 +4,13 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class Shooter : MonoBehaviour
+public class MagicCaster : MonoBehaviour
 {
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private List<SpellData> spellDataList;
-    [SerializeField] private Transform casterPoint;
-    [SerializeField] private Mana mana;
     [SerializeField] private SpellLevelManager spellLevelManager;
+    [SerializeField] private List<SpellData> spellDataList;
+    [SerializeField] private Transform castPoint;
+    [SerializeField] private Mana mana;
+    [SerializeField] private GameObject projectilePrefab;
     private bool isCooldown = false;
 
     private void Start()
@@ -26,18 +26,18 @@ public class Shooter : MonoBehaviour
         }
     }
 
-    public void ChooseSpell(SpellTypes _chosenSpell)
+    public void ChooseSpell(Elements _chosenSpell)
     {
         SpellData spellData = null;
         switch (_chosenSpell)
         {
-            case SpellTypes.Fireball:
+            case Elements.Fire:
                 spellData = spellDataList[0];
                 break;
-            case SpellTypes.Iceball:
+            case Elements.Ice:
                 spellData = spellDataList[1];
                 break;
-            case SpellTypes.Electroball:
+            case Elements.Electro:
                 spellData = spellDataList[2];
                 break;
         }
@@ -51,9 +51,9 @@ public class Shooter : MonoBehaviour
             Shoot(spellData);
             StartCoroutine(CooldownRoutine(spellData.CalculateCooldown(spellLevel)));
         }
-        else
+        else 
         {
-            Debug.Log("Not enough mana to cast the spell or spell on cooldown");
+
         }
     }
 
@@ -68,20 +68,11 @@ public class Shooter : MonoBehaviour
     {
         GameObject projectileInstance = Instantiate(projectilePrefab);
         Physics.IgnoreCollision(projectileInstance.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
-        projectileInstance.transform.position = casterPoint.transform.position;
+        projectileInstance.transform.position = castPoint.transform.position;
         Vector3 rotation = projectileInstance.transform.root.eulerAngles;
         projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
-
-        //MeshRenderer meshRenderer = projectileInstance.GetComponent<MeshRenderer>();
-        //if (meshRenderer != null)
-        //{
-        //    meshRenderer.enabled = false;
-        //}
-
-        // Get the direction the player is looking
         Vector3 launchDirection = Camera.main.transform.forward;
-
-        Projectile projectile = projectileInstance.GetComponent<Projectile>();
-        projectile.Launch(_spellData, launchDirection);
+        MagicProjectile projectile = projectileInstance.GetComponent<MagicProjectile>();
+        projectile.InitSpellProjectile(_spellData);
     }
 }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public enum EffectTypes
+public enum OnHitEffects
 {
     None,
     Burn,
@@ -10,12 +10,12 @@ public enum EffectTypes
     Electrified,
 }
 
-public enum SpellTypes
+public enum Elements
 {
     None,
-    Fireball,
-    Iceball,
-    Electroball
+    Fire,
+    Ice,
+    Electro
 }
 
 [CreateAssetMenu(menuName = "ScriptableObjects/SpellData")]
@@ -23,8 +23,8 @@ public class SpellData : ScriptableObject
 {
     [Header("General")]
     public string ID = Guid.NewGuid().ToString().ToUpper();
-    public EffectTypes EffectType; // Status effects
-    public SpellTypes Type;
+    public OnHitEffects OnHitEffect; // Status effects
+    public Elements Element;
     public string Name;
     public Sprite Icon;
 
@@ -54,8 +54,8 @@ public class SpellData : ScriptableObject
     public float ExplosionDamage;
     public float ExplosionRadius;
 
-    public VisualEffectAsset VisualEffectAsset; // visual Asset of the spell
-    public VisualEffectAsset VisualLingeringEffectAsset; // visual Asset of the status effect caused by the spell
+    public VisualEffectAsset SpellEffectAsset; // visual Asset of the spell as projectile
+    public VisualEffectAsset LingeringEffectAsset; // visual Asset of the effect remaining on the enemy
 
     public float CalculateSpeed(int _level)
     {

@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c626a208d76c4b94093d11c9ddeebbf4, type: 3}
-  m_Name: Fireball
+  m_Name: FireSpellData
   m_EditorClassIdentifier: 
-  ID: C8B09291-12CA-4390-A053-A002B694F162
+  ID: 794D60C9-1BD7-41D6-A5D9-B0AAF045D6EB
   OnHitEffect: 1
   Element: 1
-  Name: Fireball
-  Icon: {fileID: 21300000, guid: 9f69b220176e6964fbd87f5f158d45e3, type: 3}
-  BaseSpeed: 40
-  BaseDamage: 10
-  BaseCost: 10
-  BaseCooldown: 1
+  Name: FireSpellData
+  Icon: {fileID: 0}
+  BaseSpeed: 0
+  BaseDamage: 0
+  BaseCost: 0
+  BaseCooldown: 0
   UnlockCost: 0
   IsDot: 1
   IsSlow: 0
@@ -28,15 +28,14 @@ MonoBehaviour:
   DotDamagePerTick: 5
   DotTickRate: 1
   SlowStrength: 0
-  DamagePerLevel: 5
-  CostPerLevel: 2
-  SpeedPerLevel: 1
-  CooldownPerLevel: 1
+  DamagePerLevel: 0
+  CostPerLevel: 0
+  SpeedPerLevel: 0
+  CooldownPerLevel: 0
   ExplosionEffect: {fileID: 8926484042661614526, guid: 7a6e365e972844b4b83c4d6265a3476e,
     type: 3}
   ExplosionDamage: 25
   ExplosionRadius: 2
-  SpellEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
-    type: 3}
+  SpellEffectAsset: {fileID: 0}
   LingeringEffectAsset: {fileID: 8926484042661614526, guid: 2634c31c57079fa4f86f2862364561ac,
     type: 3}

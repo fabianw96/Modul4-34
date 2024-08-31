@@ -12,7 +12,7 @@ namespace Justin.KI
 
         public override void EnterState()
         {
-
+            Debug.Log("Entered Chase State");
         }
 
         public override void ExitState()
@@ -22,7 +22,6 @@ namespace Justin.KI
 
         public override void UpdateState()
         {
-            Debug.Log("Entered Chase State");
             controller.transform.LookAt(controller.Player.transform);
             controller.agent.SetDestination(controller.Player.transform.position);
         }

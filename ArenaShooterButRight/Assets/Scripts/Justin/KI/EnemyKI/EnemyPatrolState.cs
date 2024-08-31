@@ -19,6 +19,7 @@ namespace Justin.KI
 
         public override void EnterState()
         {
+            Debug.Log("Entered Patrol State");
             startPos = controller.transform.position;
             Vector3 newPos = Random.insideUnitSphere * 20 * searchWalkRadius;
             if (controller.agent.SetDestination(newPos))

@@ -79,7 +79,7 @@ namespace Fabian.EngineTool.PrefabSpawner
         {
             int rnd = UnityEngine.Random.Range(0, PrefabChoiceList.Count);
             GameObject prefab =
-                UnityEngine.Object.Instantiate(PrefabChoiceList[rnd], position + new Vector3(UnityEngine.Random.insideUnitCircle.x * Radius, 0, UnityEngine.Random.insideUnitCircle.y * Radius), quaternion.identity);
+                UnityEngine.Object.Instantiate(PrefabChoiceList[rnd], position + new Vector3(UnityEngine.Random.insideUnitCircle.x * Radius, 0, UnityEngine.Random.insideUnitCircle.y * Radius), quaternion.RotateY(UnityEngine.Random.Range(0f, 180f)));
 
             if (checkForOverlap)
             {
