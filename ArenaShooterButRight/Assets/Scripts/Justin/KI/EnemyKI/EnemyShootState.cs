@@ -22,8 +22,6 @@ namespace Justin.KI
             if (_hasShot) return;
 
             controller.StartCoroutine(ShootPlayer());
-
-            base.UpdateState();  
         }
 
         private IEnumerator ShootPlayer()

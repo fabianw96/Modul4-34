@@ -67,7 +67,7 @@ Material:
     - _AlphaSrcBlend: 1
     - _BlendMode: 0
     - _CliffHeight: 2
-    - _CliffSlopeThreshold: 0.55
+    - _CliffSlopeThreshold: 0.52
     - _CliffThreshold: 0
     - _ConservativeDepthOffsetEnable: 0
     - _CullMode: 2

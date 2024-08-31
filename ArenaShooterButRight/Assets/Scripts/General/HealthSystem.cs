@@ -50,5 +50,10 @@ namespace General
             }
             Destroy(this.gameObject);
         }
+
+        public float GetHealthPercentage()
+        {
+            return currentHealth/maxHealth;
+        }
     }
 }

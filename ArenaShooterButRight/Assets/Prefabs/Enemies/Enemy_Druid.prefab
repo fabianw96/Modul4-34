@@ -627,7 +627,7 @@ MonoBehaviour:
   BulletPrefab: {fileID: 2049982847515312590, guid: e57baa6b16df8f74fa58cc077d5d87c8,
     type: 3}
   Gun: {fileID: 1905949268353053170}
-  GunMuzzlePos: {fileID: 0}
+  GunMuzzlePos: {fileID: 7464858101256762837}
   ProjectileSpeed: 15
   ProjectileDecayDelay: 1
 --- !u!195 &7829042321792570182
@@ -640,7 +640,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -2186,6 +2186,12 @@ GameObject:
 --- !u!4 &6942842534734397851 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1811394613484459878, guid: 817e2f80f31ef404eb4f51db580f53ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 8753505972843779837}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7464858101256762837 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2225397968469893928, guid: 817e2f80f31ef404eb4f51db580f53ea,
     type: 3}
   m_PrefabInstance: {fileID: 8753505972843779837}
   m_PrefabAsset: {fileID: 0}

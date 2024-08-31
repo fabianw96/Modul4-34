@@ -17,10 +17,10 @@ MonoBehaviour:
   Type: 3
   Name: Electroball
   Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
-  BaseSpeed: 20
+  BaseSpeed: 50
   BaseDamage: 20
   BaseCost: 10
-  BaseCooldown: 1
+  BaseCooldown: 0.3
   UnlockCost: 0
   IsDot: 0
   IsSlow: 0

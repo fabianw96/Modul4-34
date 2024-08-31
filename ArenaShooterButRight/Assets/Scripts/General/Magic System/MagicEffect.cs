@@ -148,4 +148,3 @@ public class MagicEffect : MonoBehaviour
         Destroy(this);
     }
 }
-

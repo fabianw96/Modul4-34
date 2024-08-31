@@ -12,6 +12,7 @@ namespace Justin.ProcGen
         }
 
         [Header("Mapvalues")]
+        // Has to be divisible by (Size - 1) / 2,4,6,8 for LODs to work, because of Vertices per Line
         [SerializeField] private const int MAP_SIZE = 241;
         [Range(0,4)][SerializeField] private int levelOfDetail;
 

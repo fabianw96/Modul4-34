@@ -85,7 +85,7 @@ public class SpellDatabaseController
         view.SpellListView.style.height = spellDatabase.Count * spellHeight;        // Set the height of the ListView
         view.SpellTab.Add(view.SpellListView);                                      // Add the ListView to the view
 
-        view.SpellListView.selectionChanged += ListView_onSelectionChanged;
+        view.SpellListView.selectionChanged += ListView_OnSelectionChanged;
 
         // Initially hide the spell details view until a spell is selected
         view.SpellDetails.style.visibility = Visibility.Hidden;
@@ -93,7 +93,7 @@ public class SpellDatabaseController
     }
 
     // Handles the selection change event in the ListView, binds the selected spell's data to the details view and makes the details view visible. 
-    private void ListView_onSelectionChanged(IEnumerable<object> selectedSpells)
+    private void ListView_OnSelectionChanged(IEnumerable<object> selectedSpells)
     {
         activeSpell = (SpellData)selectedSpells.First();
         SerializedObject so = new SerializedObject(activeSpell);
@@ -106,7 +106,7 @@ public class SpellDatabaseController
         view.SpellDetails.style.visibility = Visibility.Visible;
     }
 
-    // Event handler for adding a new spell to the database, saving the asset in a designated golder and adjusting the Listview height for the new spell
+    // Event handler for adding a new spell to the database, saving the asset in a designated folder and adjusting the Listview height for the new spell
     private void AddSpell_OnClick()
     { 
         SpellData newSpell = ScriptableObject.CreateInstance<SpellData>();

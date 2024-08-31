@@ -18,6 +18,7 @@ namespace Justin.KI
         EnemyPatrolState PatrolState;
         EnemyChaseState ChaseState;
         EnemyShootState AttackState;
+        EnemyFleeState FleeState;
 
         [SerializeField] public GameObject BulletPrefab;
         [SerializeField] public GameObject Gun;
@@ -39,6 +40,7 @@ namespace Justin.KI
             PatrolState = new EnemyPatrolState(this);
             ChaseState = new EnemyChaseState(this);
             AttackState = new EnemyShootState(this);
+            FleeState = new EnemyFleeState(this);
             CurrentState = PatrolState;
             CurrentState.EnterState();
             StateDictionary = new Dictionary<BaseState, List<Transition>>
@@ -67,6 +69,13 @@ namespace Justin.KI
 
                          new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
                          new Transition(IsInChaseRange, ChaseState),
+                    }
+                },
+                {
+                    FleeState,
+                    new List<Transition>
+                    {
+                         new Transition(() => Enemy.GetHealthPercentage() < 0.2, FleeState),
                     }
                 },
             };
