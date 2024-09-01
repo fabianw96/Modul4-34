@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -27,6 +28,7 @@ public class SpellData : ScriptableObject
     public Elements Element;
     public string Name;
     public Sprite Icon;
+    public int Level = 1; // New property for spell Level
 
     [Header("Spellstats")]
     public float BaseSpeed; // the spells projectile speed
@@ -57,22 +59,22 @@ public class SpellData : ScriptableObject
     public VisualEffectAsset SpellEffectAsset; // visual Asset of the spell as projectile
     public VisualEffectAsset LingeringEffectAsset; // visual Asset of the effect remaining on the enemy
 
-    public float CalculateSpeed(int _level)
+    public float CalculateSpeed()
     {
-        return BaseSpeed + (SpeedPerLevel * (_level - 1));
+        return BaseSpeed + (SpeedPerLevel * (Level - 1));
     }
 
-    public float CalculateDamage(int _level)
+    public float CalculateDamage()
     {
-        return BaseDamage + (DamagePerLevel * (_level - 1));
+        return BaseDamage + (DamagePerLevel * (Level - 1));
     }
 
-    public float CalculateManaCost(int _level)
+    public float CalculateManaCost()
     {
-        return BaseCost + (CostPerLevel * (_level - 1));
+        return BaseCost + (CostPerLevel * (Level - 1));
     }
-    public float CalculateCooldown(int _level)
+    public float CalculateCooldown()
     {
-        return BaseCooldown + (CooldownPerLevel * (_level - 1));
+        return BaseCooldown + (CooldownPerLevel * (Level - 1));
     }
 }

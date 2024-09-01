@@ -48,18 +48,12 @@ namespace General
 
         private void Kill()
         {
-            VisualEffect deathEffect;
-            if (this.gameObject.GetComponent<VisualEffectAsset>() != null) 
-            {
-                Destroy(GetComponent<VisualEffectAsset>());
-            }
 
-            this.gameObject.AddComponent<VisualEffect>();
-            deathEffect = this.gameObject.GetComponent<VisualEffect>();
+            VisualEffect deathEffect = gameObject.GetComponent<VisualEffect>();
             deathEffect.visualEffectAsset = deathEffectAsset;
             deathEffect.Play();
 
-            if (this.gameObject.GetComponent<FPSController>() != null)
+            if (gameObject.GetComponent<FPSController>() != null)
             {
                 Camera.main.transform.parent = null;
             }

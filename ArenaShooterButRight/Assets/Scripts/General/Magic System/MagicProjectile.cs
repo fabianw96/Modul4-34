@@ -16,12 +16,18 @@ public class MagicProjectile : BaseProjectile
     public void InitSpellProjectile(SpellData _spellData)
     {
         spellData = _spellData;
-        projectileSpeed = spellData.CalculateSpeed(SpellLevelManager.Instance.GetSpellLevel(spellData.Element));
-        //Debug.Log($"The Spells Visual Effect: {spellData.SpellEffectAsset}");
-        //Debug.Log($"The currently saved visual Effect: {spellProjectileEffect.visualEffectAsset}");
+        projectileSpeed = spellData.CalculateSpeed();
+
         spellProjectileEffect = gameObject.GetComponent<VisualEffect>();
-        spellProjectileEffect.visualEffectAsset = spellData.SpellEffectAsset;
-        spellProjectileEffect.Play();
+        if (spellProjectileEffect != null) 
+        {
+            spellProjectileEffect.visualEffectAsset = spellData.SpellEffectAsset;
+            spellProjectileEffect.Play();
+        }
+        else
+        {
+            Debug.LogError("No VisualEffect component found on the projectile");
+        }
     }
 
     protected override void Update()
@@ -31,7 +37,10 @@ public class MagicProjectile : BaseProjectile
 
     protected override void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<HealthSystem>() != null)
+        // Check if the object has a HealthSystem component
+        HealthSystem targetHealthSystem = other.gameObject.GetComponent<HealthSystem>();
+
+        if (targetHealthSystem == null)
         {
             Destroy(gameObject);
             return;
@@ -45,6 +54,8 @@ public class MagicProjectile : BaseProjectile
 
         spellHitEffect = other.gameObject.GetComponent<SpellHitEffect>();
         spellHitEffect.InitSpellHitEffect(spellData, other.gameObject.GetComponent<HealthSystem>());
-        Destroy(gameObject); // Destroy Projectile after applying effect
+
+        // Destroy Projectile after applying effect
+        Destroy(gameObject); 
     }
 }

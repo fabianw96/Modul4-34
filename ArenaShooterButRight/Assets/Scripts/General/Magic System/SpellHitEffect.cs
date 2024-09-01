@@ -11,8 +11,8 @@ public class SpellHitEffect : MonoBehaviour
 { 
     private Elements currentElement;
     private Elements projectileElement;
-    private VisualEffect lingeringEffectAsset;
-    private VisualEffect explosionEffectAsset;
+    private VisualEffect lingeringEffect;
+    private VisualEffect explosionEffect;
     private SkinnedMeshRenderer targetMesh;
     private SpellData spellData;
     private HealthSystem healthSystem;
@@ -28,29 +28,46 @@ public class SpellHitEffect : MonoBehaviour
     {
         spellData = _spellData;
         healthSystem = _healthSys;
+        damage = _spellData.CalculateDamage();
+        effectDuration = _spellData.EffectDuration;
+        isDot = _spellData.IsDot;
+        projectileElement = _spellData.Element;
         targetMesh = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
-        lingeringEffectAsset = gameObject.GetComponent<VisualEffect>();
-        damage = spellData.CalculateDamage(SpellLevelManager.Instance.GetSpellLevel(spellData.Element));
-        effectDuration = spellData.EffectDuration;
-        isDot = spellData.IsDot;
-        projectileElement = spellData.Element;
+        navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
     }
 
     private void Start()
     {
         // Check for explosion
+        explosionEffect = gameObject.GetComponent<VisualEffect>();
         if (currentElement == Elements.Electro && projectileElement == Elements.Fire)
         {
-            explosionEffectAsset.visualEffectAsset = spellData.ExplosionEffect;
-            explosionEffectAsset.Play();
-            TriggerExplosion();
-            return;
+            if (explosionEffect != null)
+
+            {
+                explosionEffect.visualEffectAsset = spellData.ExplosionEffect;
+                explosionEffect.Play();
+                TriggerExplosion();
+                return;
+            }
+            else
+            {
+                Debug.LogError("No VisualEffect component found for the explosion.");
+            }
+        }
+            
+        lingeringEffect = gameObject.GetComponent<VisualEffect>();
+        if (lingeringEffect != null)
+        {
+            lingeringEffect.visualEffectAsset = spellData.LingeringEffectAsset;
+            lingeringEffect.SetSkinnedMeshRenderer(Shader.PropertyToID("TargetMesh"), targetMesh);
+            lingeringEffect.Play();
+        }
+        else
+        {
+            Debug.LogError("No VisualEffect component found on the enemy.");
         }
 
-        projectileElement = spellData.Element;
-        lingeringEffectAsset.visualEffectAsset = spellData.LingeringEffectAsset;
-        lingeringEffectAsset.SetSkinnedMeshRenderer(Shader.PropertyToID("TargetMesh"), targetMesh);
-        lingeringEffectAsset.Play();
 
         if (isDot)
         {
@@ -135,7 +152,7 @@ public class SpellHitEffect : MonoBehaviour
                 }
 
                 // Initialize the fire effect on the hit object
-                SpellData fireSpellData = Resources.Load<SpellData>("Assets/Sriptable Objects/Spells/FireSpellData");
+                SpellData fireSpellData = Resources.Load<SpellData>("Assets/SriptableObjects/Spells/FireSpellData");
                 if (fireSpellData != null) 
                 {
                     fireEffect.InitSpellHitEffect(fireSpellData, healthSystem);
@@ -152,11 +169,11 @@ public class SpellHitEffect : MonoBehaviour
         {
             navMeshAgent.speed = originalSpeed;
         }
-        // Stop the effect and remove the component
-        if (lingeringEffectAsset != null)
+        // Stop the effect and set visualEffect to null
+        if (lingeringEffect != null)
         {
-            lingeringEffectAsset.Stop();
-            Destroy(lingeringEffectAsset);
+            lingeringEffect.Stop();
+            lingeringEffect.visualEffectAsset = null;
         }
         Destroy(this);
     }

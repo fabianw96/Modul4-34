@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 2258.5027, g: 2398.178, b: 3491.904, a: 1}
+  m_IndirectSpecularColor: {r: 2258.5027, g: 2398.1934, b: 3491.913, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -204,10 +204,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Gypsy
       objectReference: {fileID: 0}
+    - target: {fileID: 3512734664510863664, guid: 6fa994f32cf0fb1409e8453333acd764,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7165346042369511114, guid: 6fa994f32cf0fb1409e8453333acd764,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 111.7
+      value: 101.37
       objectReference: {fileID: 0}
     - target: {fileID: 7165346042369511114, guid: 6fa994f32cf0fb1409e8453333acd764,
         type: 3}
@@ -217,7 +222,7 @@ PrefabInstance:
     - target: {fileID: 7165346042369511114, guid: 6fa994f32cf0fb1409e8453333acd764,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 63.5
+      value: 47.01
       objectReference: {fileID: 0}
     - target: {fileID: 7165346042369511114, guid: 6fa994f32cf0fb1409e8453333acd764,
         type: 3}
@@ -589,27 +594,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c89ffcfa924dfb41976d59a2907cb08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spellLevels:
-  - spellType: 1
-    level: 1
-  - spellType: 2
-    level: 1
-  - spellType: 3
-    level: 1
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
-  - spellType: 0
-    level: 0
 --- !u!4 &249210971
 Transform:
   m_ObjectHideFlags: 0
@@ -2314,7 +2298,7 @@ PrefabInstance:
     - target: {fileID: 7165346042369511114, guid: eb5b4922ba75ecb46ae067956e67781e,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 184.2
+      value: 111.9
       objectReference: {fileID: 0}
     - target: {fileID: 7165346042369511114, guid: eb5b4922ba75ecb46ae067956e67781e,
         type: 3}
@@ -2324,7 +2308,7 @@ PrefabInstance:
     - target: {fileID: 7165346042369511114, guid: eb5b4922ba75ecb46ae067956e67781e,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 75.5
+      value: 87.9
       objectReference: {fileID: 0}
     - target: {fileID: 7165346042369511114, guid: eb5b4922ba75ecb46ae067956e67781e,
         type: 3}

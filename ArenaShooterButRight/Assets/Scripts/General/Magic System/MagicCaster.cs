@@ -42,14 +42,13 @@ public class MagicCaster : MonoBehaviour
                 break;
         }
 
-        int spellLevel = spellLevelManager.GetSpellLevel(_chosenSpell);
-        float manaCost = spellData.CalculateManaCost(spellLevel);
+        float manaCost = spellData.CalculateManaCost();
 
         if (spellData != null && mana.HasEnoughMana(manaCost) && isCooldown == false)
         {
             mana.UseMana(manaCost);
             Shoot(spellData);
-            StartCoroutine(CooldownRoutine(spellData.CalculateCooldown(spellLevel)));
+            StartCoroutine(CooldownRoutine(spellData.CalculateCooldown()));
         }
         else 
         {
@@ -66,13 +65,27 @@ public class MagicCaster : MonoBehaviour
 
     private void Shoot(SpellData _spellData)
     {
+        // Instantiate the projectile
         GameObject projectileInstance = Instantiate(projectilePrefab);
+        
+        // Ignore collision between the projectile and the player
         Physics.IgnoreCollision(projectileInstance.GetComponent<Collider>(), gameObject.GetComponent<Collider>());
+        
+        //Set the projectile's position at the cast point
         projectileInstance.transform.position = castPoint.transform.position;
-        Vector3 rotation = projectileInstance.transform.root.eulerAngles;
-        projectileInstance.transform.rotation = Quaternion.Euler(rotation.x, gameObject.transform.eulerAngles.y, rotation.z);
+
+        // Set the direction to the camera's forward direction
         Vector3 launchDirection = Camera.main.transform.forward;
+
+        // Rotate the projectile to face the direction it will be moving
+        projectileInstance.transform.rotation = Quaternion.LookRotation(launchDirection);
+
+        // Get the MagicProjectile component and initialize it
         MagicProjectile projectile = projectileInstance.GetComponent<MagicProjectile>();
         projectile.InitSpellProjectile(_spellData);
+
+        // Apply velocity to the projectile to move it in the desired direction
+        Rigidbody projectileRigidbody = projectileInstance.GetComponent<Rigidbody>();
+        projectileRigidbody.velocity = launchDirection * _spellData.CalculateSpeed();
     }
 }

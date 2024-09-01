@@ -21,7 +21,7 @@
                             <ui:TextField picking-mode="Ignore" label="Name" value="filler text" binding-path="Name" name="SpellName" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
                             <uie:EnumField label="Element" name="SpellType" binding-path="Element" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
                             <uie:ObjectField label="Icon" name="IconPicker" binding-path="Icon" type="UnityEngine.Sprite, UnityEngine.CoreModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
-                            <uie:ObjectField label="Visual Effect" name="VisualEffectPicker" binding-path="VisualEffectAsset" type="UnityEngine.VFX.VisualEffectAsset, UnityEngine.VFXModule" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
+                            <uie:ObjectField label="Visual Effect" name="VisualEffectPicker" binding-path="SpellEffectAsset" type="UnityEngine.VFX.VisualEffectAsset, UnityEngine.VFXModule" focusable="true" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;" />
                         </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:VisualElement name="SpellStatsContainer" style="flex-direction: row; align-items: center; margin-left: 0;">
