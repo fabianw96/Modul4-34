@@ -84,7 +84,6 @@ public class MagicCaster : MonoBehaviour
         MagicProjectile projectile = projectileInstance.GetComponent<MagicProjectile>();
         projectile.InitSpellProjectile(_spellData);
 
-        // Apply velocity to the projectile to move it in the desired direction
         Rigidbody projectileRigidbody = projectileInstance.GetComponent<Rigidbody>();
         projectileRigidbody.velocity = launchDirection * _spellData.CalculateSpeed();
     }

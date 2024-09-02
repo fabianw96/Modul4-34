@@ -8,16 +8,15 @@ public class MagicProjectile : BaseProjectile
     private SpellData spellData;
     private VisualEffect spellProjectileEffect;
     private SpellHitEffect spellHitEffect;
+    private OnHitEffects previousEffect;
     protected override void Start()
     {
-        
+        projectileSpeed = spellData.CalculateSpeed();
     }
 
     public void InitSpellProjectile(SpellData _spellData)
     {
         spellData = _spellData;
-        projectileSpeed = spellData.CalculateSpeed();
-
         spellProjectileEffect = gameObject.GetComponent<VisualEffect>();
         if (spellProjectileEffect != null) 
         {
@@ -46,14 +45,24 @@ public class MagicProjectile : BaseProjectile
             return;
         }
 
-        // Apply SpellHitEffect Component or if already on Target, check for combos in SpellHitEffect itself
-        if (other.gameObject.GetComponent<SpellHitEffect>() == null)
+        // Try to get the existing SpellHitEffect component
+        spellHitEffect = other.gameObject.GetComponent<SpellHitEffect>();
+
+        if (spellHitEffect == null)
         {
+            // If no SpellHitEffect exists, add it to the target
             spellHitEffect = other.gameObject.AddComponent<SpellHitEffect>();
         }
 
-        spellHitEffect = other.gameObject.GetComponent<SpellHitEffect>();
-        spellHitEffect.InitSpellHitEffect(spellData, other.gameObject.GetComponent<HealthSystem>());
+        previousEffect = other.gameObject.GetComponent<SpellHitEffect>().currentEffect;
+        Debug.Log($"previous Effect: {previousEffect}");
+        if (spellData.OnHitEffect == OnHitEffects.Burn && previousEffect == OnHitEffects.Electrified)
+        {
+            spellHitEffect.TriggerExplosion(spellData);
+            return;
+        }
+
+        spellHitEffect.InitSpellHitEffect(spellData, targetHealthSystem);
 
         // Destroy Projectile after applying effect
         Destroy(gameObject); 

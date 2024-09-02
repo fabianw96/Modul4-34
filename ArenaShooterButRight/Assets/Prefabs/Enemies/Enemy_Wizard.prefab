@@ -625,15 +625,13 @@ MonoBehaviour:
   Enemy: {fileID: 2024010972212969431}
   Player: {fileID: 0}
   animator: {fileID: 3524183001038902010}
+  defaultSpeed: 2
   VisionRange: 20
   AttackRange: 10
-  enemyShootCooldown: 1
   BulletPrefab: {fileID: 2049982847515312590, guid: e57baa6b16df8f74fa58cc077d5d87c8,
     type: 3}
   Gun: {fileID: 1905949268353053170}
   GunMuzzlePos: {fileID: 7464858101256762837}
-  ProjectileSpeed: 15
-  ProjectileDecayDelay: 1
 --- !u!195 &7829042321792570182
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -2252,6 +2250,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.72337
+      objectReference: {fileID: 0}
+    - target: {fileID: 7199192401124536555, guid: 817e2f80f31ef404eb4f51db580f53ea,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:

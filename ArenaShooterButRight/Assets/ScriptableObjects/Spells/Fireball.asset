@@ -36,7 +36,7 @@ MonoBehaviour:
   ExplosionEffect: {fileID: 8926484042661614526, guid: 7a6e365e972844b4b83c4d6265a3476e,
     type: 3}
   ExplosionDamage: 25
-  ExplosionRadius: 2
+  ExplosionRadius: 5
   SpellEffectAsset: {fileID: 8926484042661614526, guid: 2c4448de5c58d8b45909d1907eb5127b,
     type: 3}
   LingeringEffectAsset: {fileID: 8926484042661614526, guid: 2634c31c57079fa4f86f2862364561ac,

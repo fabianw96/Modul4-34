@@ -1,17 +1,13 @@
 using General;
-using General.Weapons;
 using Justin.KI;
-using System;
 using System.Collections;
-using System.Threading.Tasks.Sources;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.VFX;
 
 public class SpellHitEffect : MonoBehaviour
-{ 
-    private Elements currentElement;
-    private Elements projectileElement;
+{
+    public OnHitEffects currentEffect;
     private VisualEffect lingeringEffect;
     private VisualEffect explosionEffect;
     private SkinnedMeshRenderer targetMesh;
@@ -22,43 +18,55 @@ public class SpellHitEffect : MonoBehaviour
     private float damage;
     private float effectDuration;
     private bool isDot;
-    private bool hasEffectApplied = false;
     private float elapsedTime = 0;
 
     public void InitSpellHitEffect(SpellData _spellData, HealthSystem _healthSys)
     {
+        currentEffect = _spellData.OnHitEffect;
         spellData = _spellData;
         healthSystem = _healthSys;
         damage = _spellData.CalculateDamage();
         effectDuration = _spellData.EffectDuration;
         isDot = _spellData.IsDot;
-        projectileElement = _spellData.Element;
         targetMesh = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
         navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
+
+        // Stop any ongoing effects and start the new ones
+        StopAllCoroutines(); // Stop any existing coroutines to prevent conflicts
+        ApplyEffect();
     }
 
     private void Start()
     {
+        // The original speed is stored for slow effects
         originalSpeed = GetComponent<EnemyController>().defaultSpeed;
+    }
 
-        // Check for explosion
-        explosionEffect = gameObject.GetComponent<VisualEffect>();
-        if (currentElement == Elements.Electro && projectileElement == Elements.Fire)
+    private void ApplyEffect()
+    {
+        // Apply the visual effects first
+        ApplyVisualEffects();
+
+        // Apply the appropriate effect based on the spell's properties
+        if (spellData.OnHitEffect == OnHitEffects.Slow)
         {
-            if (explosionEffect != null)
-
-            {
-                explosionEffect.visualEffectAsset = spellData.ExplosionEffect;
-                explosionEffect.Play();
-                TriggerExplosion();
-                return;
-            }
-            else
-            {
-                Debug.LogError("No VisualEffect component found for the explosion.");
-            }
+            ApplySlowEffect();
         }
-            
+        else if (spellData.OnHitEffect == OnHitEffects.Electrified)
+        {
+            ApplyElectrifiedEffect();
+        }
+        else if (spellData.OnHitEffect == OnHitEffects.Burn)
+        {
+            StartCoroutine(ApplyBurnEffect());
+        }
+        healthSystem.TakeDamage(damage);
+        StartCoroutine(RemoveEffectAfterDuration());
+    }
+
+    private void ApplyVisualEffects()
+    {
+        // Handle the lingering visual effect
         lingeringEffect = gameObject.GetComponent<VisualEffect>();
         if (lingeringEffect != null)
         {
@@ -70,14 +78,12 @@ public class SpellHitEffect : MonoBehaviour
         {
             Debug.LogError("No VisualEffect component found on the enemy.");
         }
-
-        ApplyEffect();
     }
-       
-    private IEnumerator ApplyDotEffect()
+
+    private IEnumerator ApplyBurnEffect()
     {
         elapsedTime = 0f;
-        while (elapsedTime < effectDuration)
+        while (elapsedTime <= effectDuration)
         {
             healthSystem.TakeDamage(spellData.DotDamagePerTick);
             yield return new WaitForSeconds(spellData.DotTickRate);
@@ -86,33 +92,9 @@ public class SpellHitEffect : MonoBehaviour
         CleanupEffect();
     }
 
-
-    private void ApplyEffect()
-    {
-        if (!hasEffectApplied)
-        {
-            hasEffectApplied = true;
-            if (spellData.OnHitEffect == OnHitEffects.Slow)
-            {
-                ApplySlowEffect();
-            }
-            else if (spellData.OnHitEffect == OnHitEffects.Electrified)
-            {
-                ApplyElectrifiedEffect();
-            }
-            else if (spellData.OnHitEffect == OnHitEffects.Burn) 
-            {
-                ApplyDotEffect();
-            }
-            // Remove the effect after duration
-            StartCoroutine(RemoveEffectAfterDuration());
-        }
-        healthSystem.TakeDamage(damage);
-    }
-
     private void ApplySlowEffect()
     {
-        if (navMeshAgent != null) 
+        if (navMeshAgent != null)
         {
             originalSpeed = navMeshAgent.speed;
             navMeshAgent.speed *= (1 - spellData.SlowStrength);
@@ -123,35 +105,41 @@ public class SpellHitEffect : MonoBehaviour
         navMeshAgent.speed = 0f;
     }
 
-    public void TriggerExplosion()
+    public void TriggerExplosion(SpellData _spellData)
     {
-        
+        explosionEffect = gameObject.GetComponent<VisualEffect>();
+        if (explosionEffect != null)
+        {
+            explosionEffect.visualEffectAsset = _spellData.ExplosionEffect;
+            explosionEffect.Play();
+        }
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, spellData.ExplosionRadius);
         foreach (var hitCollider in hitColliders)
         {
-            healthSystem = hitCollider.GetComponent<HealthSystem>();
-            if (healthSystem != null)
+            HealthSystem targetHealth = hitCollider.GetComponent<HealthSystem>();
+            if (targetHealth != null)
             {
                 // Apply Damage from the explosion
-                healthSystem.TakeDamage(spellData.ExplosionDamage);
+                targetHealth.TakeDamage(spellData.ExplosionDamage);
 
                 // Check if the object should also catch fire
                 SpellHitEffect fireEffect = hitCollider.gameObject.GetComponent<SpellHitEffect>();
-                if (fireEffect == null) 
+                if (fireEffect == null)
                 {
                     fireEffect = hitCollider.gameObject.AddComponent<SpellHitEffect>();
                 }
 
                 // Initialize the fire effect on the hit object
                 SpellData fireSpellData = Resources.Load<SpellData>("Assets/SriptableObjects/Spells/FireSpellData");
-                if (fireSpellData != null) 
+                if (fireSpellData != null)
                 {
-                    fireEffect.InitSpellHitEffect(fireSpellData, healthSystem);
+                    fireEffect.InitSpellHitEffect(fireSpellData, targetHealth);
                 }
             }
         }
-        CleanupEffect();
     }
+
     private IEnumerator RemoveEffectAfterDuration()
     {
         yield return new WaitForSeconds(effectDuration);
@@ -160,7 +148,7 @@ public class SpellHitEffect : MonoBehaviour
 
     private void CleanupEffect()
     {
-        if (navMeshAgent.speed != originalSpeed) 
+        if (navMeshAgent.speed != originalSpeed)
         {
             navMeshAgent.speed = originalSpeed;
         }
