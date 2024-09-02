@@ -57,6 +57,7 @@ namespace Justin.KI
                     PatrolState,
                     new List<Transition>
                     {
+                        new Transition(CheckFleeCondition, FleeState),
                         new Transition(() => Enemy.hasTakenDamage == true, ChaseState),
                         new Transition(IsInChaseRange, ChaseState ),
                         new Transition(IsInAttackRange, ShootState ),
@@ -66,6 +67,7 @@ namespace Justin.KI
                     ChaseState,
                     new List<Transition>
                     {
+                        new Transition(CheckFleeCondition, FleeState),
                         new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
                         new Transition(IsInAttackRange, ShootState ),
                     }
@@ -74,8 +76,9 @@ namespace Justin.KI
                     ShootState,
                     new List<Transition>
                     {
-                         new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
-                         new Transition(IsInChaseRange, ChaseState),
+                        new Transition(CheckFleeCondition, FleeState),
+                        new Transition(() => !IsInAttackRange() && !IsInChaseRange(), PatrolState),
+                        new Transition(IsInChaseRange, ChaseState),
                     }
                 },
             };
