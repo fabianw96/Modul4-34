@@ -82,7 +82,7 @@ Material:
     - _DepthOffsetEnable: 0
     - _DetailSpeedMult: 0.5
     - _DetailTiling: 1
-    - _DistanceToGround: 10
+    - _DistanceToGround: 5
     - _DoubleSidedEnable: 1
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2

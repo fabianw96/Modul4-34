@@ -17,7 +17,8 @@ MonoBehaviour:
   Element: 3
   Name: ElectroOrb
   Icon: {fileID: 21300000, guid: 62ce59ce09148c847b198159a3abc9f6, type: 3}
-  BaseSpeed: 50
+  Level: 1
+  BaseSpeed: 20
   BaseDamage: 20
   BaseCost: 10
   BaseCooldown: 0.3
