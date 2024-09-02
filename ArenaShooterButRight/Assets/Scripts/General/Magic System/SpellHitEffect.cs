@@ -1,5 +1,6 @@
 using General;
 using General.Weapons;
+using Justin.KI;
 using System;
 using System.Collections;
 using System.Threading.Tasks.Sources;
@@ -38,6 +39,8 @@ public class SpellHitEffect : MonoBehaviour
 
     private void Start()
     {
+        originalSpeed = GetComponent<EnemyController>().defaultSpeed;
+
         // Check for explosion
         explosionEffect = gameObject.GetComponent<VisualEffect>();
         if (currentElement == Elements.Electro && projectileElement == Elements.Fire)
@@ -68,16 +71,7 @@ public class SpellHitEffect : MonoBehaviour
             Debug.LogError("No VisualEffect component found on the enemy.");
         }
 
-
-        if (isDot)
-        {
-            StartCoroutine(ApplyDotEffect());
-        }
-
-        else
-        {
-            ApplyEffect();
-        }
+        ApplyEffect();
     }
        
     private IEnumerator ApplyDotEffect()
@@ -92,11 +86,6 @@ public class SpellHitEffect : MonoBehaviour
         CleanupEffect();
     }
 
-    private IEnumerator RemoveEffectAfterDuration()
-    {
-        yield return new WaitForSeconds(effectDuration);
-        CleanupEffect();
-    }
 
     private void ApplyEffect()
     {
@@ -111,8 +100,10 @@ public class SpellHitEffect : MonoBehaviour
             {
                 ApplyElectrifiedEffect();
             }
-            // Implement other effect types here
-
+            else if (spellData.OnHitEffect == OnHitEffects.Burn) 
+            {
+                ApplyDotEffect();
+            }
             // Remove the effect after duration
             StartCoroutine(RemoveEffectAfterDuration());
         }
@@ -129,7 +120,7 @@ public class SpellHitEffect : MonoBehaviour
     }
     private void ApplyElectrifiedEffect()
     {
-        navMeshAgent.velocity = Vector3.zero;
+        navMeshAgent.speed = 0f;
     }
 
     public void TriggerExplosion()
@@ -161,14 +152,19 @@ public class SpellHitEffect : MonoBehaviour
         }
         CleanupEffect();
     }
+    private IEnumerator RemoveEffectAfterDuration()
+    {
+        yield return new WaitForSeconds(effectDuration);
+        CleanupEffect();
+    }
 
     private void CleanupEffect()
     {
-        // Reset all values affected by the MagicEffect
-        if (spellData.OnHitEffect == OnHitEffects.Slow && navMeshAgent != null)
+        if (navMeshAgent.speed != originalSpeed) 
         {
             navMeshAgent.speed = originalSpeed;
         }
+
         // Stop the effect and set visualEffect to null
         if (lingeringEffect != null)
         {

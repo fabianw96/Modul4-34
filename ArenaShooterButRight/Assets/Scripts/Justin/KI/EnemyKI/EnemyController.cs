@@ -14,6 +14,7 @@ namespace Justin.KI
         [SerializeField] private Animator animator;
         private string currentAnimation = "";
         private float distanceToPlayer;
+        public float defaultSpeed = 2.0f;
 
         [SerializeField] private float VisionRange = 20f;
         [SerializeField] private float AttackRange = 10f;

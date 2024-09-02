@@ -8,7 +8,7 @@ namespace Justin.KI
     {
         private EnemyController controller;
         private bool _hasShot;
-        private float enemyShootCooldown = 0.5f;
+        private float enemyShootCooldown = 1f;
 
         private float ProjectileSpeed = 20f;
         private float ProjectileDecayDelay = 1f;
