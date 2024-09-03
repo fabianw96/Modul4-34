@@ -111,6 +111,7 @@ public class SpellHitEffect : MonoBehaviour
         if (explosionEffect != null)
         {
             explosionEffect.visualEffectAsset = _spellData.ExplosionEffect;
+            explosionEffect.transform.localPosition += new Vector3(0, 5f, 0);
             explosionEffect.Play();
         }
 
@@ -160,5 +161,11 @@ public class SpellHitEffect : MonoBehaviour
             lingeringEffect.visualEffectAsset = null;
         }
         Destroy(this);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(transform.position,spellData.ExplosionRadius);
     }
 }

@@ -55,6 +55,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 368f59a7c1e511c4fb50ea78fda3d555, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Refraction_Normal:
+        m_Texture: {fileID: 2800000, guid: 74521282ee0452e4ea1f0b3bc146cabe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -82,7 +86,7 @@ Material:
     - _DepthOffsetEnable: 0
     - _DetailSpeedMult: 0.5
     - _DetailTiling: 1
-    - _DistanceToGround: 5
+    - _DistanceToGround: 0
     - _DoubleSidedEnable: 1
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
@@ -90,18 +94,25 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
+    - _FoamAmount: 0
+    - _FoamCutOff: 1
     - _FoamDistance: 10
     - _FoamNoiseScale: 55
     - _FoamNoiseSpeed: 0.1
+    - _FoamScale: 100
+    - _FoamSpeed: 1
     - _FresnelPower: 0.5
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
+    - _RefractionScale: 1
+    - _RefractionSpeed: 0.05
+    - _RefractionStrength: 1
     - _RenderQueueType: 4
     - _RequireSplitLighting: 0
-    - _Smoothness: 0.72
+    - _Smoothness: 0.5
     - _SrcBlend: 1
     - _StencilRef: 0
     - _StencilRefDepth: 0
@@ -124,14 +135,18 @@ Material:
     - _TransparentZWrite: 0
     - _UseShadowThreshold: 0
     - _WaterAlpha: 0.9
+    - _WaterDepth: 3
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
     - _DeepColor: {r: 0.09972935, g: 0.20476827, b: 0.26037726, a: 0.7607843}
+    - _DeepWater: {r: 0.050196, g: 0.12361767, b: 0.5019608, a: 0.5882353}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _FoamColor: {r: 0, g: 0, b: 0, a: 0}
+    - _RefractionScale: {r: 0.05, g: 0.05, b: 0, a: 0}
     - _ShallowColor: {r: 0.21050182, g: 0.580135, b: 0.8264151, a: 0.7647059}
+    - _ShallowWater: {r: 0.08999983, g: 0.9, b: 0.9, a: 0.39215687}
   m_BuildTextureStacks: []
