@@ -5,15 +5,9 @@ namespace Justin.ProcGen
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     public class ProcGenManager : MonoBehaviour
     {
-        public enum DrawMode
-        {
-            ShaderGraph,
-            HeightMap,
-        }
-
         [Header("Mapvalues")]
         // Has to be divisible by (Size - 1) / 2,4,6,8 for LODs to work, because of Vertices per Line
-        [SerializeField] private const int MAP_SIZE = 241;
+        [SerializeField] private const int MAP_SIZE = 481;
         [Range(0,4)][SerializeField] private int levelOfDetail;
 
         [Header("Noisevalues")]
@@ -27,20 +21,21 @@ namespace Justin.ProcGen
         [SerializeField] private AnimationCurve meshHeightCurve;
 
         [Header("Texturevalues")]
-        [SerializeField] private DrawMode drawMode;
         [SerializeField] private Shader shader;
-        [SerializeField] private TerrainTypeConfig terrainTypeConfig;
         private Material material;
 
         [Header("Meshreferenzen")]
         [SerializeField] private MeshRenderer meshRenderer;
         [SerializeField] private MeshFilter meshFilter;
 
+        private float[,] falloffMap;
+        public bool useFalloffMap;
         public bool autoUpdate;
 
         // Start is called before the first frame update
         void Start()
         {
+            falloffMap = FalloffGenerator.GenerateFalloffMap(MAP_SIZE);
             GenerateMap();
         }
 
@@ -49,25 +44,24 @@ namespace Justin.ProcGen
             // Generate Noisemap based on given parameters
             float[,] noiseMap = NoiseGenerator.GenerateNoiseMap(MAP_SIZE, MAP_SIZE, seed, noiseScale, octaves, persistence, lacunarity, offset);
 
+            if (useFalloffMap)
+            {
+                for (int y = 0; y < MAP_SIZE; y++) 
+                {
+                    for (int x = 0; x < MAP_SIZE; x++) 
+                    {
+                        noiseMap[x, y] = Mathf.Clamp01(noiseMap[x,y] - falloffMap[x,y]);
+                    }
+                }
+            }
             // Generate Terrain-Mesh based on noisemap
             MeshData meshData = MeshGenerator.GenerateTerrainMesh(noiseMap, meshHeightMultiplier, meshHeightCurve, levelOfDetail);
 
             // Apply generated mesh to meshfilter
             meshFilter.mesh = meshData.CreateMesh();
 
-
-            if (drawMode == DrawMode.HeightMap)
-            {
-                // Generate and apply the texture to the meshrenderer
-                Texture2D texture = TextureGenerator.TextureFromHeightMap(noiseMap, terrainTypeConfig);
-                meshRenderer.sharedMaterial.mainTexture = texture;
-            }
-            else if (drawMode == DrawMode.ShaderGraph)
-            {
-                meshRenderer.sharedMaterial.shader = shader;
-            }
-
-
+            // Apply Shader Material
+            meshRenderer.sharedMaterial.shader = shader;
         }
 
         private void OnValidate()
@@ -84,6 +78,8 @@ namespace Justin.ProcGen
             {
                 meshHeightMultiplier = 0;
             }
+
+            falloffMap = FalloffGenerator.GenerateFalloffMap(MAP_SIZE);
         }
     }
 }

@@ -91,7 +91,7 @@ Material:
     - _Height: 15
     - _HillsHeight: 130
     - _HillsThreshold: 1
-    - _MeshHeightMultiplier: 25
+    - _MeshHeightMultiplier: 50
     - _MountainHeight: 0.7
     - _MountainThreshold: 1
     - _MountainToSnowThreshold: 0.05

@@ -94,14 +94,16 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
-    - _FoamAmount: 0
-    - _FoamCutOff: 1
+    - _FoamAmount: 1.1
+    - _FoamCutOff: 1.04
     - _FoamDistance: 10
     - _FoamNoiseScale: 55
     - _FoamNoiseSpeed: 0.1
-    - _FoamScale: 100
+    - _FoamScale: 1.5
     - _FoamSpeed: 1
     - _FresnelPower: 0.5
+    - _HeightFrequency: 1
+    - _NormalStrength: 0.25
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
@@ -109,10 +111,10 @@ Material:
     - _RefractionModel: 0
     - _RefractionScale: 1
     - _RefractionSpeed: 0.05
-    - _RefractionStrength: 1
+    - _RefractionStrength: 0.05
     - _RenderQueueType: 4
     - _RequireSplitLighting: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 1
     - _SrcBlend: 1
     - _StencilRef: 0
     - _StencilRefDepth: 0
@@ -126,6 +128,7 @@ Material:
     - _StencilWriteMaskMV: 41
     - _SupportDecals: 1
     - _SurfaceType: 1
+    - _Transparency: 0.9
     - _TransparentBackfaceEnable: 0
     - _TransparentCullMode: 2
     - _TransparentDepthPostpassEnable: 0
@@ -135,18 +138,20 @@ Material:
     - _TransparentZWrite: 0
     - _UseShadowThreshold: 0
     - _WaterAlpha: 0.9
-    - _WaterDepth: 3
+    - _WaterDepth: 7
+    - _WaveAmplitude: 5
+    - _WaveSpeed: 0.5
     - _ZTestDepthEqualForOpaque: 4
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
     - _DeepColor: {r: 0.09972935, g: 0.20476827, b: 0.26037726, a: 0.7607843}
-    - _DeepWater: {r: 0.050196, g: 0.12361767, b: 0.5019608, a: 0.5882353}
+    - _DeepWater: {r: 0, g: 0.067053765, b: 0.3962264, a: 0.5882353}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _FoamColor: {r: 0, g: 0, b: 0, a: 0}
-    - _RefractionScale: {r: 0.05, g: 0.05, b: 0, a: 0}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RefractionScale: {r: 0.1, g: 0.1, b: 0, a: 0}
     - _ShallowColor: {r: 0.21050182, g: 0.580135, b: 0.8264151, a: 0.7647059}
-    - _ShallowWater: {r: 0.08999983, g: 0.9, b: 0.9, a: 0.39215687}
+    - _ShallowWater: {r: 0.0899998, g: 1, b: 1, a: 0.39215687}
   m_BuildTextureStacks: []
