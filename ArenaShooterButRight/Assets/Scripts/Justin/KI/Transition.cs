@@ -1,5 +1,8 @@
 namespace Justin.KI
 {
+    /// <summary>
+    /// Represents a transition in the finite state machine (FSM). Defines a condition and the next state to transition to.
+    /// </summary>
     public delegate bool TransitionCondition();
     public struct Transition
     {

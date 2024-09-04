@@ -47,6 +47,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Refraction_Normal:
+        m_Texture: {fileID: 2800000, guid: 74521282ee0452e4ea1f0b3bc146cabe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -85,32 +89,41 @@ Material:
     - _EnableBlendModePreserveSpecularLighting: 1
     - _EnableFogOnTransparent: 1
     - _ExcludeFromTUAndAA: 0
+    - _FoamAmount: 2
+    - _FoamCutOff: 1
+    - _FoamScale: 100
+    - _FoamSpeed: 1
     - _GrassHeight: 0.35
     - _GrassThreshold: 1
     - _GrassToMountainThreshold: 0.05
     - _Height: 15
+    - _HeightFrequency: 1
     - _HillsHeight: 130
     - _HillsThreshold: 1
     - _MeshHeightMultiplier: 50
     - _MountainHeight: 0.7
     - _MountainThreshold: 1
     - _MountainToSnowThreshold: 0.05
+    - _NormalStrength: 1
     - _OpaqueCullMode: 2
     - _RayTracing: 0
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
+    - _RefractionSpeed: 0.1
+    - _RefractionStrength: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _SandHeight: 0.25
+    - _SandHeight: 0.3
     - _SandThreshold: 1
     - _SandToDirtThreshold: 0.05
     - _ShallowWaterHeight: 0
     - _ShallowWaterThreshold: 0
     - _SmoothenessBottom: 0
+    - _Smoothness: 0
     - _SmoothnessTop: 0
     - _Smoothness_Threshhold: 6
-    - _SnowHeight: 0.95
+    - _SnowHeight: 0.9
     - _SnowMountain: 0
     - _SnowThreshhold: 0
     - _SrcBlend: 1
@@ -126,6 +139,7 @@ Material:
     - _StencilWriteMaskMV: 41
     - _SupportDecals: 1
     - _SurfaceType: 0
+    - _Transparency: 0
     - _TransparentBackfaceEnable: 0
     - _TransparentCullMode: 2
     - _TransparentDepthPostpassEnable: 0
@@ -134,6 +148,9 @@ Material:
     - _TransparentWritingMotionVec: 0
     - _TransparentZWrite: 0
     - _UseShadowThreshold: 0
+    - _WaterDepth: 5
+    - _WaveAmplitude: 1
+    - _WaveSpeed: 0
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
@@ -145,11 +162,13 @@ Material:
     - _DirtColor: {r: 0.6, g: 0.39999995, b: 0.19999993, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 1}
     - _Grass: {r: 0.22387266, g: 0.6509434, b: 0.21186367, a: 0}
     - _GrassColor: {r: 0.39999995, g: 0.6, b: 0.19999993, a: 1}
     - _Hills: {r: 0.5, g: 0.5, b: 0.29999998, a: 1}
     - _Mountain: {r: 0.4528302, g: 0.4528302, b: 0.4528302, a: 0}
     - _MountainColor: {r: 0.5, g: 0.39999995, b: 0.29999995, a: 1}
+    - _RefractionScale: {r: 1, g: 1, b: 0, a: 0}
     - _Sand: {r: 1, g: 0.9, b: 0.6, a: 1}
     - _SandColor: {r: 0.9, g: 0.8, b: 0.5, a: 1}
     - _ShallowWater: {r: 0.19999996, g: 0.5, b: 0.7, a: 1}

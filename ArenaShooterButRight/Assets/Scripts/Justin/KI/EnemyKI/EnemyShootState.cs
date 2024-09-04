@@ -10,8 +10,12 @@ namespace Justin.KI
         private bool _hasShot;
         private float enemyShootCooldown = 1f;
 
-        private float ProjectileSpeed = 20f;
+        private float ProjectileSpeed = 15f;
         private float ProjectileDecayDelay = 1f;
+
+        private float minDistanceFromPlayer = 5f;
+        private float maxDistanceFromPlayer = 10f;
+
         public EnemyShootState(EnemyController _controller) : base(_controller)
         {
             controller = _controller;
@@ -25,14 +29,23 @@ namespace Justin.KI
 
         public override void UpdateState()
         {
-            if (controller.agent.remainingDistance > 2.5)
+            // Move to a safe distance if too close to the player
+            controller.transform.LookAt(controller.Player.transform);
+            if (controller.distanceToPlayer <= minDistanceFromPlayer)
             {
-                controller.transform.LookAt(controller.Player.transform);
-                controller.agent.SetDestination(controller.Player.transform.position);
+                MaintainSafeDistance();
             }
-            if (_hasShot) return;
 
+            if (_hasShot) return;
             controller.StartCoroutine(ShootPlayer());
+        }
+
+        private void MaintainSafeDistance()
+        {
+            // Calculate a position that is within the desired range from the player
+            Vector3 directionToPlayer = controller.Player.transform.position - controller.transform.position;
+            Vector3 desiredPosition = controller.Player.transform.position - directionToPlayer.normalized * Random.Range(minDistanceFromPlayer, maxDistanceFromPlayer);
+            controller.agent.SetDestination(desiredPosition);
         }
 
         private IEnumerator ShootPlayer()

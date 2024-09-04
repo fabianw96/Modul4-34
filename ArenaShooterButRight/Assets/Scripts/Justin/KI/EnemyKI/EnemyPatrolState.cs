@@ -20,35 +20,38 @@ namespace Justin.KI
         public override void EnterState()
         {
             Debug.Log("Entered Patrol State");
-            startPos = controller.transform.position;
-            Vector3 newPos = Random.insideUnitSphere * 20 * searchWalkRadius;
-            if (controller.agent.SetDestination(newPos))
-            {
-                controller.agent.SetDestination(newPos);
-            }
+            startPos = controller.transform.position; // Set the start position
+            SetNewPatrolDestination(); // Set the initial patrol destination
         }
 
         public override void ExitState()
         {
-
+            controller.agent.isStopped = false; // Ensure the agent is not stopped when exiting the state
         }
 
         public override void UpdateState()
         {
-            if (controller.agent.remainingDistance <= 0.1f)
-            {
-                if (!timerStarted)
-                {
-                    controller.StartCoroutine(C_WaitForNewPosition());
-                }
+            if (controller.agent.remainingDistance <= 0.1f && !timerStarted)
+            {   
+                controller.StartCoroutine(C_WaitForNewPosition());
             }
         }
+
+        private void SetNewPatrolDestination()
+        {
+            Vector3 newPos = Random.insideUnitSphere * searchWalkRadius + startPos;  // Generate a new random patrol position
+            controller.agent.SetDestination(newPos);  // Set the destination for the agent
+            controller.agent.isStopped = false;  // Ensure the agent is not stopped
+        }
+
 
         private IEnumerator C_WaitForNewPosition()
         {
             timerStarted = true;
+            controller.agent.isStopped = true; // Stop the agent during the wait time
             yield return new WaitForSeconds(waitTimeAtPosition);
-            goToStart = !goToStart;
+            controller.agent.isStopped = false; // Resume the agent's movement
+            goToStart = !goToStart; // Toggle between going to the start position and a new random position
 
             if (!goToStart)
             {
@@ -56,8 +59,7 @@ namespace Justin.KI
             }
             else
             {
-                Vector3 newPos = startPos + Random.insideUnitSphere * searchWalkRadius;
-                controller.agent.SetDestination(newPos);
+                SetNewPatrolDestination(); 
             }
 
             timerStarted = false;

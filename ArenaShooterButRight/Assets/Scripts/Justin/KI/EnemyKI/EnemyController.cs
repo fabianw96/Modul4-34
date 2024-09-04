@@ -6,6 +6,10 @@ using UnityEngine.VFX;
 
 namespace Justin.KI
 {
+    /// <summary>
+    /// Manages the behavior of an enemy including patrolling, chasing, shooting, and fleeing. 
+    /// Implements the finite state machine for state transitions.
+    /// </summary>
     [RequireComponent(typeof(NavMeshAgent), typeof(VisualEffectAsset), typeof(Animator))]
     public class EnemyController : BaseController
     {
@@ -13,7 +17,7 @@ namespace Justin.KI
         [SerializeField] public HealthSystem Player;
         [SerializeField] private Animator animator;
         private string currentAnimation = "";
-        private float distanceToPlayer;
+        public float distanceToPlayer;
         public float defaultSpeed = 2.0f;
 
         [SerializeField] private float VisionRange = 20f;
@@ -39,12 +43,17 @@ namespace Justin.KI
 
         protected override void InitFSM()
         {
+            // Initialize states
             PatrolState = new EnemyPatrolState(this);
             ChaseState = new EnemyChaseState(this);
             ShootState = new EnemyShootState(this);
             FleeState = new EnemyFleeState(this);
+
+            // set initial state
             CurrentState = PatrolState;
             CurrentState.EnterState();
+
+            // Define state transitions
             StateDictionary = new Dictionary<BaseState, List<Transition>>
             {
                 {
@@ -117,14 +126,10 @@ namespace Justin.KI
         }
         public void CheckAnimation()
         {
-            if (agent.velocity != Vector3.zero && CurrentState == PatrolState)
+            if (agent.speed != 0 && CurrentState == PatrolState)
                 ChangeAnimation("Walk");
-            else if (agent.velocity != Vector3.zero && CurrentState == ChaseState)
+            else if (agent.speed != 0 && CurrentState == ChaseState)
                 ChangeAnimation("Chase");
-            else if (agent.velocity != Vector3.zero && CurrentState == ShootState)
-                ChangeAnimation("Shoot Walking");
-            else if (agent.velocity == Vector3.zero && CurrentState == ShootState)
-                ChangeAnimation("Shoot Standing");
             else
                 ChangeAnimation("Idle");
         }
